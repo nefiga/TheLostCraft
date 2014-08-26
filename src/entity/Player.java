@@ -13,10 +13,10 @@ public class Player extends LivingEntity{
     }
 
     public void render(SpriteBatcher batcher) {
-        batcher.draw(x - Game.getXOffset(), y - Game.getYOffset(), width, height, textureX, textureY + (dir * height));
+        batcher.draw(x - Game.getXOffset(), y - Game.getYOffset(), width, height, textureX, textureY + (direction * height));
     }
 
     public void interactWith() {
-        level.interact(this, currentTool, (int) x + interactX[dir], (int) y + interactY[dir], 10, 32);
+        level.interact(this, currentTool, (int) x + interactX[direction], (int) y + interactY[direction], 10, 32);
     }
 }

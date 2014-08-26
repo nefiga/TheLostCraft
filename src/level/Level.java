@@ -7,9 +7,8 @@ import entity.Player;
 import game.Game;
 import game.graphics.SpriteBatcher;
 import game.graphics.TextureManager;
-import item.tool.Tool;
+import gear.tool.Tool;
 import org.lwjgl.opengl.Display;
-import testing.MoveableEntity;
 import tile.Tile;
 
 import java.awt.*;
@@ -69,16 +68,15 @@ public class Level {
         this.width = map.width;
         this.player = player;
         player.setLevel(this);
-        tileBatch = new SpriteBatcher(1000, TextureManager.loadTexture("tiles.png"));
-
+        tileBatch = new SpriteBatcher(700, TextureManager.loadTexture("tiles.png"));
         entityBatch = new SpriteBatcher(100, TextureManager.loadTexture("normal_sprites.png"));
         interactArea = new Rectangle();
-        addEntity(new MoveableEntity(100, 100, 64, 0, 64, 64));
     }
 
     public void update(long delta) {
         for (int i = 0; i < entities.size(); i++) {
             entities.get(i).update(delta);
+            if (entities.get(i).isRemoved()) removeEntity(entities.get(i));
         }
         player.update(delta);
     }
@@ -136,7 +134,7 @@ public class Level {
             Rectangle rect1 = entities.get(i).getRect();
             if (interactArea.intersects(rect1)) {
                 entities.get(i).interact(this, entity);
-                // If there is a entity method will return without interacting with the tile under the entity
+                // NO reason to interact with tile if there is an entity to interact with
                 return;
             }
         }

@@ -2,9 +2,8 @@ package tile;
 
 import entity.Entity;
 import game.graphics.SpriteBatcher;
-import item.tool.Tool;
+import gear.tool.Tool;
 import level.Level;
-import testing.TestTile;
 
 public class Tile {
 

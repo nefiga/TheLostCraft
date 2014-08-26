@@ -2,7 +2,7 @@ package entity;
 
 
 import item.Item;
-import item.tool.Tool;
+import gear.tool.Tool;
 import level.Level;
 
 public class LivingEntity extends Entity {
@@ -12,8 +12,15 @@ public class LivingEntity extends Entity {
      */
     Level level;
 
+    /**
+     * The tool the entity is currently holding
+     */
     protected Tool currentTool;
 
+    /**
+     * How much to add to the entities x, y position when the entities interactWith method is called.
+     * The amounts correspond with the entities direction, they are in this order UP, RIGHT, DOWN, LEFT.
+     */
     protected int[] interactX = new int[]  {32, 96, 32 , -32};
     protected int[] interactY = new int[] {-32, 32, 96, 32};
 
@@ -42,7 +49,7 @@ public class LivingEntity extends Entity {
     }
 
     public void interactWith() {
-        level.interact(this, currentTool, (int) x + interactX[dir], (int) y +interactY[dir], 10, 64);
+        level.interact(this, currentTool, (int) x + interactX[direction], (int) y +interactY[direction], 10, 64);
     }
 
     /**
@@ -52,10 +59,10 @@ public class LivingEntity extends Entity {
      * @param velocityY The amount to be moved on the y axis
      */
     public void move(int velocityX, int velocityY) {
-        if (velocityX > 0) dir = 1;
-        if (velocityX < 0) dir = 3;
-        if (velocityY > 0) dir = 2;
-        if (velocityY < 0) dir = 0;
+        if (velocityX > 0) direction = RIGHT;
+        if (velocityX < 0) direction = LEFT;
+        if (velocityY > 0) direction = DOWN;
+        if (velocityY < 0) direction = UP;
 
         x += level.getMaxMoveX(this, velocityX, null);
         y += level.getMaxMoveY(this, velocityY, null);

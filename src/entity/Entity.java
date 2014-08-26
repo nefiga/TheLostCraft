@@ -2,7 +2,6 @@ package entity;
 
 import game.Game;
 import game.graphics.SpriteBatcher;
-import item.Item;
 import level.Level;
 
 import java.awt.*;
@@ -32,7 +31,12 @@ public class Entity {
     /**
      * The direction the entity is facing
      */
-    public int dir = 0;
+    public int direction = 0;
+
+    /**
+     * The directions the entity can face
+     */
+    public static final int UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3;
 
     /**
      * width and height of this entity
@@ -139,6 +143,10 @@ public class Entity {
 
     public Rectangle getRect() {
         return rect;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 
     public float getX() {

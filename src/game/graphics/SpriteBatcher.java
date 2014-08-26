@@ -3,6 +3,7 @@ package game.graphics;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 
+import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -18,6 +19,7 @@ public class
         SpriteBatcher {
 
     TextureManager texture;
+    Texture texture1;
     ShaderManager shader;
 
     FloatBuffer vertex, texCords;
@@ -118,6 +120,64 @@ public class
         shader.unBind();
     }
 
+    public void draw(BufferedImage image, float x, float y) {
+        int disWidth = Display.getWidth();
+        int disHeight = Display.getHeight();
+        int texWidth = texture.getWidth();
+        int texHeight = texture.getHeight();
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int u = 0;
+        int v = 0;
+
+        float x1 = x / disWidth * 2 - 1;
+        float y1 = 1 - y / disHeight * 2;
+        float x2 = x / disWidth * 2 + width / disWidth * 2 - 1;
+        float y2 = (1 - y / disHeight * 2) - (height / disHeight * 2);
+
+        float tx1 = u / texWidth;
+        float ty1 = v / texHeight;
+        float tx2 = u / texWidth + width / texWidth;
+        float ty2 = v / texHeight + height / texHeight;
+
+        vertex.put(x1).put(y1); // Top left
+        vertex.put(x2).put(y1);// Top right
+        vertex.put(x1).put(y2);// Bottom  left
+        vertex.put(x2).put(y2);// Bottom right
+
+        texCords.put(tx1).put(ty1);// Top left
+        texCords.put(tx2).put(ty1);// Top right
+        texCords.put(tx1).put(ty2);// Bottom left
+        texCords.put(tx2).put(ty2);// Bottom right
+
+        if (ep == 0) {
+            elements.put(ep);
+            ep++;
+            elements.put(ep);
+            ep++;
+            elements.put(ep);
+            ep++;
+            elements.put(ep);
+            elements.put(ep);
+            ep++;
+            points += 5;
+        }
+        else  {
+            elements.put(ep);
+            elements.put(ep);
+            ep++;
+            elements.put(ep);
+            ep++;
+            elements.put(ep);
+            ep++;
+            elements.put(ep);
+            elements.put(ep);
+            ep++;
+            points += 6;
+        }
+    }
+
     /**
      * Adds the vertices and texture coordinates to the corresponding buffer
      * @param x The starting X position of where the sprite is to be drawn
@@ -178,7 +238,5 @@ public class
             ep++;
             points += 6;
         }
-
-
     }
 }
