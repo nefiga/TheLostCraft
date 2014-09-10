@@ -4,8 +4,8 @@ import gear.Gear;
 
 public class Tool extends Gear{
 
-    public Tool() {
-        super();
+    public Tool(String name) {
+        super(name);
     }
 
 }

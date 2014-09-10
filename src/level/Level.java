@@ -5,9 +5,14 @@ import entity.ItemEntity;
 import entity.LivingEntity;
 import entity.Player;
 import game.Game;
-import game.graphics.SpriteBatcher;
-import game.graphics.TextureManager;
+import game.graphics.*;
+import gear.Gear;
+import gear.Stats;
+import gear.weapon.Sword;
 import gear.tool.Tool;
+import item.part.Blade;
+import item.part.Guard;
+import item.part.LongHandle;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -17,15 +22,11 @@ import java.util.List;
 
 public class Level {
 
-    /**
-     * A SpriteBatcher for Tiles
-     */
-    SpriteBatcher tileBatch;
+    private SpriteBatch tileBatch;
+    private SpriteBatch spriteBatch;
+    private SpriteBatch gearBatch;
 
-    /**
-     * A SpriteBatcher for entities
-     */
-    SpriteBatcher entityBatch;
+    Sword sword;
 
     /**
      * A list of all the tiles in the level
@@ -62,15 +63,17 @@ public class Level {
      * @param player The player
      */
     public Level(Map map, Player player) {
+        sword = new Sword("Sword", new Blade("Blade", new Stats(10, 10, 10)), new Guard("Guard", new Stats(10, 10, 10)), new LongHandle("LongHandle", new Stats(10, 10, 10)));
         this.tiles = map.tiles;
         this.tileData = map.tileData;
         this.height = map.height;
         this.width = map.width;
         this.player = player;
         player.setLevel(this);
-        tileBatch = new SpriteBatcher(700, TextureManager.loadTexture("tiles.png"));
-        entityBatch = new SpriteBatcher(100, TextureManager.loadTexture("normal_sprites.png"));
         interactArea = new Rectangle();
+        tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 700);
+        spriteBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
+        gearBatch = new SpriteBatch(new Texture(Gear.gearAtlas), 100);
     }
 
     public void update(long delta) {
@@ -86,20 +89,25 @@ public class Level {
         renderTiles();
         tileBatch.end();
 
-        entityBatch.begin();
+        spriteBatch.begin();
         renderEntities();
-        entityBatch.end();
+        spriteBatch.end();
+
+        gearBatch.begin();
+        renderGear();
+        gearBatch.end();
+    }
+
+    public void renderGear() {
+        sword.render(gearBatch, 800, 700);
     }
 
     protected void renderEntities() {
-        for (int i = 0; i < entities.size(); i++) {
-            entities.get(i).render(entityBatch);
-        }
-        player.render(entityBatch);
+        player.render(spriteBatch);
     }
 
     /**
-     * Adds the entity to this level. Also sets the entities current level to this
+     * Adds the entity to this level.
      *
      * @param entity The entity to be added
      */
@@ -108,7 +116,7 @@ public class Level {
     }
 
     /**
-     * Removes the entity from this level and sets its current level to null
+     * Removes the entity from this level
      *
      * @param entity The entity to be removed from this level
      */

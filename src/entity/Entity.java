@@ -1,7 +1,6 @@
 package entity;
 
-import game.Game;
-import game.graphics.SpriteBatcher;
+import game.graphics.SpriteBatch;
 import level.Level;
 
 import java.awt.*;
@@ -26,7 +25,7 @@ public class Entity {
     /**
      * x, y position on the map
      */
-    protected int x, y;
+    protected float x, y;
 
     /**
      * The direction the entity is facing
@@ -44,27 +43,14 @@ public class Entity {
     protected int width, height;
 
     /**
-     * The starting x and y position of the sprite in the sprite sheet
-     */
-    protected int textureX, textureY;
-
-    /**
      * Creates a new entity
      *
      * @param positionX The x position on the map
      * @param positionY The y position on the map
-     * @param textureX  The starting x position of the sprite on the sprite sheet
-     * @param textureY  The starting y position of the sprite on the sprite sheet
-     * @param width     The width of the sprite in the sprite sheet
-     * @param height    The height of the sprite in the sprite sheet
      */
-    public Entity(int positionX, int positionY, int textureX, int textureY, int width, int height) {
+    public Entity(int positionX, int positionY) {
         this.x = positionX;
         this.y = positionY;
-        this.textureX = textureX;
-        this.textureY = textureY;
-        this.width = width;
-        this.height = height;
         rect = new Rectangle(positionX, positionY, width, height);
     }
 
@@ -72,8 +58,8 @@ public class Entity {
 
     }
 
-    public void render(SpriteBatcher batcher) {
-        batcher.draw(x - Game.getXOffset(), y - Game.getYOffset(), width, height, textureX, textureY);
+    public void render(SpriteBatch batch) {
+
     }
 
     /**

@@ -4,7 +4,7 @@ import gear.Stats;
 
 public class PickHead extends Part{
 
-    public PickHead(Stats stats) {
-        super(stats);
+    public PickHead(String image, Stats stats) {
+        super(image, stats);
     }
 }

@@ -2,8 +2,9 @@ package tile;
 
 public class DirtTile extends Tile{
 
-    public DirtTile(String name, int xOffset, int yOffset) {
-        super(name, xOffset, yOffset);
+    public DirtTile(String name) {
+        super(name);
+        setImage("dirt_tile");
         this.id = addTile(this);
     }
 }

@@ -3,22 +3,21 @@ package game.graphics;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 
-import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL20.*;
-
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-public class
-        SpriteBatcher {
+public class SpriteBatch {
 
-    TextureManager texture;
+    Texture texture;
     ShaderManager shader;
 
     FloatBuffer vertex, texCords;
@@ -30,13 +29,11 @@ public class
 
     /**
      * Creates a new SpriteBatcher Object
-     * @param size Number of sprites to be rendered
-     * @param texture The sprite sheet to be used
      */
-    public SpriteBatcher(int size, TextureManager texture) {
+    public SpriteBatch(Texture texture, int size) {
         vertex = BufferUtils.createFloatBuffer(size * 8);
         texCords = BufferUtils.createFloatBuffer(size * 8);
-        elements = BufferUtils.createShortBuffer(size * 10);
+        elements = BufferUtils.createShortBuffer(size  * 10);
 
         this.texture = texture;
         shader = new ShaderManager();
@@ -55,7 +52,7 @@ public class
 
         glBindVertexArray(0);
 
-        texture.setActiveTextureUnit(0);
+        this.texture.setActiveTexture(0);
 
         // Turning on blending so alpha channel will be transparent
         glEnable(GL_BLEND);
@@ -103,7 +100,6 @@ public class
      * Draws all the sprites in the buffers.
      */
     private void render() {
-
         shader.bind();
 
         glEnableVertexAttribArray(0);
@@ -120,29 +116,30 @@ public class
     }
 
     /**
-     * Adds the vertices and texture coordinates to the corresponding buffer
-     * @param x The starting X position of where the sprite is to be drawn
-     * @param y The starting Y position of where the sprite is to be drawn
-     * @param width The width of the sprite in the sprite sheet
-     * @param height The height of the sprite in the sprite sheet
-     * @param u The starting X position of the sprite in the sprite sheet
-     * @param v The starting Y posotion of the sprite in the sprite sheet
+     * Adds the texture to the Buffer to be drawn.
+     *
+     * @param width  The width of the TextureAtlas
+     * @param height The height of the TextureAtlas
+     * @param x      The starting x point on the screen
+     * @param y      The starting y point on the screen
+     * @param s      The offset of the texture in the TextureAtlas
+     * @param t      The offset of the texture in the TextureAtlas
      */
-    public void draw(float x, float y, float width, float height, float u, float v) {
-        int disWidth = Display.getWidth();
-        int disHeight = Display.getHeight();
-        int texWidth = texture.getWidth();
-        int texHeight = texture.getHeight();
+    public void draw(int width, int height, float x, float y, int s, int t) {
+        float disWidth = Display.getWidth();
+        float disHeight = Display.getHeight();
+        float texWidth = texture.getWidth();
+        float texHeight = texture.getHeight();
 
         float x1 = x / disWidth * 2 - 1;
         float y1 = 1 - y / disHeight * 2;
         float x2 = x / disWidth * 2 + width / disWidth * 2 - 1;
         float y2 = (1 - y / disHeight * 2) - (height / disHeight * 2);
 
-        float tx1 = u / texWidth;
-        float ty1 = v / texHeight;
-        float tx2 = u / texWidth + width / texWidth;
-        float ty2 = v / texHeight + height / texHeight;
+        float tx1 = (s* width) / texWidth;
+        float ty1 = (t * height) / texHeight;
+        float tx2 = ((s * width) / texWidth) + width / texWidth;
+        float ty2 = (t * height) / texHeight + height / texHeight;
 
         vertex.put(x1).put(y1); // Top left
         vertex.put(x2).put(y1);// Top right
@@ -165,8 +162,7 @@ public class
             elements.put(ep);
             ep++;
             points += 5;
-        }
-        else  {
+        } else {
             elements.put(ep);
             elements.put(ep);
             ep++;

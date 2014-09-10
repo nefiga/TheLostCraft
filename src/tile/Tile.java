@@ -1,18 +1,34 @@
 package tile;
 
 import entity.Entity;
-import game.graphics.SpriteBatcher;
+import game.graphics.ImageManager;
+import game.graphics.SpriteBatch;
+import game.graphics.TextureAtlas;
 import gear.tool.Tool;
 import level.Level;
+
+import java.awt.image.BufferedImage;
 
 public class Tile {
 
 
-    public static Tile voidTile = new VoidTile("VoidTile", 0, 1);
-    public static Tile water = new WaterTile("Water", 3 ,0);
-    public static Tile grass = new GrassTile("Grass", 0, 0);
-    public static Tile dirt = new DirtTile("Dirt", 1, 0);
-    public static Tile stone = new StoneTile("Stone", 2, 0);
+    public static Tile voidTile = new VoidTile("VoidTile");
+    public static Tile water = new WaterTile("Water");
+    public static Tile grass = new GrassTile("Grass");
+    public static Tile dirt = new DirtTile("Dirt");
+    public static Tile stone = new StoneTile("Stone");
+
+    /**
+     * The TextureAtlas for all Tiles
+     */
+    public static TextureAtlas tileAtlas;
+
+    /**
+     * The position and width and height of the tile in the TextureAtlas
+     */
+    int atlasS, atlasT, width, height;
+
+    protected BufferedImage image;
 
     /**
      * An array of all the tiles
@@ -29,11 +45,6 @@ public class Tile {
      */
     protected static final int tileSize = 64;
 
-    /**
-     * The sprites starting position on the sprite sheet
-     */
-    protected final int xOffset, yOffset;
-
     protected String name;
 
     /**
@@ -46,20 +57,34 @@ public class Tile {
     /**
      * Creates a new Tile. use the static method {@code addTile} to set the {@code id} of the Tile. Which will also
      * add the tile to the tiles array. Default durability is 1.
-     *
-     * @param name    The of the Tile
-     * @param xOffset Where the sprites starting X position is in the sprite sheet
-     * @param yOffset Where the sprites starting Y position is in the sprite sheet
      */
-    public Tile(String name, int xOffset, int yOffset) {
+    public Tile(String name) {
         this.name = name;
-        this.xOffset = xOffset * tileSize;
-        this.yOffset = yOffset * tileSize;
         durability = 1;
 
         if (tiles == null) {
             tiles = new Tile[1000];
+            tileAtlas = new TextureAtlas(TextureAtlas.SMALL, tileSize);
+            // The default tile image
+            image = ImageManager.getImage("/tiles/void_tile");
+            tileAtlas.addTexture(image);
         }
+        // The position of the default tile image
+        atlasS = 0;
+        atlasT = 0;
+        width = height = tileSize;
+    }
+
+    /**
+     * Sets the image for this tile. If no image is set the default image will be used
+     * @param image The file location of the image.
+     */
+    public void setImage(String image) {
+        this.image = ImageManager.getImage("/tiles/" + image);
+        int[] atlasPosition = tileAtlas.addTexture(this.image);
+        atlasS = atlasPosition[0];
+        atlasT = atlasPosition[1];
+        width = height = atlasPosition[2];
     }
 
     /**
@@ -131,11 +156,11 @@ public class Tile {
 
     /**
      * Renders the tiles image at x, y
-     * @param batcher The SpriteBatcher this tile will be rendered with
+     * @param batch The SpriteBatch this tile will be rendered with
      * @param x The x position on the screen this tile will be rendered at
      * @param y The y position on the screen this tile will be rendered at
      */
-    public void render(SpriteBatcher batcher, int x, int y) {
-        batcher.draw(x, y, tileSize, tileSize, xOffset, yOffset);
+    public void render(SpriteBatch batch, int x, int y) {
+        batch.draw(width, height, x, y, atlasS, atlasT);
     }
 }

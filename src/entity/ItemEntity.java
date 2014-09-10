@@ -6,8 +6,8 @@ public class ItemEntity extends Entity{
 
     Item item;
 
-    public ItemEntity(Item item, int positionX, int positionY, int textureX, int textureY, int width, int height) {
-        super(positionX, positionY, textureX, textureY, width, height);
+    public ItemEntity(Item item, int positionX, int positionY) {
+        super(positionX, positionY);
         this.item = item;
     }
 

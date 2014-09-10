@@ -7,7 +7,4 @@ import item.part.PickHead;
 
 public class GearRecipes {
 
-    public static PickAxe craftPickAxe(LongHandle handle, PickHead head, Bracket bracket) {
-        return new PickAxe(handle,  head, bracket);
-    }
 }

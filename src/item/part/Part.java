@@ -7,8 +7,8 @@ public class Part extends Item{
 
     public final Stats stats;
 
-    public Part(Stats stats) {
-        super();
+    public Part(String image, Stats stats) {
+        super(image);
         this.stats = stats;
     }
 

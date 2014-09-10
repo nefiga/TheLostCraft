@@ -1,11 +1,29 @@
 package item;
 
+import game.graphics.ImageManager;
+import game.graphics.TextureAtlas;
+
+import java.awt.image.BufferedImage;
+
 public class Item {
+
+    public static TextureAtlas itemAtlas;
+
+    /**
+     * The position and width and height of the tile in the TextureAtlas
+     */
+    int atlasS, atlasT, width, height;
+
+    protected BufferedImage image;
+
+    int itemSize = 32;
 
     /**
      * A list of all the items
      */
     private static Item[] items;
+
+    protected String name;
 
     /**
      * The next open position in the items array
@@ -17,10 +35,27 @@ public class Item {
      */
     protected int id;
 
-    public Item() {
+    public Item(String name) {
+        this.name = name;
+
         if (items == null) {
             items = new Item[1000];
+            itemAtlas = new TextureAtlas(TextureAtlas.SMALL, 32);
+            image = ImageManager.getImage("/items/void_item");
+            itemAtlas.addTexture(image);
         }
+        atlasS = 0;
+        atlasT = 0;
+        width = height = itemSize;
+        this.name = name;
+    }
+
+    public void setTexture(String image) {
+        this.image = ImageManager.getImage("/items/" + image);
+        int[] atlasPosition = itemAtlas.addTexture(this.image);
+        atlasS = atlasPosition[0];
+        atlasT = atlasPosition[1];
+        width = height = atlasPosition[2];
     }
 
     /**
@@ -32,6 +67,10 @@ public class Item {
         itemPosition++;
         items[itemPosition] = item;
         return itemPosition;
+    }
+
+    public BufferedImage getImage() {
+        return image;
     }
 
     /**
@@ -47,5 +86,9 @@ public class Item {
      */
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

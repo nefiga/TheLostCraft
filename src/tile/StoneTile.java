@@ -2,8 +2,9 @@ package tile;
 
 public class StoneTile extends Tile{
 
-    public StoneTile(String name, int xOffset, int yOffset) {
-        super(name, xOffset, yOffset);
+    public StoneTile(String name) {
+        super(name);
+        setImage("stone_tile");
         id = addTile(this);
         setDurability(1000);
     }

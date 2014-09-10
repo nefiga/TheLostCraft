@@ -1,15 +1,20 @@
 package game;
 
 import entity.Player;
+import game.graphics.Texture;
 import input.Input;
 import input.PlayerInput;
 import level.Level;
 import level.LevelManager;
 import level.RandomMapGenerator;
 import org.lwjgl.opengl.Display;
+import tile.Tile;
+
+import java.awt.image.BufferedImage;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class Game extends GameLoop{
 
@@ -21,12 +26,13 @@ public class Game extends GameLoop{
 
     public void init() {
 
-        player = new Player(200, 200, 0, 0, 64, 64);
+        player = new Player(200, 200);
         playerInput = new PlayerInput(player);
 
         levelManager = new LevelManager();
         levelManager.addLevel("Testing", new Level(RandomMapGenerator.generateMap(1000), player));
         levelManager.setCurrentLevel("Testing");
+        glClearColor(0, 1, 0, 1);
     }
 
     public void update(long delta) {

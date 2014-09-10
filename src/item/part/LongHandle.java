@@ -4,7 +4,8 @@ import gear.Stats;
 
 public class LongHandle extends Part{
 
-    public LongHandle(Stats stats) {
-        super(stats);
+    public LongHandle(String image, Stats stats) {
+        super(image, stats);
+        setTexture("handle");
     }
 }

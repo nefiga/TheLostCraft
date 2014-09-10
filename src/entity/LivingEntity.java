@@ -1,11 +1,25 @@
 package entity;
 
 
+import game.Game;
+import game.graphics.ImageManager;
+import game.graphics.SpriteBatch;
+import game.graphics.TextureAtlas;
 import item.Item;
 import gear.tool.Tool;
 import level.Level;
 
+import java.awt.image.BufferedImage;
+
 public class LivingEntity extends Entity {
+
+    public static TextureAtlas livingEntityAtlas;
+
+    protected int atlasS, atlasT;
+
+    protected BufferedImage image;
+
+    private final int entitySize = 64;
 
     /**
      * The level this entity is currently in
@@ -24,8 +38,24 @@ public class LivingEntity extends Entity {
     protected int[] interactX = new int[]  {32, 96, 32 , -32};
     protected int[] interactY = new int[] {-32, 32, 96, 32};
 
-    public LivingEntity(int positionX, int positionY, int textureX, int textureY, int width, int height) {
-        super(positionX, positionY, textureX, textureY, width, height);
+    public LivingEntity(int positionX, int positionY) {
+        super(positionX, positionY);
+        if (livingEntityAtlas == null) {
+            livingEntityAtlas = new TextureAtlas(TextureAtlas.LARGE, entitySize);
+            livingEntityAtlas.addTexture(ImageManager.getImage("/sprites/void_entity"));
+        }
+        atlasS = 0;
+        atlasT = 0;
+        this.width = this.height = entitySize;
+    }
+
+    public void setTexture(String image) {
+        int[] position = livingEntityAtlas.addTexture(ImageManager.getImage("/sprites/" + image));
+        for (int i =0; i < position.length; i++) {
+            atlasS = position[0];
+            atlasT = position[1];
+            width = height = position[2];
+        }
     }
 
     public void setLevel(Level level) {
@@ -68,4 +98,7 @@ public class LivingEntity extends Entity {
         y += level.getMaxMoveY(this, velocityY, null);
     }
 
+    public void render(SpriteBatch batch) {
+        batch.draw(width, height, x - Game.getXOffset(), y - Game.getYOffset(), atlasS * entitySize, atlasT * entitySize);
+    }
 }
