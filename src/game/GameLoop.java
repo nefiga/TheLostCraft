@@ -11,7 +11,7 @@ public class GameLoop {
 
     private static GameLoop gameLoop;
 
-    private int FPS = 60;
+    private int FPS = 6000;
     private long lastFPS;
     int fps;
 

@@ -41,7 +41,7 @@ public class TextureAtlas {
     }
 
     /**
-     * Adds the image to the atlas of textures at the first open position
+     * Adds the image to the texture atlas at the first open position
      *
      * @param image The image to be added
      * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
@@ -82,14 +82,13 @@ public class TextureAtlas {
     }
 
     /**
-     * Adds the image to the atlas of textures at the first open position
+     * Adds the pixels to the texture atlas at the first open position
      *
      * @param imagePixels An array of pixels to be added to the texture atlas
-     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
-     * and position 2 and 3 are the width and height of the image.
+     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas.
      */
     public int[] addTexture(int[] imagePixels, int w, int h) {
-        int[] position = new int[4];
+        int[] position = new int[2];
         int textureColumns = w / tileSize;
         int textureRows = h / tileSize;
 
@@ -98,8 +97,6 @@ public class TextureAtlas {
                 if (checkSpace(c, r, textureColumns, textureRows)) {
                     position[0] = c;
                     position[1] = r;
-                    position[2] = w;
-                    position[3] = h;
 
                     int pixelRow = r * tileSize;
                     int pixelCol = c * tileSize;
@@ -119,7 +116,7 @@ public class TextureAtlas {
     }
 
     /**
-     * Sets the location in the tiles array to 1
+     * Sets the location in the tiles array to 1 (full)
      * @param c The starting column
      * @param r The starting row
      * @param numColumns The number of columns to set

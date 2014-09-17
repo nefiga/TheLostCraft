@@ -43,22 +43,37 @@ public class Map {
     }
 
     /**
-     * Renders the miniMap. Image is stored in the misBatch in the Game class
+     * Renders the miniMap. Image is stored in the misBatch in the Game class. Each tile is 4 pixels on the mini map.
      *
-     * @param batch  SpriteBatch
      * @param startX The x position in the map that the miniMap will start rendering at
      * @param startY The y position in the map that the miniMap will start rendering at
      */
+    int timer = 0;
+
     public void renderMiniMap(SpriteBatch batch, int startX, int startY) {
-        for (int y = 0; y < MINI_HEIGHT; y++) {
-            for (int x = 0; x < MINI_WIDTH; x++) {
-                if (startX + x < 0 || startX + x >= width || startY + y < 0 || startY + y >= height)
-                    miniMap[x + y * MINI_WIDTH] = 0xff000000;
-                else
-                    miniMap[x + y * MINI_WIDTH] = Tile.getTile(tiles[(x + startX) + (y + startY) * width]).getMapColor();
+        timer++;
+        // Only update the mini map image every 20 renders, since it takes 21 renders for the player to move 1 tile
+        if (timer > 20) {
+            timer = 0;
+            for (int y = 0; y < MINI_HEIGHT / 2 - 1; y++) {
+                for (int x = 0; x < MINI_WIDTH / 2 - 1; x++) {
+                    if (startX + x < 0 || startX + x >= width || startY + y < 0 || startY + y >= height) {
+                        miniMap[(x * 2) + (y * 2) * MINI_WIDTH] = 0xff000000;
+                        miniMap[(x * 2 + 1) + (y * 2) * MINI_WIDTH] = 0xff000000;
+                        miniMap[(x * 2) + (y * 2 + 1) * MINI_WIDTH] = 0xff000000;
+                        miniMap[(x * 2 + 1) + (y * 2 + 1) * MINI_WIDTH] = 0xff000000;
+                    } else {
+                        int color = Tile.getTile(tiles[(x + startX) + (y + startY) * width]).getMapColor();
+                        miniMap[(x * 2) + (y * 2) * MINI_WIDTH] = color;
+                        miniMap[(x * 2 + 1) + (y * 2) * MINI_WIDTH] = color;
+                        miniMap[(x * 2) + (y * 2 + 1) * MINI_WIDTH] = color;
+                        miniMap[(x * 2 + 1) + (y * 2 + 1) * MINI_WIDTH] = color;
+                    }
+                }
             }
+            batch.subTexture(miniMap, atlasS, atlasT, MINI_WIDTH, MINI_HEIGHT);
         }
-        batch.subTexture(miniMap, atlasS, atlasT, MINI_WIDTH, MINI_HEIGHT);
+        // Still need to draw the minim map ever render
         batch.draw(MINI_WIDTH, MINI_HEIGHT, offsetX, offsetY, atlasS, atlasT);
     }
 }

@@ -94,7 +94,7 @@ public class Level {
     }
 
     protected void renderMis() {
-        map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
+        map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 4, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 4);
     }
 
 

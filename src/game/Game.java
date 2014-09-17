@@ -31,9 +31,9 @@ public class Game extends GameLoop{
     private static int xOffset, yOffset;
 
     public void init() {
-        misAtlas = new TextureAtlas(TextureAtlas.LARGE, 64);
+        misAtlas = new TextureAtlas(TextureAtlas.LARGE, 32);
 
-        player = new Player(200, 200);
+        player = new Player(64 * 50, 64 * 50);
         playerInput = new PlayerInput(player);
 
         levelManager = new LevelManager();
