@@ -23,7 +23,7 @@ public class Sword extends Weapon{
         addStats(handle.getStats());
 
         // Combining the Texture from the items that make up this sword then setting the texture
-        image = ImageManager.combineImages(blade.getImage(), guard.getImage(), handle.getImage());
+        image = ImageManager.combineImages(handle.getImage(), blade.getImage(), guard.getImage());
         setTexture(image);
     }
 }

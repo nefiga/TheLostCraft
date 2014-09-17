@@ -74,6 +74,29 @@ public class Texture {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 
+    public void subTexture(int[] texture, int offsetX, int offsetY, int width, int height) {
+        ByteBuffer tempBuffer = BufferUtils.createByteBuffer(texture.length * 4);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = texture[x + y * width];
+                //Add red component
+                tempBuffer.put((byte) ((pixel >> 16) & 0xff));
+                //Add green component
+                tempBuffer.put((byte) ((pixel >> 8) & 0xff));
+                //Add blue component
+                tempBuffer.put((byte) (pixel & 0xff));
+                //Add alpha component
+                tempBuffer.put((byte) ((pixel >> 24) & 0xff));
+            }
+        }
+        tempBuffer.rewind();
+
+        bind();
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, width, height, GL_RGBA, GL_UNSIGNED_BYTE, tempBuffer);
+    }
+
     public int getWidth() {
         return width;
     }

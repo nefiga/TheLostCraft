@@ -6,5 +6,6 @@ public class GrassTile extends Tile{
         super(name);
         setImage("grass_tile");
         this.id = addTile(this);
+        mapColor = 0xff0d8f00;
     }
 }

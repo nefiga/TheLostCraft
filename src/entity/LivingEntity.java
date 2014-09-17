@@ -42,7 +42,8 @@ public class LivingEntity extends Entity {
         super(positionX, positionY);
         if (livingEntityAtlas == null) {
             livingEntityAtlas = new TextureAtlas(TextureAtlas.LARGE, entitySize);
-            livingEntityAtlas.addTexture(ImageManager.getImage("/sprites/void_entity"));
+            image = ImageManager.getImage("/sprites/void_entity");
+            livingEntityAtlas.addTexture(image);
         }
         atlasS = 0;
         atlasT = 0;
@@ -50,11 +51,13 @@ public class LivingEntity extends Entity {
     }
 
     public void setTexture(String image) {
-        int[] position = livingEntityAtlas.addTexture(ImageManager.getImage("/sprites/" + image));
+        this.image = ImageManager.getImage("/sprites/" + image);
+        int[] position = livingEntityAtlas.addTexture(this.image);
         for (int i =0; i < position.length; i++) {
             atlasS = position[0];
             atlasT = position[1];
-            width = height = position[2];
+            width = position[2];
+            height = position[3];
         }
     }
 
@@ -99,6 +102,6 @@ public class LivingEntity extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(width, height, x - Game.getXOffset(), y - Game.getYOffset(), atlasS * entitySize, atlasT * entitySize);
+        batch.draw(width, height, x - Game.getXOffset(), y - Game.getYOffset(), atlasS, atlasT);
     }
 }

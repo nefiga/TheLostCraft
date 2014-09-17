@@ -7,12 +7,7 @@ import entity.Player;
 import game.Game;
 import game.graphics.*;
 import gear.Gear;
-import gear.Stats;
-import gear.weapon.Sword;
 import gear.tool.Tool;
-import item.part.Blade;
-import item.part.Guard;
-import item.part.LongHandle;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -23,10 +18,10 @@ import java.util.List;
 public class Level {
 
     private SpriteBatch tileBatch;
-    private SpriteBatch spriteBatch;
-    private SpriteBatch gearBatch;
+    private SpriteBatch entityBatch;
+    private SpriteBatch misBatch;
 
-    Sword sword;
+    Map map;
 
     /**
      * A list of all the tiles in the level
@@ -63,7 +58,7 @@ public class Level {
      * @param player The player
      */
     public Level(Map map, Player player) {
-        sword = new Sword("Sword", new Blade("Blade", new Stats(10, 10, 10)), new Guard("Guard", new Stats(10, 10, 10)), new LongHandle("LongHandle", new Stats(10, 10, 10)));
+        this.map = map;
         this.tiles = map.tiles;
         this.tileData = map.tileData;
         this.height = map.height;
@@ -72,8 +67,8 @@ public class Level {
         player.setLevel(this);
         interactArea = new Rectangle();
         tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 700);
-        spriteBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
-        gearBatch = new SpriteBatch(new Texture(Gear.gearAtlas), 100);
+        entityBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
+        misBatch = new SpriteBatch(new Texture(Game.misAtlas), 1000);
     }
 
     public void update(long delta) {
@@ -89,21 +84,22 @@ public class Level {
         renderTiles();
         tileBatch.end();
 
-        spriteBatch.begin();
+        entityBatch.begin();
         renderEntities();
-        spriteBatch.end();
+        entityBatch.end();
 
-        gearBatch.begin();
-        renderGear();
-        gearBatch.end();
+        misBatch.begin();
+        renderMis();
+        misBatch.end();
     }
 
-    public void renderGear() {
-        sword.render(gearBatch, 800, 700);
+    protected void renderMis() {
+        map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
     }
+
 
     protected void renderEntities() {
-        player.render(spriteBatch);
+        player.render(entityBatch);
     }
 
     /**

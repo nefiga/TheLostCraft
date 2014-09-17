@@ -2,6 +2,7 @@ package game;
 
 import entity.Player;
 import game.graphics.Texture;
+import game.graphics.TextureAtlas;
 import input.Input;
 import input.PlayerInput;
 import level.Level;
@@ -18,6 +19,11 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class Game extends GameLoop{
 
+    /**
+     * TextureAtlas for miscellaneous images
+     */
+    public static TextureAtlas misAtlas;
+
     LevelManager levelManager;
     Player player;
     Input playerInput;
@@ -25,6 +31,7 @@ public class Game extends GameLoop{
     private static int xOffset, yOffset;
 
     public void init() {
+        misAtlas = new TextureAtlas(TextureAtlas.LARGE, 64);
 
         player = new Player(200, 200);
         playerInput = new PlayerInput(player);

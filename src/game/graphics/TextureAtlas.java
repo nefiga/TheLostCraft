@@ -1,10 +1,6 @@
 package game.graphics;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TextureAtlas {
 
@@ -12,88 +8,150 @@ public class TextureAtlas {
 
     private int[] atlas;
 
+    // The tiles of the atlas. This is determined by rows * columns
+    // An empty space is indicated by 0 and a full space is indicated by 1
+    private int[] tiles;
+
     // The number of rows and columns in the TextureAtlas
     private final int rows, columns;
-
-    // The current row and column in the Atlas
-    private int currentRow, currentColumn;
 
     // The size of the TextureAtlas
     private int width, height;
 
     // The size of a column and row
-    private int textureSize;
+    private int tileSize;
 
     private int textureCapacity;
 
     /**
      * Creates a new TextureAtlas
      *
-     * @param atlasSize   The size of the TextureAtlas. There are the standard sizes small, medium and large
-     * @param textureSize The standard size of the textures to be used in this TextureAtlas
+     * @param atlasSize The size of the TextureAtlas. There are the standard sizes small, medium and large
+     * @param tileSize  The size of the rows and columns
      */
-    public TextureAtlas(int atlasSize, int textureSize) {
-        this.textureSize = textureSize;
-        rows = atlasSize / textureSize;
-        columns = atlasSize / textureSize;
+    public TextureAtlas(int atlasSize, int tileSize) {
+        this.tileSize = tileSize;
+        rows = atlasSize / tileSize;
+        columns = atlasSize / tileSize;
         width = atlasSize;
         height = atlasSize;
         atlas = new int[atlasSize * atlasSize];
         textureCapacity = rows * columns;
+        tiles = new int[rows * columns];
     }
 
+    /**
+     * Adds the image to the atlas of textures at the first open position
+     *
+     * @param image The image to be added
+     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
+     * and position 2 and 3 are the width and height of the image.
+     */
     public int[] addTexture(BufferedImage image) {
-        int[] position = new int[3];
-            int w = image.getWidth();
-            int h = image.getHeight();
-            int[] imagePixels = new int[w * h];
-            image.getRGB(0, 0, w, h, imagePixels, 0, image.getWidth());
+        int[] position = new int[4];
+        int w = image.getWidth();
+        int h = image.getHeight();
+        int textureColumns = w / tileSize;
+        int textureRows = h / tileSize;
+        int[] imagePixels = new int[w * h];
+        image.getRGB(0, 0, w, h, imagePixels, 0, image.getWidth());
 
-            if (currentColumn + (w / textureSize) > columns) {
-                increaseCurrentRow();
-                currentColumn = 0;
-            }
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                if (checkSpace(c, r, textureColumns, textureRows)) {
+                    position[0] = c;
+                    position[1] = r;
+                    position[2] = image.getWidth();
+                    position[3] = image.getHeight();
 
-            position[0] = currentColumn;
-            position[1] = currentRow;
-            position[2] = textureSize;
-
-            int pixelRow = currentRow * textureSize;
-            int pixelCol = currentColumn * textureSize;
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
+                    int pixelRow = r * tileSize;
+                    int pixelCol = c * tileSize;
+                    for (int y = 0; y < h; y++) {
+                        for (int x = 0; x < w; x++) {
+                            atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
+                        }
+                    }
+                    fillTile(c, r, textureColumns, textureRows);
+                    return position;
                 }
             }
-
-            currentColumn += (w / textureSize);
-        return position;
-    }
-
-    public int[] addTexture(int[] imagePixels, int w, int h) {
-        int[] position = new int[3];
-
-        if (currentColumn + (w / textureSize) > columns) {
-            increaseCurrentRow();
-            currentColumn = 0;
         }
 
-        int pixelRow = currentRow * textureSize;
-        int pixelCol = currentColumn * textureSize;
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
+        System.err.print("Atlas out off space  " + this.toString());
+        return null;
+    }
+
+    /**
+     * Adds the image to the atlas of textures at the first open position
+     *
+     * @param imagePixels An array of pixels to be added to the texture atlas
+     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
+     * and position 2 and 3 are the width and height of the image.
+     */
+    public int[] addTexture(int[] imagePixels, int w, int h) {
+        int[] position = new int[4];
+        int textureColumns = w / tileSize;
+        int textureRows = h / tileSize;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                if (checkSpace(c, r, textureColumns, textureRows)) {
+                    position[0] = c;
+                    position[1] = r;
+                    position[2] = w;
+                    position[3] = h;
+
+                    int pixelRow = r * tileSize;
+                    int pixelCol = c * tileSize;
+                    for (int y = 0; y < h; y++) {
+                        for (int x = 0; x < w; x++) {
+                            atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
+                        }
+                    }
+                    fillTile(c, r, textureColumns, textureRows);
+                    return position;
+                }
             }
         }
-        currentColumn += (w / textureSize);
-        return position;
+
+        System.err.print("Atlas out off space  " + this.toString());
+        return null;
     }
 
-    public void increaseCurrentRow() {
-        currentRow++;
-        if (currentRow > rows) {
-            System.err.println("To many textures!");
+    /**
+     * Sets the location in the tiles array to 1
+     * @param c The starting column
+     * @param r The starting row
+     * @param numColumns The number of columns to set
+     * @param numRows The number of rows to set
+     */
+    public void fillTile(int c, int r, int numColumns, int numRows) {
+        for (int y = 0; y < numRows; y++) {
+            for (int x = 0; x < numColumns; x++) {
+                tiles[(c + x) + (r + y) * rows] = 1;
+            }
         }
+    }
+
+    /**
+     * Checks if there is enough space for the image at the given location
+     * @param c The starting column
+     * @param r The starting row
+     * @param numCol The number of columns the image will take up
+     * @param numRow The number of rows the image will take up
+     * @return true if there is enough space
+     */
+    public boolean checkSpace(int c, int r, int numCol, int numRow) {
+        if (tiles[c + r * columns] == 0 && c + numCol < columns && r + numRow < rows) {
+            for (int y = 0; y < numRow; y++) {
+                for (int x = 0; x < numCol; x++) {
+                    if (tiles[(c + x) + (r + y) * rows] == 1) return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -114,8 +172,8 @@ public class TextureAtlas {
     /**
      * @return The size of the textures in this TextureAtlas
      */
-    public int getTextureSize() {
-        return textureSize;
+    public int getTileSize() {
+        return tileSize;
     }
 
     public int getTextureCapacity() {

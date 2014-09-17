@@ -26,7 +26,7 @@ public class Gear {
         if (gearAtlas == null) {
             gearAtlas = new TextureAtlas(TextureAtlas.LARGE, gearSize);
             // Create default texture
-            image = ImageManager.getImage("/items/blade");
+            image = ImageManager.getImage("/gear/void_gear");
             gearAtlas.addTexture(image);
         }
         atlasS = 0;
@@ -39,7 +39,8 @@ public class Gear {
         int[] atlasPosition = gearAtlas.addTexture(image);
         atlasS = atlasPosition[0];
         atlasT = atlasPosition[1];
-        width = height = atlasPosition[2];
+        width = atlasPosition[2];
+        height = atlasPosition[3];
     }
 
     public void addStats(Stats stats) {

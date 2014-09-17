@@ -33,7 +33,7 @@ public class SpriteBatch {
     public SpriteBatch(Texture texture, int size) {
         vertex = BufferUtils.createFloatBuffer(size * 8);
         texCords = BufferUtils.createFloatBuffer(size * 8);
-        elements = BufferUtils.createShortBuffer(size  * 10);
+        elements = BufferUtils.createShortBuffer(size * 10);
 
         this.texture = texture;
         shader = new ShaderManager();
@@ -116,30 +116,46 @@ public class SpriteBatch {
     }
 
     /**
-     * Adds the texture to the Buffer to be drawn.
+     * Adds the texture to the Buffer that will be rendered
      *
-     * @param width  The width of the TextureAtlas
-     * @param height The height of the TextureAtlas
-     * @param x      The starting x point on the screen
-     * @param y      The starting y point on the screen
-     * @param s      The offset of the texture in the TextureAtlas
-     * @param t      The offset of the texture in the TextureAtlas
+     * @param width    The width of the texture and the width to draw the texture
+     * @param height   The height of the texture and the height to draw the texture
+     * @param x        The starting x point on the screen
+     * @param y        The starting y point on the screen
+     * @param textureX The starting x point of the texture in the texture atlas
+     * @param textureY The starting y point of the texture in the texture atlas
      */
-    public void draw(int width, int height, float x, float y, int s, int t) {
+    public void draw(int width, int height, float  x, float y, int textureX, int textureY) {
+        draw(width, height, x, y, textureX, textureY, width, height);
+    }
+
+    /**
+     * Add the texture to the Buffer that will be rendered
+     *
+     * @param drawWidth     The width to draw the texture
+     * @param drawHeight    The height to draw the texture
+     * @param x             The starting x point of the screen
+     * @param y             The starting y point on the screen
+     * @param textureX      The starting x point of the texture in the texture atlas
+     * @param textureY      The starting y point of the texture in the texture atlas
+     * @param textureWidth  The width of the texture in the texture atlas
+     * @param textureHeight The height of the texture in the texture atlas
+     */
+    public void draw(int drawWidth, int drawHeight, float x, float y, int textureX, int textureY, int textureWidth, int textureHeight) {
         float disWidth = Display.getWidth();
         float disHeight = Display.getHeight();
-        float texWidth = texture.getWidth();
-        float texHeight = texture.getHeight();
+        float atlasWidth = texture.getWidth();
+        float atlasHeight = texture.getHeight();
 
         float x1 = x / disWidth * 2 - 1;
         float y1 = 1 - y / disHeight * 2;
-        float x2 = x / disWidth * 2 + width / disWidth * 2 - 1;
-        float y2 = (1 - y / disHeight * 2) - (height / disHeight * 2);
+        float x2 = x / disWidth * 2 + drawWidth / disWidth * 2 - 1;
+        float y2 = (1 - y / disHeight * 2) - (drawHeight / disHeight * 2);
 
-        float tx1 = (s* width) / texWidth;
-        float ty1 = (t * height) / texHeight;
-        float tx2 = ((s * width) / texWidth) + width / texWidth;
-        float ty2 = (t * height) / texHeight + height / texHeight;
+        float tx1 = (textureX * textureWidth) / atlasWidth;
+        float ty1 = (textureY * textureHeight) / atlasHeight;
+        float tx2 = ((textureX * textureWidth) / atlasWidth) + textureWidth / atlasWidth;
+        float ty2 = (textureY * textureHeight) / atlasHeight + textureHeight / atlasHeight;
 
         vertex.put(x1).put(y1); // Top left
         vertex.put(x2).put(y1);// Top right
@@ -175,5 +191,9 @@ public class SpriteBatch {
             ep++;
             points += 6;
         }
+    }
+
+    public void subTexture(int[] piexels, int offsetX, int offsetY, int width, int height) {
+        texture.subTexture(piexels, offsetX, offsetY, width, height);
     }
 }

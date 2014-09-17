@@ -52,6 +52,11 @@ public class Tile {
      */
     protected int id;
 
+    /**
+     * The color that will be displayed on the map for this tile
+     */
+    protected int mapColor = 0;
+
     protected int durability;
 
     /**
@@ -84,7 +89,8 @@ public class Tile {
         int[] atlasPosition = tileAtlas.addTexture(this.image);
         atlasS = atlasPosition[0];
         atlasT = atlasPosition[1];
-        width = height = atlasPosition[2];
+        width = atlasPosition[2];
+        height = atlasPosition[3];
     }
 
     /**
@@ -132,6 +138,10 @@ public class Tile {
      */
     public int getID() {
         return id;
+    }
+
+    public int getMapColor() {
+        return mapColor;
     }
 
     /**

@@ -55,7 +55,8 @@ public class Item {
         int[] atlasPosition = itemAtlas.addTexture(this.image);
         atlasS = atlasPosition[0];
         atlasT = atlasPosition[1];
-        width = height = atlasPosition[2];
+        width = atlasPosition[2];
+        height = atlasPosition[3];
     }
 
     /**

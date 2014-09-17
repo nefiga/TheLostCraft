@@ -6,5 +6,6 @@ public class WaterTile extends Tile{
         super(name);
         setImage("water_tile");
         id = addTile(this);
+        mapColor = 0xff008a9f;
     }
 }
