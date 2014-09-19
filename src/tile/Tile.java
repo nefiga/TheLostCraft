@@ -1,6 +1,7 @@
 package tile;
 
 import entity.Entity;
+import game.Game;
 import game.graphics.ImageManager;
 import game.graphics.SpriteBatch;
 import game.graphics.TextureAtlas;
@@ -28,7 +29,14 @@ public class Tile {
      */
     int atlasS, atlasT, width, height;
 
+    //Stores the images position in TextureAtlas in this order x, y, width, height
+    protected int[] imagePosition;
+
+    protected int[] mapImagePosition;
+
     protected BufferedImage image;
+
+    protected BufferedImage mapImage;
 
     /**
      * An array of all the tiles
@@ -69,37 +77,45 @@ public class Tile {
 
         if (tiles == null) {
             tiles = new Tile[1000];
-            tileAtlas = new TextureAtlas(TextureAtlas.SMALL, tileSize);
+            tileAtlas = new TextureAtlas(TextureAtlas.SMALL);
+
             // The default tile image
             image = ImageManager.getImage("/tiles/void_tile");
-            tileAtlas.addTexture(image);
+            imagePosition = tileAtlas.addTexture(image);
+            mapImage = ImageManager.getImage("/tiles/map_void");
+            mapImagePosition = Game.miniMapAtlas.addTexture(mapImage);
         }
-        // The position of the default tile image
-        atlasS = 0;
-        atlasT = 0;
-        width = height = tileSize;
+
+
     }
 
     /**
      * Sets the image for this tile. If no image is set the default image will be used
+     *
      * @param image The file location of the image.
      */
     public void setImage(String image) {
         this.image = ImageManager.getImage("/tiles/" + image);
-        int[] atlasPosition = tileAtlas.addTexture(this.image);
-        atlasS = atlasPosition[0];
-        atlasT = atlasPosition[1];
-        width = atlasPosition[2];
-        height = atlasPosition[3];
+        imagePosition = tileAtlas.addTexture(this.image);
+    }
+
+    public void setMapImage(String image) {
+        this.mapImage = ImageManager.getImage("/tiles/" + image);
+        mapImagePosition = Game.miniMapAtlas.addTexture(mapImage);
+    }
+
+    public void setMiniMapImage(String image) {
+
     }
 
     /**
      * Interacts with this tile
-     * @param level The level the tile is in
+     *
+     * @param level  The level the tile is in
      * @param entity The entity interacting with the tile
-     * @param tool The tool being used
-     * @param x The x position of the tile
-     * @param y The y position of the tile
+     * @param tool   The tool being used
+     * @param x      The x position of the tile
+     * @param y      The y position of the tile
      */
     public void interact(Level level, Entity entity, Tool tool, int x, int y) {
 
@@ -155,6 +171,7 @@ public class Tile {
 
     /**
      * Adds the tile to the {@code tiles} array at the next open position.
+     *
      * @param tile The tile to be added
      * @return The position the tile was added to the array
      */
@@ -166,11 +183,16 @@ public class Tile {
 
     /**
      * Renders the tiles image at x, y
+     *
      * @param batch The SpriteBatch this tile will be rendered with
-     * @param x The x position on the screen this tile will be rendered at
-     * @param y The y position on the screen this tile will be rendered at
+     * @param x     The x position on the screen this tile will be rendered at
+     * @param y     The y position on the screen this tile will be rendered at
      */
     public void render(SpriteBatch batch, int x, int y) {
-        batch.draw(width, height, x, y, atlasS, atlasT);
+        batch.draw(imagePosition[2], imagePosition[3], x, y, imagePosition[0], imagePosition[1]);
+    }
+
+    public void renderMapImage(SpriteBatch batch, int x, int y) {
+        batch.draw(mapImagePosition[2], mapImagePosition[3], x, y, mapImagePosition[0], mapImagePosition[1]);
     }
 }

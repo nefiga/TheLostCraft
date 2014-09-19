@@ -34,7 +34,7 @@ public class Animation {
         if (currentSprite > numSprites) currentSprite = 0;
     }
 
-    public void render(SpriteBatcher batcher, int x, int y) {
+    public void render(SpriteBatch batcher, int x, int y) {
         batcher.draw(x, y, width, height, textureX + (width * currentSprite), textureY);
     }
 }

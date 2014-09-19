@@ -6,7 +6,6 @@ import entity.LivingEntity;
 import entity.Player;
 import game.Game;
 import game.graphics.*;
-import gear.Gear;
 import gear.tool.Tool;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
@@ -68,7 +67,7 @@ public class Level {
         interactArea = new Rectangle();
         tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
-        misBatch = new SpriteBatch(new Texture(Game.misAtlas), 1000);
+        misBatch = new SpriteBatch(new Texture(Game.miniMapAtlas), 1500);
     }
 
     public void update(long delta) {
@@ -94,7 +93,7 @@ public class Level {
     }
 
     protected void renderMis() {
-        map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 4, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 4);
+        map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
     }
 
 

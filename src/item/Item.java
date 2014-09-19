@@ -9,10 +9,7 @@ public class Item {
 
     public static TextureAtlas itemAtlas;
 
-    /**
-     * The position and width and height of the tile in the TextureAtlas
-     */
-    int atlasS, atlasT, width, height;
+    protected int[]  imagePosition;
 
     protected BufferedImage image;
 
@@ -40,23 +37,17 @@ public class Item {
 
         if (items == null) {
             items = new Item[1000];
-            itemAtlas = new TextureAtlas(TextureAtlas.SMALL, 32);
+            itemAtlas = new TextureAtlas(TextureAtlas.SMALL);
             image = ImageManager.getImage("/items/void_item");
-            itemAtlas.addTexture(image);
+            imagePosition = itemAtlas.addTexture(image);
         }
-        atlasS = 0;
-        atlasT = 0;
-        width = height = itemSize;
+
         this.name = name;
     }
 
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/items/" + image);
-        int[] atlasPosition = itemAtlas.addTexture(this.image);
-        atlasS = atlasPosition[0];
-        atlasT = atlasPosition[1];
-        width = atlasPosition[2];
-        height = atlasPosition[3];
+        imagePosition = itemAtlas.addTexture(this.image);
     }
 
     /**

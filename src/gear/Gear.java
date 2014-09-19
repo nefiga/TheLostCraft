@@ -10,7 +10,7 @@ public class Gear {
 
     public static TextureAtlas gearAtlas;
 
-    int atlasS, atlasT, width, height;
+    protected int[] imagePosition;
 
     protected BufferedImage image;
 
@@ -24,32 +24,28 @@ public class Gear {
         this.name = name;
 
         if (gearAtlas == null) {
-            gearAtlas = new TextureAtlas(TextureAtlas.LARGE, gearSize);
+            gearAtlas = new TextureAtlas(TextureAtlas.LARGE);
             // Create default texture
-            image = ImageManager.getImage("/gear/void_gear");
-            gearAtlas.addTexture(image);
+            image = ImageManager.getImage("/items/void_item");
+            imagePosition = gearAtlas.addTexture(image);
         }
-        atlasS = 0;
-        atlasT = 0;
-        width = height = gearSize;
     }
 
     public void setTexture(BufferedImage image) {
         this.image = image;
-        int[] atlasPosition = gearAtlas.addTexture(image);
-        atlasS = atlasPosition[0];
-        atlasT = atlasPosition[1];
-        width = atlasPosition[2];
-        height = atlasPosition[3];
+        imagePosition = gearAtlas.addTexture(image);
     }
 
+    /**
+     * Adds the stats to the gear. Will combined with other stats currently on the gear
+     */
     public void addStats(Stats stats) {
         if (this.stats == null) this.stats = stats;
         else this.stats = Stats.combinedStats(this.stats, stats);
     }
 
     public void render(SpriteBatch batch, int x, int y) {
-        batch.draw(width, height, x, y, atlasS, atlasT);
+        batch.draw(imagePosition[2], imagePosition[3], x, y, imagePosition[0], imagePosition[1]);
     }
 
     public String getName() {

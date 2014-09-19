@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class TextureAtlas {
 
-    public static final int SMALL = 640, MEDIUM = 960, LARGE = 1024;
+    public static final int SUPER_SMALL = 320, SMALL = 640, MEDIUM = 960, LARGE = 1024;
 
     private int[] atlas;
 
@@ -19,7 +19,7 @@ public class TextureAtlas {
     private int width, height;
 
     // The size of a column and row
-    private int tileSize;
+    public static final int TILE_SIZE = 8;
 
     private int textureCapacity;
 
@@ -27,12 +27,10 @@ public class TextureAtlas {
      * Creates a new TextureAtlas
      *
      * @param atlasSize The size of the TextureAtlas. There are the standard sizes small, medium and large
-     * @param tileSize  The size of the rows and columns
      */
-    public TextureAtlas(int atlasSize, int tileSize) {
-        this.tileSize = tileSize;
-        rows = atlasSize / tileSize;
-        columns = atlasSize / tileSize;
+    public TextureAtlas(int atlasSize) {
+        rows = atlasSize / TILE_SIZE;
+        columns = atlasSize / TILE_SIZE;
         width = atlasSize;
         height = atlasSize;
         atlas = new int[atlasSize * atlasSize];
@@ -51,8 +49,8 @@ public class TextureAtlas {
         int[] position = new int[4];
         int w = image.getWidth();
         int h = image.getHeight();
-        int textureColumns = w / tileSize;
-        int textureRows = h / tileSize;
+        int textureColumns = w / TILE_SIZE;
+        int textureRows = h / TILE_SIZE;
         int[] imagePixels = new int[w * h];
         image.getRGB(0, 0, w, h, imagePixels, 0, image.getWidth());
 
@@ -64,8 +62,8 @@ public class TextureAtlas {
                     position[2] = image.getWidth();
                     position[3] = image.getHeight();
 
-                    int pixelRow = r * tileSize;
-                    int pixelCol = c * tileSize;
+                    int pixelRow = r * TILE_SIZE;
+                    int pixelCol = c * TILE_SIZE;
                     for (int y = 0; y < h; y++) {
                         for (int x = 0; x < w; x++) {
                             atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
@@ -89,8 +87,8 @@ public class TextureAtlas {
      */
     public int[] addTexture(int[] imagePixels, int w, int h) {
         int[] position = new int[2];
-        int textureColumns = w / tileSize;
-        int textureRows = h / tileSize;
+        int textureColumns = w / TILE_SIZE;
+        int textureRows = h / TILE_SIZE;
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
@@ -98,8 +96,8 @@ public class TextureAtlas {
                     position[0] = c;
                     position[1] = r;
 
-                    int pixelRow = r * tileSize;
-                    int pixelCol = c * tileSize;
+                    int pixelRow = r * TILE_SIZE;
+                    int pixelCol = c * TILE_SIZE;
                     for (int y = 0; y < h; y++) {
                         for (int x = 0; x < w; x++) {
                             atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
@@ -170,7 +168,7 @@ public class TextureAtlas {
      * @return The size of the textures in this TextureAtlas
      */
     public int getTileSize() {
-        return tileSize;
+        return TILE_SIZE;
     }
 
     public int getTextureCapacity() {

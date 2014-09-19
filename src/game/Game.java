@@ -1,7 +1,6 @@
 package game;
 
 import entity.Player;
-import game.graphics.Texture;
 import game.graphics.TextureAtlas;
 import input.Input;
 import input.PlayerInput;
@@ -9,9 +8,6 @@ import level.Level;
 import level.LevelManager;
 import level.RandomMapGenerator;
 import org.lwjgl.opengl.Display;
-import tile.Tile;
-
-import java.awt.image.BufferedImage;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -22,7 +18,7 @@ public class Game extends GameLoop{
     /**
      * TextureAtlas for miscellaneous images
      */
-    public static TextureAtlas misAtlas;
+    public static TextureAtlas miniMapAtlas;
 
     LevelManager levelManager;
     Player player;
@@ -31,7 +27,7 @@ public class Game extends GameLoop{
     private static int xOffset, yOffset;
 
     public void init() {
-        misAtlas = new TextureAtlas(TextureAtlas.LARGE, 32);
+        miniMapAtlas = new TextureAtlas(TextureAtlas.SUPER_SMALL);
 
         player = new Player(64 * 50, 64 * 50);
         playerInput = new PlayerInput(player);

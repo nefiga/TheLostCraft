@@ -15,7 +15,7 @@ public class LivingEntity extends Entity {
 
     public static TextureAtlas livingEntityAtlas;
 
-    protected int atlasS, atlasT;
+    protected int[] imagePosition;
 
     protected BufferedImage image;
 
@@ -35,30 +35,22 @@ public class LivingEntity extends Entity {
      * How much to add to the entities x, y position when the entities interactWith method is called.
      * The amounts correspond with the entities direction, they are in this order UP, RIGHT, DOWN, LEFT.
      */
-    protected int[] interactX = new int[]  {32, 96, 32 , -32};
-    protected int[] interactY = new int[] {-32, 32, 96, 32};
+    protected int[] interactX = new int[]{32, 96, 32, -32};
+    protected int[] interactY = new int[]{-32, 32, 96, 32};
 
     public LivingEntity(int positionX, int positionY) {
         super(positionX, positionY);
         if (livingEntityAtlas == null) {
-            livingEntityAtlas = new TextureAtlas(TextureAtlas.LARGE, entitySize);
+            livingEntityAtlas = new TextureAtlas(TextureAtlas.LARGE);
             image = ImageManager.getImage("/sprites/void_entity");
-            livingEntityAtlas.addTexture(image);
+            imagePosition = livingEntityAtlas.addTexture(image);
         }
-        atlasS = 0;
-        atlasT = 0;
         this.width = this.height = entitySize;
     }
 
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/sprites/" + image);
-        int[] position = livingEntityAtlas.addTexture(this.image);
-        for (int i =0; i < position.length; i++) {
-            atlasS = position[0];
-            atlasT = position[1];
-            width = position[2];
-            height = position[3];
-        }
+        imagePosition = livingEntityAtlas.addTexture(this.image);
     }
 
     public void setLevel(Level level) {
@@ -82,7 +74,7 @@ public class LivingEntity extends Entity {
     }
 
     public void interactWith() {
-        level.interact(this, currentTool, (int) x + interactX[direction], (int) y +interactY[direction], 10, 64);
+        level.interact(this, currentTool, (int) x + interactX[direction], (int) y + interactY[direction], 10, 64);
     }
 
     /**
@@ -102,6 +94,10 @@ public class LivingEntity extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(width, height, x - Game.getXOffset(), y - Game.getYOffset(), atlasS, atlasT);
+        batch.draw(imagePosition[2], imagePosition[3], x - Game.getXOffset(), y - Game.getYOffset(), imagePosition[0], imagePosition[1]);
+    }
+
+    public void render(SpriteBatch batch, int x, int y) {
+
     }
 }

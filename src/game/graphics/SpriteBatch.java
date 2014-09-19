@@ -152,10 +152,10 @@ public class SpriteBatch {
         float x2 = x / disWidth * 2 + drawWidth / disWidth * 2 - 1;
         float y2 = (1 - y / disHeight * 2) - (drawHeight / disHeight * 2);
 
-        float tx1 = (textureX * textureWidth) / atlasWidth;
-        float ty1 = (textureY * textureHeight) / atlasHeight;
-        float tx2 = ((textureX * textureWidth) / atlasWidth) + textureWidth / atlasWidth;
-        float ty2 = (textureY * textureHeight) / atlasHeight + textureHeight / atlasHeight;
+        float tx1 = (textureX * TextureAtlas.TILE_SIZE) / atlasWidth;
+        float ty1 = (textureY * TextureAtlas.TILE_SIZE) / atlasHeight;
+        float tx2 = ((textureX * TextureAtlas.TILE_SIZE) / atlasWidth) + textureWidth / atlasWidth;
+        float ty2 = (textureY * TextureAtlas.TILE_SIZE) / atlasHeight + textureHeight / atlasHeight;
 
         vertex.put(x1).put(y1); // Top left
         vertex.put(x2).put(y1);// Top right

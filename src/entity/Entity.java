@@ -58,7 +58,17 @@ public class Entity {
 
     }
 
+    /**
+     * Renders the entity with the SpriteBatch. They entities position will be decided by the entity
+     */
     public void render(SpriteBatch batch) {
+
+    }
+
+    /**
+     * Renders the entity with the SpriteBatch at x, y
+     */
+    public void render(SpriteBatch batch, int x, int y) {
 
     }
 
