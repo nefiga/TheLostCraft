@@ -27,6 +27,9 @@ public class SpriteBatch {
     int points = 0;
     short ep = 0;
 
+    // Rotates the image clockwise
+    public static final int NO_ROTATE = 0, ROTATE_90 = 1, ROTATE_180 = 2, ROTATE_270 = 3;
+
     /**
      * Creates a new SpriteBatcher Object
      */
@@ -125,8 +128,12 @@ public class SpriteBatch {
      * @param textureX The starting x point of the texture in the texture atlas
      * @param textureY The starting y point of the texture in the texture atlas
      */
-    public void draw(int width, int height, float  x, float y, int textureX, int textureY) {
+    public void draw(int width, int height, float x, float y, int textureX, int textureY) {
         draw(width, height, x, y, textureX, textureY, width, height);
+    }
+
+    public void draw(int width, int height, float x, float y, int textureX, int textureY, int flipped) {
+        draw(width, height, x, y, textureX, textureY, width, height, flipped);
     }
 
     /**
@@ -142,6 +149,23 @@ public class SpriteBatch {
      * @param textureHeight The height of the texture in the texture atlas
      */
     public void draw(int drawWidth, int drawHeight, float x, float y, int textureX, int textureY, int textureWidth, int textureHeight) {
+        draw(drawWidth, drawHeight, x, y, textureX, textureY, textureWidth, textureHeight, NO_ROTATE);
+    }
+
+    /**
+     * Add the texture to the Buffer that will be rendered
+     *
+     * @param drawWidth     The width to draw the texture
+     * @param drawHeight    The height to draw the texture
+     * @param x             The starting x point of the screen
+     * @param y             The starting y point on the screen
+     * @param textureX      The starting x point of the texture in the texture atlas
+     * @param textureY      The starting y point of the texture in the texture atlas
+     * @param textureWidth  The width of the texture in the texture atlas
+     * @param textureHeight The height of the texture in the texture atlas
+     * @param rotate       If the image should be rotate and in what direction it should be rotate
+     */
+    public void draw(int drawWidth, int drawHeight, float x, float y, int textureX, int textureY, int textureWidth, int textureHeight, int rotate) {
         float disWidth = Display.getWidth();
         float disHeight = Display.getHeight();
         float atlasWidth = texture.getWidth();
@@ -157,10 +181,30 @@ public class SpriteBatch {
         float tx2 = ((textureX * TextureAtlas.TILE_SIZE) / atlasWidth) + textureWidth / atlasWidth;
         float ty2 = (textureY * TextureAtlas.TILE_SIZE) / atlasHeight + textureHeight / atlasHeight;
 
-        vertex.put(x1).put(y1); // Top left
-        vertex.put(x2).put(y1);// Top right
-        vertex.put(x1).put(y2);// Bottom  left
-        vertex.put(x2).put(y2);// Bottom right
+        if (rotate == NO_ROTATE) {
+            vertex.put(x1).put(y1); // Top left
+            vertex.put(x2).put(y1);// Top right
+            vertex.put(x1).put(y2);// Bottom  left
+            vertex.put(x2).put(y2);// Bottom right
+        }
+        else if (rotate == ROTATE_90) {
+            vertex.put(x2).put(y1); // Top left
+            vertex.put(x2).put(y2);// Top right
+            vertex.put(x1).put(y1);// Bottom  left
+            vertex.put(x1).put(y2);// Bottom right
+        }
+        else if (rotate == ROTATE_180) {
+            vertex.put(x2).put(y2); // Top left
+            vertex.put(x1).put(y2);// Top right
+            vertex.put(x2).put(y1);// Bottom  left
+            vertex.put(x1).put(y1);// Bottom right
+        }
+        else if (rotate == ROTATE_270) {
+            vertex.put(x1).put(y2); // Top left
+            vertex.put(x1).put(y1);// Top right
+            vertex.put(x2).put(y2);// Bottom  left
+            vertex.put(x2).put(y1);// Bottom right
+        }
 
         texCords.put(tx1).put(ty1);// Top left
         texCords.put(tx2).put(ty1);// Top right

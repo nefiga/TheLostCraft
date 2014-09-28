@@ -7,6 +7,5 @@ public class DirtTile extends Tile{
         setImage("dirt_tile");
         setMapImage("map_dirt");
         this.id = addTile(this);
-        mapColor = 0xff644909;
     }
 }

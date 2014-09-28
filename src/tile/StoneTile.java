@@ -8,7 +8,6 @@ public class StoneTile extends Tile{
         setMapImage("map_stone");
         id = addTile(this);
         setDurability(1000);
-        mapColor = 0xff707070;
     }
 
     public boolean solid() {

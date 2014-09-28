@@ -7,6 +7,7 @@ import entity.Player;
 import game.Game;
 import game.graphics.*;
 import gear.tool.Tool;
+import menu.Menu;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -19,6 +20,7 @@ public class Level {
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
     private SpriteBatch misBatch;
+    private SpriteBatch menuBatch;
 
     Map map;
 
@@ -33,6 +35,8 @@ public class Level {
     private int[] tileData;
 
     LivingEntity player;
+
+    Menu menu;
 
     /**
      * A rectangle used to see if a action intersects with any other entities rectangle
@@ -68,6 +72,9 @@ public class Level {
         tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
         misBatch = new SpriteBatch(new Texture(Game.miniMapAtlas), 1500);
+
+        menu = new Menu(20, 20, "corner",  "side", "middle");
+        menuBatch = new SpriteBatch(new Texture(Menu.menuAtlas), 1000);
     }
 
     public void update(long delta) {
@@ -90,7 +97,11 @@ public class Level {
         misBatch.begin();
         renderMis();
         misBatch.end();
-    }
+
+        menuBatch.begin();
+        menu.render(menuBatch, 10, 20);
+        menuBatch.end();
+}
 
     protected void renderMis() {
         map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
@@ -120,7 +131,7 @@ public class Level {
     }
 
     /**
-     * Tries to interact with an entity at x, y. If there is no entity interacts with the tile at x, y
+     * Tries to interact with an entity at x, y. If there is no entity it will interact with the tile at x, y
      *
      * @param entity The interacting entity
      * @param x      The x position of the action
@@ -219,10 +230,10 @@ public class Level {
         int distance = moveX;
         int push = moveX;
 
-        // Checking Tile collision
         int xa = (int) entity.getX() + distance;
         int ya = (int) entity.getY();
 
+        // Checking Tile collision
         while (tileCollision(xa, ya)) {
             push = distance = (int) Math.nextAfter(distance, 0);
             xa = (int) entity.getX() + distance;

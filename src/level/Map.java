@@ -18,8 +18,10 @@ public class Map {
     // Width and height of the map
     public int width, height;
 
+    // Location of the minim map on the screen
     int mapXLocation = Display.getWidth() - MINI_WIDTH * 8;
 
+    // Location of the mini map on the screen
     int mapYLocation = Display.getHeight() - MINI_HEIGHT * 8;
 
     public Map(int[] tiles, int[] tileData, int w, int h) {
@@ -31,7 +33,7 @@ public class Map {
     }
 
     /**
-     * Renders the miniMap. Image is stored in the misBatch in the Game class. Each tile is 4 pixels on the mini map.
+     * Renders the miniMap. Image is stored in the misBatch in the Game class. Each tile is 8 pixels on the mini map.
      *
      * @param startX The x position in the map that the miniMap will start rendering at
      * @param startY The y position in the map that the miniMap will start rendering at

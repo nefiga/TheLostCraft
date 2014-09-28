@@ -20,6 +20,8 @@ public class Game extends GameLoop{
      */
     public static TextureAtlas miniMapAtlas;
 
+    public long time = 0;
+
     LevelManager levelManager;
     Player player;
     Input playerInput;
@@ -35,7 +37,7 @@ public class Game extends GameLoop{
         levelManager = new LevelManager();
         levelManager.addLevel("Testing", new Level(RandomMapGenerator.generateMap(1000), player));
         levelManager.setCurrentLevel("Testing");
-        glClearColor(0, 1, 0, 1);
+        glClearColor(0, 0, 0, 1);
     }
 
     public void update(long delta) {
@@ -43,11 +45,18 @@ public class Game extends GameLoop{
         xOffset = (int) (player.getX() - (Display.getWidth() / 2 -32));
         yOffset = (int) player.getY() - (Display.getHeight() / 2 -32);
         levelManager.update(delta);
+
+        updateTime(delta);
     }
 
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT);
         levelManager.render();
+    }
+
+    public void updateTime(long delta) {
+        time += delta;
+        if (delta >= 2100) delta = 0;
     }
 
     public static int getXOffset() {

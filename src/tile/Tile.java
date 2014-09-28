@@ -24,14 +24,11 @@ public class Tile {
      */
     public static TextureAtlas tileAtlas;
 
-    /**
-     * The position and width and height of the tile in the TextureAtlas
-     */
-    int atlasS, atlasT, width, height;
-
     //Stores the images position in TextureAtlas in this order x, y, width, height
     protected int[] imagePosition;
 
+    // Store the image position for the mini map in this order x, y, width, height
+    // The mini map tiles ares held in the misAtlas in the Game class
     protected int[] mapImagePosition;
 
     protected BufferedImage image;
@@ -61,10 +58,8 @@ public class Tile {
     protected int id;
 
     /**
-     * The color that will be displayed on the map for this tile
+     * The durability of this tile when it is harvested
      */
-    protected int mapColor = 0;
-
     protected int durability;
 
     /**
@@ -99,13 +94,13 @@ public class Tile {
         imagePosition = tileAtlas.addTexture(this.image);
     }
 
+    /**
+     * Sets the mini map image for this tile. If no image is set the default image will be used
+     * @param image The file location of the image
+     */
     public void setMapImage(String image) {
         this.mapImage = ImageManager.getImage("/tiles/" + image);
         mapImagePosition = Game.miniMapAtlas.addTexture(mapImage);
-    }
-
-    public void setMiniMapImage(String image) {
-
     }
 
     /**
@@ -156,11 +151,8 @@ public class Tile {
         return id;
     }
 
-    public int getMapColor() {
-        return mapColor;
-    }
-
     /**
+     * Retrieves the tile corresponding to the id from the tiles array
      * @param id The id of the Tile to be returned
      * @return The Tile associated with the id.
      */
@@ -184,7 +176,7 @@ public class Tile {
     /**
      * Renders the tiles image at x, y
      *
-     * @param batch The SpriteBatch this tile will be rendered with
+     * @param batch The SpriteBatch used to rendered
      * @param x     The x position on the screen this tile will be rendered at
      * @param y     The y position on the screen this tile will be rendered at
      */
@@ -192,6 +184,12 @@ public class Tile {
         batch.draw(imagePosition[2], imagePosition[3], x, y, imagePosition[0], imagePosition[1]);
     }
 
+    /**
+     * Renders the mini map tile image at x, y
+     * @param batch The SpriteBatch used to rendered
+     * @param x The x position on the screen
+     * @param y The y position on the screen
+     */
     public void renderMapImage(SpriteBatch batch, int x, int y) {
         batch.draw(mapImagePosition[2], mapImagePosition[3], x, y, mapImagePosition[0], mapImagePosition[1]);
     }

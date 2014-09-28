@@ -46,6 +46,11 @@ public class Texture {
         glActiveTexture(GL_TEXTURE0 + unit);
     }
 
+    /**
+     * Loads all the colors from the texture into byte buffer.
+     * Then loads it to the gpu. also set scaling, filtering and mipmaps
+     * @param texture An array of the colors in the texture
+     */
     public void loadTexture(int[] texture) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

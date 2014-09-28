@@ -26,7 +26,7 @@ public class TextureAtlas {
     /**
      * Creates a new TextureAtlas
      *
-     * @param atlasSize The size of the TextureAtlas. There are the standard sizes small, medium and large
+     * @param atlasSize The size of the TextureAtlas. There are the standard sizes super small, small, medium and large
      */
     public TextureAtlas(int atlasSize) {
         rows = atlasSize / TILE_SIZE;
