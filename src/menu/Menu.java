@@ -16,7 +16,7 @@ public class Menu {
     private int width, height;
 
     // The size of the menu tiles
-    private final int tileSize = 16;
+    private final int tileSize;
 
     // The first array is the cursors current selection, the second array is the cursors x, y position on the screen.
     private int[][] cursorPosition;
@@ -28,17 +28,17 @@ public class Menu {
     private int[] corner, side, middle;
 
     /**
-     * The menu is created out of 16 X 16 tiles.
-     *
      * @param width       The numbers of tiles wide
      * @param height      The number of tiles tall
+     * @param tileSize    The width and height of the tiles for this menu
      * @param cornerImage The file location for the corner image
      * @param sideImage   The file location for the top, bottom and side image
      * @param middleImage The file location for the middle image
      */
-    public Menu(int width, int height, String cornerImage, String sideImage, String middleImage) {
+    public Menu(int width, int height, int tileSize, String cornerImage, String sideImage, String middleImage) {
         this.width = width;
         this.height = height;
+        this.tileSize = tileSize;
 
         if (menuAtlas == null) {
             menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
@@ -84,13 +84,16 @@ public class Menu {
         batch.draw(tileSize, tileSize, x, y + height * tileSize, corner[0], corner[1], SpriteBatch.ROTATE_270);
         batch.draw(tileSize, tileSize, x + width * tileSize, y + height * tileSize, corner[0], corner[1], SpriteBatch.ROTATE_180);
 
-        // DrawSides
+        // Draw top and bottom
         for (int i = 1; i < width; i++) {
-            batch.draw(tileSize, tileSize, x, y + i * tileSize, side[0], side[1]);
             batch.draw(tileSize, tileSize, x + i * tileSize, y, side[0], side[1], SpriteBatch.ROTATE_90);
-            batch.draw(tileSize, tileSize, x + width * tileSize, y + i * tileSize, side[0], side[1], SpriteBatch.ROTATE_180);
             batch.draw(tileSize, tileSize, x + i * tileSize, y + height * tileSize, side[0], side[1], SpriteBatch.ROTATE_270);
+        }
 
+        // Draw sides
+        for (int i = 1; i < height; i++) {
+            batch.draw(tileSize, tileSize, x, y + i * tileSize, side[0], side[1]);
+            batch.draw(tileSize, tileSize, x + width * tileSize, y + i * tileSize, side[0], side[1], SpriteBatch.ROTATE_180);
         }
 
         //Draw middle

@@ -73,7 +73,7 @@ public class Level {
         entityBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
         misBatch = new SpriteBatch(new Texture(Game.miniMapAtlas), 1500);
 
-        menu = new Menu(20, 20, "corner",  "side", "middle");
+        menu = new Menu(30, 20, 16, "corner",  "side", "middle");
         menuBatch = new SpriteBatch(new Texture(Menu.menuAtlas), 1000);
     }
 
@@ -211,10 +211,10 @@ public class Level {
      * @return True if there is a solid tile at x, y else return false
      */
     public boolean tileCollision(int xa, int ya) {
-        if (getTile(xa, ya, false).solid()) return true;
-        if (getTile(xa + 63, ya, false).solid()) return true;
-        if (getTile(xa, ya + 63, false).solid()) return true;
-        if (getTile(xa + 63, ya + 63, false).solid()) return true;
+        if (getTile(xa, ya, false).solid(xa, ya)) return true;
+        if (getTile(xa + 63, ya, false).solid(xa + 63, ya)) return true;
+        if (getTile(xa, ya + 63, false).solid(xa, ya + 63)) return true;
+        if (getTile(xa + 63, ya + 63, false).solid(xa + 63, ya + 63)) return true;
         return false;
     }
 

@@ -80,8 +80,6 @@ public class Tile {
             mapImage = ImageManager.getImage("/tiles/map_void");
             mapImagePosition = Game.miniMapAtlas.addTexture(mapImage);
         }
-
-
     }
 
     /**
@@ -119,7 +117,7 @@ public class Tile {
     /**
      * Sets whether entities can walk through this tile
      */
-    public boolean solid() {
+    public boolean solid(int x, int y) {
         return false;
     }
 

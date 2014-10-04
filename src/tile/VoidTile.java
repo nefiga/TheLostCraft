@@ -7,7 +7,7 @@ public class VoidTile extends Tile{
         id = addTile(this);
     }
 
-    public boolean solid() {
+    public boolean solid(int x, int y) {
         return true;
     }
 }

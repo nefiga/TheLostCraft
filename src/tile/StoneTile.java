@@ -1,6 +1,6 @@
 package tile;
 
-public class StoneTile extends Tile{
+public class StoneTile extends Tile {
 
     public StoneTile(String name) {
         super(name);
@@ -10,7 +10,7 @@ public class StoneTile extends Tile{
         setDurability(1000);
     }
 
-    public boolean solid() {
+    public boolean solid(int x, int y) {
         return true;
     }
 }
