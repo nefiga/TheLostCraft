@@ -43,10 +43,8 @@ public class Map {
         for (int y = 0; y < MINI_HEIGHT; y++) {
             for (int x = 0; x < MINI_WIDTH; x++) {
                 if (startX + x < 0 || startX + x >= width || startY + y < 0 || startY + y >= height) {
-                    //Tile.voidTile.renderMapImage(batch, mapXLocation + x * 8, mapYLocation + y * 8);
                     Tile.voidTile.render(batch, mapXLocation + x * 8, mapYLocation + y * 8, 8, 8);
                 } else {
-                    //Tile.getTile(tiles[(x + startX) + (y + startY) * width]).renderMapImage(batch, mapXLocation + x * 8, mapYLocation + y * 8);
                     Tile.getTile(tiles[(x + startX) + (y + startY) * width]).render(batch, mapXLocation + x * 8, mapYLocation + y * 8, 8, 8);
                 }
             }
