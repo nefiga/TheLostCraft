@@ -27,13 +27,7 @@ public class Tile {
     //Stores the images position in TextureAtlas in this order x, y, width, height
     protected int[] imagePosition;
 
-    // Store the image position for the mini map in this order x, y, width, height
-    // The mini map tiles ares held in the misAtlas in the Game class
-    protected int[] mapImagePosition;
-
     protected BufferedImage image;
-
-    protected BufferedImage mapImage;
 
     /**
      * An array of all the tiles
@@ -77,8 +71,6 @@ public class Tile {
             // The default tile image
             image = ImageManager.getImage("/tiles/void_tile");
             imagePosition = tileAtlas.addTexture(image);
-            mapImage = ImageManager.getImage("/tiles/map_void");
-            mapImagePosition = Game.miniMapAtlas.addTexture(mapImage);
         }
     }
 
@@ -90,15 +82,6 @@ public class Tile {
     public void setImage(String image) {
         this.image = ImageManager.getImage("/tiles/" + image);
         imagePosition = tileAtlas.addTexture(this.image);
-    }
-
-    /**
-     * Sets the mini map image for this tile. If no image is set the default image will be used
-     * @param image The file location of the image
-     */
-    public void setMapImage(String image) {
-        this.mapImage = ImageManager.getImage("/tiles/" + image);
-        mapImagePosition = Game.miniMapAtlas.addTexture(mapImage);
     }
 
     /**
@@ -151,6 +134,7 @@ public class Tile {
 
     /**
      * Retrieves the tile corresponding to the id from the tiles array
+     *
      * @param id The id of the Tile to be returned
      * @return The Tile associated with the id.
      */
@@ -183,12 +167,13 @@ public class Tile {
     }
 
     /**
-     * Renders the mini map tile image at x, y
-     * @param batch The SpriteBatch used to rendered
-     * @param x The x position on the screen
-     * @param y The y position on the screen
+     * @param batch The The SpriteBatch used to rendered
+     * @param x The x position of the tile
+     * @param y The y position of the tile
+     * @param w The width the tile will be rendered at
+     * @param h The height the tile will be rendered at
      */
-    public void renderMapImage(SpriteBatch batch, int x, int y) {
-        batch.draw(mapImagePosition[2], mapImagePosition[3], x, y, mapImagePosition[0], mapImagePosition[1]);
+    public void render(SpriteBatch batch, int x, int y, int w, int h) {
+        batch.draw(w, h, x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
     }
 }

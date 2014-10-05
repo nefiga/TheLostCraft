@@ -15,11 +15,6 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class Game extends GameLoop{
 
-    /**
-     * TextureAtlas for miscellaneous images
-     */
-    public static TextureAtlas miniMapAtlas;
-
     public long time = 0;
 
     LevelManager levelManager;
@@ -29,7 +24,6 @@ public class Game extends GameLoop{
     private static int xOffset, yOffset;
 
     public void init() {
-        miniMapAtlas = new TextureAtlas(TextureAtlas.SUPER_SMALL);
 
         player = new Player(64 * 50, 64 * 50);
         playerInput = new PlayerInput(player);

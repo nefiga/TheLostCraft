@@ -71,7 +71,7 @@ public class Level {
         interactArea = new Rectangle();
         tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
-        misBatch = new SpriteBatch(new Texture(Game.miniMapAtlas), 1500);
+        misBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 1500);
 
         menu = new Menu(30, 20, 16, "corner",  "side", "middle");
         menuBatch = new SpriteBatch(new Texture(Menu.menuAtlas), 1000);
