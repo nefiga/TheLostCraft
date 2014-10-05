@@ -94,7 +94,7 @@ public class LivingEntity extends Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(imagePosition[2], imagePosition[3], x - Game.getXOffset(), y - Game.getYOffset(), imagePosition[0], imagePosition[1]);
+        batch.draw(x - Game.getXOffset(), y - Game.getYOffset(), imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
     }
 
     public void render(SpriteBatch batch, int x, int y) {

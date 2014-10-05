@@ -35,6 +35,6 @@ public class Animation {
     }
 
     public void render(SpriteBatch batcher, int x, int y) {
-        batcher.draw(x, y, width, height, textureX + (width * currentSprite), textureY);
+
     }
 }

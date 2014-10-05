@@ -45,7 +45,7 @@ public class Gear {
     }
 
     public void render(SpriteBatch batch, int x, int y) {
-        batch.draw(imagePosition[2], imagePosition[3], x, y, imagePosition[0], imagePosition[1]);
+        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
     }
 
     public String getName() {

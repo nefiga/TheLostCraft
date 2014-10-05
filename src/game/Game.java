@@ -1,7 +1,9 @@
 package game;
 
+import editor.Editor;
 import entity.Player;
 import game.graphics.TextureAtlas;
+import input.EditorInput;
 import input.Input;
 import input.PlayerInput;
 import level.Level;
@@ -13,44 +15,75 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
-public class Game extends GameLoop{
+public class Game extends GameLoop {
 
     public long time = 0;
 
     LevelManager levelManager;
+    Editor editor;
     Player player;
-    Input playerInput;
+    Input playerInput, editorInput;
 
     private static int xOffset, yOffset;
 
-    public void init() {
+    private static int state = 2;
 
+    public static final int MAIN_MENU = 0, GAME = 1, MAP_EDITOR = 2;
+
+    public void init() {
         player = new Player(64 * 50, 64 * 50);
         playerInput = new PlayerInput(player);
+        editorInput = new EditorInput(editor);
 
+        editor = new Editor();
         levelManager = new LevelManager();
         levelManager.addLevel("Testing", new Level(RandomMapGenerator.generateMap(1000), player));
         levelManager.setCurrentLevel("Testing");
-        glClearColor(0, 0, 0, 1);
+        glClearColor(255, 255, 255, 1);
     }
 
     public void update(long delta) {
-        playerInput.update();
-        xOffset = (int) (player.getX() - (Display.getWidth() / 2 -32));
-        yOffset = (int) player.getY() - (Display.getHeight() / 2 -32);
-        levelManager.update(delta);
+        switch (state) {
+            case MAIN_MENU:
+
+                break;
+            case GAME:
+                playerInput.update();
+                xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
+                yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
+                levelManager.update(delta);
+                break;
+            case MAP_EDITOR:
+                editorInput.update();
+                editor.update();
+                break;
+        }
 
         updateTime(delta);
     }
 
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        levelManager.render();
+        switch (state) {
+            case MAIN_MENU:
+
+                break;
+            case GAME:
+                levelManager.render();
+                break;
+            case MAP_EDITOR:
+                editor.render();
+                break;
+        }
     }
 
     public void updateTime(long delta) {
         time += delta;
         if (delta >= 2100) delta = 0;
+    }
+
+    public static void setState(int state) {
+        Game.state = state;
     }
 
     public static int getXOffset() {

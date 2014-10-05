@@ -128,12 +128,12 @@ public class SpriteBatch {
      * @param textureX The starting x point of the texture in the texture atlas
      * @param textureY The starting y point of the texture in the texture atlas
      */
-    public void draw(int width, int height, float x, float y, int textureX, int textureY) {
-        draw(width, height, x, y, textureX, textureY, width, height);
+    public void draw(float x, float y, int textureX, int textureY, int width, int height) {
+        draw(x, y, width, height, textureX, textureY, width, height);
     }
 
-    public void draw(int width, int height, float x, float y, int textureX, int textureY, int flipped) {
-        draw(width, height, x, y, textureX, textureY, width, height, flipped);
+    public void draw(float x, float y, int textureX, int textureY, int width, int height, int flipped) {
+        draw(x, y, width, height, textureX, textureY, width, height, flipped);
     }
 
     /**
@@ -148,8 +148,8 @@ public class SpriteBatch {
      * @param textureWidth  The width of the texture in the texture atlas
      * @param textureHeight The height of the texture in the texture atlas
      */
-    public void draw(int drawWidth, int drawHeight, float x, float y, int textureX, int textureY, int textureWidth, int textureHeight) {
-        draw(drawWidth, drawHeight, x, y, textureX, textureY, textureWidth, textureHeight, NO_ROTATE);
+    public void draw(float x, float y, int drawWidth, int drawHeight, int textureX, int textureY, int textureWidth, int textureHeight) {
+        draw(x, y, drawWidth, drawHeight, textureX, textureY, textureWidth, textureHeight, NO_ROTATE);
     }
 
     /**
@@ -165,7 +165,7 @@ public class SpriteBatch {
      * @param textureHeight The height of the texture in the texture atlas
      * @param rotate       If the image should be rotate and in what direction it should be rotate
      */
-    public void draw(int drawWidth, int drawHeight, float x, float y, int textureX, int textureY, int textureWidth, int textureHeight, int rotate) {
+    public void draw(float x, float y, int drawWidth, int drawHeight, int textureX, int textureY, int textureWidth, int textureHeight, int rotate) {
         float disWidth = Display.getWidth();
         float disHeight = Display.getHeight();
         float atlasWidth = texture.getWidth();

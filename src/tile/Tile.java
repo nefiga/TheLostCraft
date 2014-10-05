@@ -14,6 +14,7 @@ public class Tile {
 
 
     public static Tile voidTile = new VoidTile("VoidTile");
+    public static Tile emptyTile = new EmptyTile("EmptyTile");
     public static Tile water = new WaterTile("Water");
     public static Tile grass = new GrassTile("Grass");
     public static Tile dirt = new DirtTile("Dirt");
@@ -163,7 +164,7 @@ public class Tile {
      * @param y     The y position on the screen this tile will be rendered at
      */
     public void render(SpriteBatch batch, int x, int y) {
-        batch.draw(imagePosition[2], imagePosition[3], x, y, imagePosition[0], imagePosition[1]);
+        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
     }
 
     /**
@@ -174,6 +175,6 @@ public class Tile {
      * @param h The height the tile will be rendered at
      */
     public void render(SpriteBatch batch, int x, int y, int w, int h) {
-        batch.draw(w, h, x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+        batch.draw(x, y, w, h, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
     }
 }

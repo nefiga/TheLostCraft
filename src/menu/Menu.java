@@ -79,27 +79,27 @@ public class Menu {
 
     public void render(SpriteBatch batch, int x, int y) {
         // Drawing the corners
-        batch.draw(tileSize, tileSize, x, y, corner[0], corner[1]);
-        batch.draw(tileSize, tileSize, x + width * tileSize, y, corner[0], corner[1], SpriteBatch.ROTATE_90);
-        batch.draw(tileSize, tileSize, x, y + height * tileSize, corner[0], corner[1], SpriteBatch.ROTATE_270);
-        batch.draw(tileSize, tileSize, x + width * tileSize, y + height * tileSize, corner[0], corner[1], SpriteBatch.ROTATE_180);
+        batch.draw(x, y, corner[0], corner[1], tileSize, tileSize);
+        batch.draw(x + width * tileSize, y, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_90);
+        batch.draw(x, y + height * tileSize, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_270);
+        batch.draw(x + width * tileSize, y + height * tileSize, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_180);
 
         // Draw top and bottom
         for (int i = 1; i < width; i++) {
-            batch.draw(tileSize, tileSize, x + i * tileSize, y, side[0], side[1], SpriteBatch.ROTATE_90);
-            batch.draw(tileSize, tileSize, x + i * tileSize, y + height * tileSize, side[0], side[1], SpriteBatch.ROTATE_270);
+            batch.draw(x + i * tileSize, y, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_90);
+            batch.draw(x + i * tileSize, y + height * tileSize, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_270);
         }
 
         // Draw sides
         for (int i = 1; i < height; i++) {
-            batch.draw(tileSize, tileSize, x, y + i * tileSize, side[0], side[1]);
-            batch.draw(tileSize, tileSize, x + width * tileSize, y + i * tileSize, side[0], side[1], SpriteBatch.ROTATE_180);
+            batch.draw(x, y + i * tileSize, side[0], side[1], tileSize, tileSize);
+            batch.draw(x + width * tileSize, y + i * tileSize, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_180);
         }
 
         //Draw middle
         for (int yp = 1; yp < height; yp++) {
             for (int xp = 1; xp < width; xp++) {
-                batch.draw(tileSize, tileSize, x + xp * tileSize, y + yp * tileSize, middle[0], middle[1]);
+                batch.draw(x + xp * tileSize, y + yp * tileSize, middle[0], middle[1], tileSize, tileSize);
             }
         }
     }
