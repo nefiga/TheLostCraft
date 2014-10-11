@@ -25,6 +25,8 @@ public class SpriteBatch {
 
     int vboID, vaoID, texID, eboID;
     int points = 0;
+    int size;
+    int renderCount;
     short ep = 0;
 
     // Rotates the image clockwise
@@ -34,6 +36,7 @@ public class SpriteBatch {
      * Creates a new SpriteBatcher Object
      */
     public SpriteBatch(Texture texture, int size) {
+        this.size = size;
         vertex = BufferUtils.createFloatBuffer(size * 8);
         texCords = BufferUtils.createFloatBuffer(size * 8);
         elements = BufferUtils.createShortBuffer(size * 10);
@@ -80,6 +83,7 @@ public class SpriteBatch {
      * Flips all the buffers, sets the vertex attribute pointers and binds the element buffer object
      */
     public void end() {
+        renderCount = 0;
         vertex.flip();
         texCords.flip();
         elements.flip();
@@ -97,6 +101,12 @@ public class SpriteBatch {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_STATIC_DRAW);
 
         render();
+    }
+
+    private void flush() {
+        //System.out.println("Capped  " + size);
+        end();
+        begin();
     }
 
     /**
@@ -235,6 +245,9 @@ public class SpriteBatch {
             ep++;
             points += 6;
         }
+
+        renderCount++;
+        if (renderCount >= size) flush();
     }
 
     public void subTexture(int[] piexels, int offsetX, int offsetY, int width, int height) {

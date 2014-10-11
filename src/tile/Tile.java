@@ -143,6 +143,13 @@ public class Tile {
         return tiles[id];
     }
 
+    /**
+     * Returns an array of all the tiles
+     */
+    public static Tile[] getTiles() {
+        return tiles;
+    }
+
 
     /**
      * Adds the tile to the {@code tiles} array at the next open position.

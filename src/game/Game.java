@@ -33,9 +33,10 @@ public class Game extends GameLoop {
     public void init() {
         player = new Player(64 * 50, 64 * 50);
         playerInput = new PlayerInput(player);
-        editorInput = new EditorInput(editor);
 
         editor = new Editor();
+        editorInput = new EditorInput(editor);
+
         levelManager = new LevelManager();
         levelManager.addLevel("Testing", new Level(RandomMapGenerator.generateMap(1000), player));
         levelManager.setCurrentLevel("Testing");
@@ -55,6 +56,8 @@ public class Game extends GameLoop {
                 break;
             case MAP_EDITOR:
                 editorInput.update();
+                xOffset = editor.getX() - (Display.getWidth() / 2 - 32);
+                yOffset = editor.getY() - (Display.getHeight() / 2 - 32);
                 editor.update();
                 break;
         }
@@ -80,6 +83,10 @@ public class Game extends GameLoop {
     public void updateTime(long delta) {
         time += delta;
         if (delta >= 2100) delta = 0;
+    }
+
+    public void resized() {
+        editor.updateScreenSize(Display.getWidth(), Display.getHeight());
     }
 
     public static void setState(int state) {
