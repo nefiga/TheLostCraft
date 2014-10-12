@@ -2,6 +2,7 @@ package input;
 
 import editor.Editor;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 public class EditorInput extends Input {
 

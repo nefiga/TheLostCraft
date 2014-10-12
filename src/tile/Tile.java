@@ -161,7 +161,6 @@ public class Tile {
      * @return The position the tile was added to the array
      */
     protected static int addTile(Tile tile) {
-        System.out.println(tile.getName() + "   " + tilePosition);
         tiles[tilePosition] = tile;
         tilePosition++;
         return tilePosition - 1;

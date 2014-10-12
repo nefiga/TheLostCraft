@@ -58,6 +58,7 @@ public class Editor {
     }
 
     private void init() {
+        loadTileList();
         editorAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
         editorMap = new EditorMap();
         createTextureAtlas();
@@ -66,7 +67,6 @@ public class Editor {
         screenWidth = Display.getWidth();
         screenHeight = Display.getHeight();
         updateScreenSize(screenWidth, screenHeight);
-        loadTileList();
     }
 
     private void loadTileList() {
@@ -77,7 +77,6 @@ public class Editor {
             tilePage = new int[pages][Tile.tilePosition];
 
             for (int t = 0; t < Tile.tilePosition; t++) {
-                System.out.println(Tile.getTile(tiles[t].getID()).getName());
                 tilePage[0][t] = tiles[t].getID();
             }
         } else {
@@ -108,9 +107,12 @@ public class Editor {
     }
 
     public void renderSelectableTiles() {
-        for (int y = 0; y < pages; y++) {
-            for (int x = 0; x < tilePage[y].length; x++) {
-                Tile.getTile(tilePage[y][x]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
+        for (int p = 0; p < pages; p++) {
+            for (int y = 0; y < pageY.length; y++) {
+                for (int x = 0; x < pageX.length; x++) {
+                    if (x + y * 3 >= tilePage[p].length) continue;
+                    Tile.getTile(tilePage[p][x + y * 3]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
+                }
             }
         }
     }
@@ -181,6 +183,10 @@ public class Editor {
         if (page < 0) page = pages;
     }
 
+    public void leftClick(int x, int y) {
+
+    }
+
     public void move(int x, int y) {
         this.x += x;
         this.y += y;
@@ -189,20 +195,20 @@ public class Editor {
     public void updateScreenSize(int width, int height) {
         screenWidth = width;
         screenHeight = height;
-        int oneFith = screenWidth / 5;
+        int oneFifth = screenWidth / 5;
         int oneHalf = screenHeight / 2;
 
-        menuTopLocation[0] = screenWidth - oneFith;
+        menuTopLocation[0] = screenWidth - oneFifth;
         menuTopLocation[1] = 0;
-        menuTopLocation[2] = oneFith;
+        menuTopLocation[2] = oneFifth;
         menuTopLocation[3] = oneHalf;
-        menuBottomLocation[0] = screenWidth - oneFith;
+        menuBottomLocation[0] = screenWidth - oneFifth;
         menuBottomLocation[1] = oneHalf;
-        menuBottomLocation[2] = oneFith;
+        menuBottomLocation[2] = oneFifth;
         menuBottomLocation[3] = oneHalf + 1;
-        tilePageSize = oneFith / 4;
+        tilePageSize = oneFifth / 4;
         for (int x = 0; x < 3; x++) {
-            pageX[x] = (screenWidth - oneFith) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
+            pageX[x] = (screenWidth - oneFifth) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
         }
         for (int y = 0; y < 8; y++) {
             pageY[y] = (tilePageSize + tilePageSize / 8) * y + 20;
