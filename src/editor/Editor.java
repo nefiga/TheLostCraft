@@ -21,53 +21,62 @@ public class Editor {
 
     private int[] tiles;
 
-    private int[][] pageLayout = new int[][]{{100, 100}, {250, 350, 450}};
+    private int[] pageX = new int[3];
+    private int[] pageY = new int[10];
 
-    private Tile[][] tilePage;
+    private int[][] tilePage;
 
     private int screenWidth, screenHeight;
 
-    public static final int X1 = 8, X2 = 16, X3 = 32, X4 = 64;
+    private int[] menuTopLocation = new int[4];
+    private int[] menuBottomLocation = new int[4];
 
-    private int zoom = X4;
+    public static final int X1 = 16, X2 = 32, X3 = 64;
+
+    private int zoom = X3;
 
     private int page = 0, pages;
 
     private int x = 1000, y = 1000;
 
     public Editor() {
-        editorAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
-        editorMap = new EditorMap();
-        createTextureAtlas();
-        tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 1500);
-        editorBatch = new SpriteBatch(new Texture(editorAtlas), 100);
-        screenWidth = Display.getWidth();
-        screenHeight = Display.getHeight();
+        init();
         tiles = new int[500 * 500];
         Random random = new Random();
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = random.nextInt(5)+1;
+            tiles[i] = random.nextInt(5) + 1;
 
         }
     }
 
     public Editor(Map map) {
+        tiles = map.tiles;
+        init();
+    }
+
+    private void init() {
+
         editorAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
         editorMap = new EditorMap();
         createTextureAtlas();
         tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 1500);
         editorBatch = new SpriteBatch(new Texture(editorAtlas), 100);
-        tiles = map.tiles;
         screenWidth = Display.getWidth();
         screenHeight = Display.getHeight();
+        updateScreenSize(screenWidth, screenHeight);
     }
 
     private void loadTileList() {
         Tile[] tiles = Tile.getTiles();
-        pages = tiles.length / 6;
+
+        if (tiles.length < 30) pages = 1;
+        else pages = tiles.length / 30;
+
+        tilePage = new int[pages][30];
+
         for (int p = 0; p < pages; p++) {
-            for (int t = 0; t < 6; t++) {
-                tilePage[p][t] = tiles[t + p * pages];
+            for (int t = 0; t < tiles.length; t++) {
+                tilePage[p][t] = tiles[t + p * pages].getID();
             }
         }
     }
@@ -89,10 +98,9 @@ public class Editor {
         tileBatch.end();
     }
 
-    int test;
     public void renderMenu() {
-        editorBatch.draw(screenWidth - 400, 0, menuTop[2], screenHeight / 2, menuTop[0], menuTop[1], menuTop[2], menuTop[3]);
-        editorBatch.draw(screenWidth - 400, screenHeight / 2, menuBottom[2], screenHeight / 2, menuBottom[0], menuBottom[1], menuBottom[2], menuBottom[3]);
+        editorBatch.draw(menuTopLocation[0], menuTopLocation[1], menuTopLocation[2], menuTopLocation[3], menuTop[0], menuTop[1], menuTop[2], menuTop[3]);
+        editorBatch.draw(menuBottomLocation[0], menuBottomLocation[1], menuBottomLocation[2], menuBottomLocation[3], menuBottom[0], menuBottom[1], menuBottom[2], menuBottom[3]);
     }
 
     public void renderSelectableTiles() {
@@ -136,9 +144,6 @@ public class Editor {
                 zoom = X3;
                 break;
             case X3:
-                zoom = X4;
-                break;
-            case X4:
                 zoom = X1;
                 break;
         }
@@ -147,16 +152,13 @@ public class Editor {
     public void zoomOut() {
         switch (zoom) {
             case X1:
-                zoom = X4;
+                zoom = X3;
                 break;
             case X2:
                 zoom = X1;
                 break;
             case X3:
                 zoom = X2;
-                break;
-            case X4:
-                zoom = X3;
                 break;
         }
     }
@@ -179,6 +181,14 @@ public class Editor {
     public void updateScreenSize(int width, int height) {
         screenWidth = width;
         screenHeight = height;
+        menuTopLocation[0] = screenWidth - screenWidth / 5;
+        menuTopLocation[1] = 0;
+        menuTopLocation[2] = screenWidth / 5;
+        menuTopLocation[3] = screenHeight / 2;
+        menuBottomLocation[0] = screenWidth - screenWidth / 5;
+        menuBottomLocation[1] = screenHeight / 2;
+        menuBottomLocation[2] = screenWidth / 5;
+        menuBottomLocation[3] = screenHeight / 2 + 1;
     }
 
     public int getX() {
