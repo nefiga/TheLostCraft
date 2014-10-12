@@ -1,7 +1,6 @@
 package tile;
 
 import entity.Entity;
-import game.Game;
 import game.graphics.ImageManager;
 import game.graphics.SpriteBatch;
 import game.graphics.TextureAtlas;
@@ -38,7 +37,7 @@ public class Tile {
     /**
      * The position in the tiles array that the next tile will be added
      */
-    private static int tilePosition = 0;
+    public static int tilePosition;
 
     /**
      * The size of the tile in the sprite sheet
@@ -133,6 +132,10 @@ public class Tile {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
      * Retrieves the tile corresponding to the id from the tiles array
      *
@@ -158,9 +161,10 @@ public class Tile {
      * @return The position the tile was added to the array
      */
     protected static int addTile(Tile tile) {
-        tilePosition++;
+        System.out.println(tile.getName() + "   " + tilePosition);
         tiles[tilePosition] = tile;
-        return tilePosition;
+        tilePosition++;
+        return tilePosition - 1;
     }
 
     /**
@@ -176,10 +180,10 @@ public class Tile {
 
     /**
      * @param batch The The SpriteBatch used to rendered
-     * @param x The x position of the tile
-     * @param y The y position of the tile
-     * @param w The width the tile will be rendered at
-     * @param h The height the tile will be rendered at
+     * @param x     The x position of the tile
+     * @param y     The y position of the tile
+     * @param w     The width the tile will be rendered at
+     * @param h     The height the tile will be rendered at
      */
     public void render(SpriteBatch batch, int x, int y, int w, int h) {
         batch.draw(x, y, w, h, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);

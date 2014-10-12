@@ -18,8 +18,8 @@ public class EditorInput extends Input {
         right = new Action("Right", Keyboard.KEY_RIGHT);
         down = new Action("Down", Keyboard.KEY_DOWN);
         left = new Action("Left", Keyboard.KEY_LEFT);
-        zoomIn = new Action("Zoom In", Keyboard.KEY_ADD);
-        zoomOut = new Action("Zoom  Out", Keyboard.KEY_SUBTRACT);
+        zoomIn = new Action("Zoom In", Keyboard.KEY_Z);
+        zoomOut = new Action("Zoom  Out", Keyboard.KEY_X);
 
         actions.add(up);
         actions.add(right);

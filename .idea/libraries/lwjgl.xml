@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="lwjgl">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Desktop/Program/LWJGL/lwjgl-2.9.1/jar/lwjgl.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/Program/LWJGL/lwjgl-2.9.1/jar/lwjgl_util.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programing/lwjgl/lwjgl-2.9.1/jar/lwjgl.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programing/lwjgl/lwjgl-2.9.1/jar/lwjgl_util.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

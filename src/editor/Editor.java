@@ -21,8 +21,10 @@ public class Editor {
 
     private int[] tiles;
 
+    private int tilePageSize;
+
     private int[] pageX = new int[3];
-    private int[] pageY = new int[10];
+    private int[] pageY = new int[8];
 
     private int[][] tilePage;
 
@@ -40,13 +42,14 @@ public class Editor {
     private int x = 1000, y = 1000;
 
     public Editor() {
-        init();
+
         tiles = new int[500 * 500];
         Random random = new Random();
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = random.nextInt(5) + 1;
+            tiles[i] = Tile.getTile(random.nextInt(6)).getID();
 
         }
+        init();
     }
 
     public Editor(Map map) {
@@ -55,7 +58,6 @@ public class Editor {
     }
 
     private void init() {
-
         editorAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
         editorMap = new EditorMap();
         createTextureAtlas();
@@ -64,20 +66,22 @@ public class Editor {
         screenWidth = Display.getWidth();
         screenHeight = Display.getHeight();
         updateScreenSize(screenWidth, screenHeight);
+        loadTileList();
     }
 
     private void loadTileList() {
         Tile[] tiles = Tile.getTiles();
 
-        if (tiles.length < 30) pages = 1;
-        else pages = tiles.length / 30;
+        if (Tile.tilePosition < 30) {
+            pages = 1;
+            tilePage = new int[pages][Tile.tilePosition];
 
-        tilePage = new int[pages][30];
-
-        for (int p = 0; p < pages; p++) {
-            for (int t = 0; t < tiles.length; t++) {
-                tilePage[p][t] = tiles[t + p * pages].getID();
+            for (int t = 0; t < Tile.tilePosition; t++) {
+                System.out.println(Tile.getTile(tiles[t].getID()).getName());
+                tilePage[0][t] = tiles[t].getID();
             }
+        } else {
+            pages = tiles.length / 30;
         }
     }
 
@@ -104,7 +108,11 @@ public class Editor {
     }
 
     public void renderSelectableTiles() {
-
+        for (int y = 0; y < pages; y++) {
+            for (int x = 0; x < tilePage[y].length; x++) {
+                Tile.getTile(tilePage[y][x]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
+            }
+        }
     }
 
     public Tile getTile(int x, int y, boolean tilePrecision) {
@@ -181,14 +189,24 @@ public class Editor {
     public void updateScreenSize(int width, int height) {
         screenWidth = width;
         screenHeight = height;
-        menuTopLocation[0] = screenWidth - screenWidth / 5;
+        int oneFith = screenWidth / 5;
+        int oneHalf = screenHeight / 2;
+
+        menuTopLocation[0] = screenWidth - oneFith;
         menuTopLocation[1] = 0;
-        menuTopLocation[2] = screenWidth / 5;
-        menuTopLocation[3] = screenHeight / 2;
-        menuBottomLocation[0] = screenWidth - screenWidth / 5;
-        menuBottomLocation[1] = screenHeight / 2;
-        menuBottomLocation[2] = screenWidth / 5;
-        menuBottomLocation[3] = screenHeight / 2 + 1;
+        menuTopLocation[2] = oneFith;
+        menuTopLocation[3] = oneHalf;
+        menuBottomLocation[0] = screenWidth - oneFith;
+        menuBottomLocation[1] = oneHalf;
+        menuBottomLocation[2] = oneFith;
+        menuBottomLocation[3] = oneHalf + 1;
+        tilePageSize = oneFith / 4;
+        for (int x = 0; x < 3; x++) {
+            pageX[x] = (screenWidth - oneFith) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
+        }
+        for (int y = 0; y < 8; y++) {
+            pageY[y] = (tilePageSize + tilePageSize / 8) * y + 20;
+        }
     }
 
     public int getX() {
