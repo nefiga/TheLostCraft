@@ -13,8 +13,10 @@ public class Action {
     }
 
     public void press() {
-        pressed = true;
-        holding = true;
+        if (!holding) {
+            pressed = true;
+            holding = true;
+        }
     }
 
     public void release() {

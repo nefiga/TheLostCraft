@@ -184,7 +184,42 @@ public class Editor {
     }
 
     public void leftClick(int x, int y) {
+        if (x < screenWidth / 5 * 4) clickScreen(0, x, y);
+        else {
 
+        }
+    }
+
+    public void rightClick(int x, int y) {
+        if (x < screenWidth / 5 * 4) clickScreen(1, x, y);
+        else {
+
+        }
+    }
+
+    private void clickScreen(int button, int x, int y) {
+        // Left click
+        if (button == 0) {
+            // invert mouse y position
+            y = Math.abs(y - Display.getHeight());
+
+            x = (x + Game.getXOffset()) / zoom;
+            y = (y + Game.getYOffset()) / zoom;
+            if (x + y * 500 > 0 && x + y * 500 < tiles.length) {
+                tiles[x + y * 500] = Tile.grass.getID();
+            }
+        }
+        // Right click
+        else {
+            // invert mouse y position
+            y = Math.abs(y - Display.getHeight());
+
+            x = (x + Game.getXOffset()) / zoom;
+            y = (y + Game.getYOffset()) / zoom;
+            if (x + y * 500 > 0 && x + y * 500 < tiles.length) {
+                tiles[x + y * 500] = Tile.emptyTile.getID();
+            }
+        }
     }
 
     public void move(int x, int y) {

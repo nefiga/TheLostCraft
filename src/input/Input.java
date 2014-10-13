@@ -10,7 +10,8 @@ public class Input {
 
     protected  List<Action> actions = new ArrayList<Action>();
 
-    public static final int LEFT_MOUSE_BUTTON = 500, RIGHT_MOUSE_BUTTON = 501;
+    protected Action leftButton = new Action("Left Button", 0);
+    protected Action rightButton = new Action("Right Button", 1);
 
     public Input() {
         initActions();
@@ -33,6 +34,11 @@ public class Input {
             }
         }
         checkInput();
+
+        if (Mouse.isButtonDown(0)) leftButton.press();
+        else leftButton.release();
+        if (Mouse.isButtonDown(1)) rightButton.press();
+        else rightButton.release();
     }
 
     public void checkInput() {

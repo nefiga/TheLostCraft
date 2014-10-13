@@ -48,5 +48,8 @@ public class EditorInput extends Input {
 
         if (zoomIn.isPressed()) editor.zoomIn();
         if (zoomOut.isPressed()) editor.zoomOut();
+
+        if (leftButton.isPressed()) editor.leftClick(Mouse.getX(), Mouse.getY());
+        if (rightButton.isPressed()) editor.rightClick(Mouse.getX(), Mouse.getY());
     }
 }
