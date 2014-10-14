@@ -17,14 +17,18 @@ public class Editor {
     TextureAtlas editorAtlas;
     EditorMap editorMap;
 
-    private int[] menuTop, menuBottom;
+    private int[] menuTop, menuBottom, currentTile;
 
     private int[] tiles;
+    private int[] tileData;
 
     private int tilePageSize;
 
     private int[] pageX = new int[3];
     private int[] pageY = new int[8];
+
+    private int selectTileX, selectTileY;
+    private Tile inHand = Tile.voidTile;
 
     private int[][] tilePage;
 
@@ -44,16 +48,17 @@ public class Editor {
     public Editor() {
 
         tiles = new int[500 * 500];
-        Random random = new Random();
+        tileData = new int[500 * 500];
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = Tile.getTile(random.nextInt(6)).getID();
-
+            tiles[i] = Tile.emptyTile.getID();
+            tileData[i] = 0;
         }
         init();
     }
 
     public Editor(Map map) {
         tiles = map.tiles;
+        tileData = map.tileData;
         init();
     }
 
@@ -93,28 +98,34 @@ public class Editor {
         tileBatch.end();
 
         editorBatch.begin();
-        renderMenu();
+        renderMenuBackground();
         editorBatch.end();
 
         tileBatch.begin();
         renderSelectableTiles();
         tileBatch.end();
+
+        editorBatch.begin();
+        renderMenu();
+        editorBatch.end();
     }
 
-    public void renderMenu() {
+    public void renderMenuBackground() {
         editorBatch.draw(menuTopLocation[0], menuTopLocation[1], menuTopLocation[2], menuTopLocation[3], menuTop[0], menuTop[1], menuTop[2], menuTop[3]);
         editorBatch.draw(menuBottomLocation[0], menuBottomLocation[1], menuBottomLocation[2], menuBottomLocation[3], menuBottom[0], menuBottom[1], menuBottom[2], menuBottom[3]);
     }
 
+    private void renderMenu() {
+        editorBatch.draw(pageX[selectTileX], pageY[selectTileY], tilePageSize, tilePageSize, currentTile[0], currentTile[1], currentTile[2], currentTile[3]);
+    }
+
     public void renderSelectableTiles() {
-        for (int p = 0; p < pages; p++) {
             for (int y = 0; y < pageY.length; y++) {
                 for (int x = 0; x < pageX.length; x++) {
-                    if (x + y * 3 >= tilePage[p].length) continue;
-                    Tile.getTile(tilePage[p][x + y * 3]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
+                    if (x + y * 3 >= tilePage[page].length) continue;
+                    Tile.getTile(tilePage[page][x + y * 3]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
                 }
             }
-        }
     }
 
     public Tile getTile(int x, int y, boolean tilePrecision) {
@@ -128,6 +139,18 @@ public class Editor {
         return Tile.getTile(tiles[x + y * 500]);
     }
 
+    public int getTileData(int x, int y, boolean tilePrecision) {
+        if (!tilePrecision) {
+            x = x / zoom;
+            y = y / zoom;
+        }
+        if (x < 0 || y < 0 || x >= 500 || y >= 500)
+            return 0;
+
+        return tileData[x + y * 500];
+    }
+
+
     protected void renderTiles() {
         int startX = Game.getXOffset() / zoom - 1;
         int endX = (Display.getWidth() + Game.getXOffset()) / zoom + 1;
@@ -135,7 +158,7 @@ public class Editor {
         int endY = (Display.getHeight() + Game.getYOffset()) / zoom + 1;
         for (int y = startY; y < endY; y++) {
             for (int x = startX; x < endX; x++) {
-                getTile(x, y, true).render(tileBatch, x * zoom - Game.getXOffset(), y * zoom - Game.getYOffset(), zoom, zoom);
+                getTile(x, y, true).render(tileBatch, x * zoom - Game.getXOffset(), y * zoom - Game.getYOffset(), zoom, zoom, (getTileData(x, y, true) & 0xff00) >> 8);
             }
         }
     }
@@ -143,9 +166,12 @@ public class Editor {
     private void createTextureAtlas() {
         menuTop = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_top"));
         menuBottom = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_bottom"));
+        currentTile = editorAtlas.addTexture(ImageManager.getImage("/editor/current_tile"));
     }
 
     public void zoomIn() {
+        int tempX = x / zoom;
+        int tempY = y / zoom;
         switch (zoom) {
             case X1:
                 zoom = X2;
@@ -157,9 +183,13 @@ public class Editor {
                 zoom = X1;
                 break;
         }
+        x = tempX * zoom;
+        y = tempY * zoom;
     }
 
     public void zoomOut() {
+        int tempX = x / zoom;
+        int tempY = y / zoom;
         switch (zoom) {
             case X1:
                 zoom = X3;
@@ -171,6 +201,8 @@ public class Editor {
                 zoom = X2;
                 break;
         }
+        x = tempX * zoom;
+        y = tempY * zoom;
     }
 
     public void nextPage() {
@@ -183,41 +215,69 @@ public class Editor {
         if (page < 0) page = pages;
     }
 
+    // Rotates the tile
+    public void shiftClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
+        x = (x + Game.getXOffset()) / zoom;
+        y = (y + Game.getYOffset()) / zoom;
+        if (x + y * 500 >= 0 && x + y * 500 < tiles.length) {
+            int t = tileData[x + y * 500];
+            int durability = (t & 0xff);
+            int rotation = Tile.rotateTile((t & 0xff00) >> 8);
+            tileData[x + y *  500] = rotation << 8 | durability;
+        }
+    }
+
+    public void controlClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
+        x = (x + Game.getXOffset()) / zoom;
+        y = (y + Game.getYOffset()) / zoom;
+        if (x + y * 500 >= 0 && x + y * 500 < tiles.length) inHand = Tile.getTile(tiles[x + y * 500]);
+    }
+
     public void leftClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
         if (x < screenWidth / 5 * 4) clickScreen(0, x, y);
         else {
-
+            for (int yp = 0; yp < pageY.length; yp++) {
+                for (int xp = 0; xp < pageX.length; xp++) {
+                    if (x > pageX[xp] && x < pageX[xp] + tilePageSize && y > pageY[yp] && y < pageY[yp] + tilePageSize) {
+                        if (xp + yp * 3 >= tilePage[page].length) continue;
+                        selectTileX = xp;
+                        selectTileY = yp;
+                        inHand = Tile.getTile(tilePage[page][xp + yp * 3]);
+                    }
+                }
+            }
         }
     }
 
     public void rightClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
         if (x < screenWidth / 5 * 4) clickScreen(1, x, y);
-        else {
-
-        }
     }
 
     private void clickScreen(int button, int x, int y) {
         // Left click
         if (button == 0) {
-            // invert mouse y position
-            y = Math.abs(y - Display.getHeight());
-
             x = (x + Game.getXOffset()) / zoom;
             y = (y + Game.getYOffset()) / zoom;
-            if (x + y * 500 > 0 && x + y * 500 < tiles.length) {
-                tiles[x + y * 500] = Tile.grass.getID();
+            if (x + y * 500 >= 0 && x + y * 500 < tiles.length) {
+                tiles[x + y * 500] = inHand.getID();
+                tileData[x + y * 500] = inHand.getDurability();
             }
         }
         // Right click
         else {
-            // invert mouse y position
-            y = Math.abs(y - Display.getHeight());
-
             x = (x + Game.getXOffset()) / zoom;
             y = (y + Game.getYOffset()) / zoom;
-            if (x + y * 500 > 0 && x + y * 500 < tiles.length) {
+            if (x + y * 500 >= 0 && x + y * 500 < tiles.length) {
                 tiles[x + y * 500] = Tile.emptyTile.getID();
+                tileData[x + y * 500] = inHand.getDurability();
             }
         }
     }
@@ -248,6 +308,7 @@ public class Editor {
         for (int y = 0; y < 8; y++) {
             pageY[y] = (tilePageSize + tilePageSize / 8) * y + 20;
         }
+
     }
 
     public int getX() {

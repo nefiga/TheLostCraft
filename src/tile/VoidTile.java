@@ -1,5 +1,7 @@
 package tile;
 
+import game.graphics.SpriteBatch;
+
 public class VoidTile extends Tile{
 
     public VoidTile(String name) {

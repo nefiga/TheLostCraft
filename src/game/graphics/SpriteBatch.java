@@ -128,36 +128,14 @@ public class SpriteBatch {
         shader.unBind();
     }
 
-    /**
-     * Adds the texture to the Buffer that will be rendered
-     *
-     * @param width    The width of the texture and the width to draw the texture
-     * @param height   The height of the texture and the height to draw the texture
-     * @param x        The starting x point on the screen
-     * @param y        The starting y point on the screen
-     * @param textureX The starting x point of the texture in the texture atlas
-     * @param textureY The starting y point of the texture in the texture atlas
-     */
     public void draw(float x, float y, int textureX, int textureY, int width, int height) {
-        draw(x, y, width, height, textureX, textureY, width, height);
+        draw(x, y, width, height, textureX, textureY, NO_ROTATE);
     }
 
-    public void draw(float x, float y, int textureX, int textureY, int width, int height, int flipped) {
-        draw(x, y, width, height, textureX, textureY, width, height, flipped);
+    public void draw(float x, float y, int textureX, int textureY, int width, int height, int rotate) {
+        draw(x, y, width, height, textureX, textureY, width, height, rotate);
     }
 
-    /**
-     * Add the texture to the Buffer that will be rendered
-     *
-     * @param drawWidth     The width to draw the texture
-     * @param drawHeight    The height to draw the texture
-     * @param x             The starting x point of the screen
-     * @param y             The starting y point on the screen
-     * @param textureX      The starting x point of the texture in the texture atlas
-     * @param textureY      The starting y point of the texture in the texture atlas
-     * @param textureWidth  The width of the texture in the texture atlas
-     * @param textureHeight The height of the texture in the texture atlas
-     */
     public void draw(float x, float y, int drawWidth, int drawHeight, int textureX, int textureY, int textureWidth, int textureHeight) {
         draw(x, y, drawWidth, drawHeight, textureX, textureY, textureWidth, textureHeight, NO_ROTATE);
     }

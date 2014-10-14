@@ -33,9 +33,14 @@ public class Entity {
     public int direction = 0;
 
     /**
+     * The rotation to be put on the entity image when drawn
+     */
+    protected int rotation = SpriteBatch.NO_ROTATE;
+
+    /**
      * The directions the entity can face
      */
-    public static final int UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3;
+    public static final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
 
     /**
      * width and height of this entity

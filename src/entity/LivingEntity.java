@@ -33,7 +33,7 @@ public class LivingEntity extends Entity {
 
     /**
      * How much to add to the entities x, y position when the entities interactWith method is called.
-     * The amounts correspond with the entities direction, they are in this order UP, RIGHT, DOWN, LEFT.
+     * The amounts correspond with the entities direction, they are in this order NORTH, EAST, SOUTH, WEST.
      */
     protected int[] interactX = new int[]{32, 96, 32, -32};
     protected int[] interactY = new int[]{-32, 32, 96, 32};
@@ -84,17 +84,17 @@ public class LivingEntity extends Entity {
      * @param velocityY The amount to be moved on the y axis
      */
     public void move(int velocityX, int velocityY) {
-        if (velocityX > 0) direction = RIGHT;
-        if (velocityX < 0) direction = LEFT;
-        if (velocityY > 0) direction = DOWN;
-        if (velocityY < 0) direction = UP;
+        if (velocityX > 0) direction = EAST;
+        if (velocityX < 0) direction = WEST;
+        if (velocityY > 0) direction = SOUTH;
+        if (velocityY < 0) direction = NORTH;
 
         x += level.getMaxMoveX(this, velocityX, null);
         y += level.getMaxMoveY(this, velocityY, null);
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(x - Game.getXOffset(), y - Game.getYOffset(), imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+        batch.draw(x - Game.getXOffset(), y - Game.getYOffset(), imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
     }
 
     public void render(SpriteBatch batch, int x, int y) {

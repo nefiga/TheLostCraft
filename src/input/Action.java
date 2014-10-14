@@ -21,6 +21,7 @@ public class Action {
 
     public void release() {
         holding = false;
+        pressed = false;
     }
 
     public boolean isHolding() {

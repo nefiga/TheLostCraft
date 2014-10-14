@@ -166,6 +166,12 @@ public class Tile {
         return tilePosition - 1;
     }
 
+    public static int rotateTile(int direction) {
+        direction++;
+        if (direction > 3) direction = 0;
+        return direction;
+    }
+
     /**
      * Renders the tiles image at x, y
      *
@@ -177,6 +183,10 @@ public class Tile {
         batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
     }
 
+    public void render(SpriteBatch batch, int x, int y, int rotation) {
+        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
+    }
+
     /**
      * @param batch The The SpriteBatch used to rendered
      * @param x     The x position of the tile
@@ -186,5 +196,9 @@ public class Tile {
      */
     public void render(SpriteBatch batch, int x, int y, int w, int h) {
         batch.draw(x, y, w, h, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+    }
+
+    public void render(SpriteBatch batch, int x, int y, int w, int h, int rotation) {
+        batch.draw(x, y, w, h, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
     }
 }

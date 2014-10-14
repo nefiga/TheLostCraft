@@ -4,11 +4,13 @@ import editor.Editor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.awt.event.MouseEvent;
+
 public class EditorInput extends Input {
 
     Editor editor;
 
-    Action up, right, down, left, zoomIn, zoomOut;
+    Action up, right, down, left, zoomIn, zoomOut, shift, control;
 
     public EditorInput(Editor editor) {
         this.editor = editor;
@@ -21,6 +23,8 @@ public class EditorInput extends Input {
         left = new Action("Left", Keyboard.KEY_LEFT);
         zoomIn = new Action("Zoom In", Keyboard.KEY_Z);
         zoomOut = new Action("Zoom  Out", Keyboard.KEY_X);
+        shift = new Action("Shift", Keyboard.KEY_LSHIFT);
+        control = new Action("Control", Keyboard.KEY_LCONTROL);
 
         actions.add(up);
         actions.add(right);
@@ -28,6 +32,8 @@ public class EditorInput extends Input {
         actions.add(left);
         actions.add(zoomIn);
         actions.add(zoomOut);
+        actions.add(shift);
+        actions.add(control);
     }
 
     public void checkInput() {
@@ -49,7 +55,21 @@ public class EditorInput extends Input {
         if (zoomIn.isPressed()) editor.zoomIn();
         if (zoomOut.isPressed()) editor.zoomOut();
 
-        if (leftButton.isPressed()) editor.leftClick(Mouse.getX(), Mouse.getY());
-        if (rightButton.isPressed()) editor.rightClick(Mouse.getX(), Mouse.getY());
+        if (shift.isHolding()) {
+            if (leftButton.isPressed()) {
+                editor.shiftClick(Mouse.getX(), Mouse.getY());
+            }
+        }
+        else if(control.isHolding()) {
+            if (leftButton.isPressed()) {
+                editor.controlClick(Mouse.getX(), Mouse.getY());
+            }
+        }
+        else if (leftButton.isHolding()) {
+            editor.leftClick(Mouse.getX(), Mouse.getY());
+        }
+        else if (rightButton.isHolding()) {
+            editor.rightClick(Mouse.getX(), Mouse.getY());
+        }
     }
 }
