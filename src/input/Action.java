@@ -17,6 +17,7 @@ public class Action {
             pressed = true;
             holding = true;
         }
+        else pressed = false;
     }
 
     public void release() {

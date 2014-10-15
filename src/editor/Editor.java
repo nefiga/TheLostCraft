@@ -45,10 +45,12 @@ public class Editor {
 
     private int x = 1000, y = 1000;
 
+    private int chunkSize = 500;
+
     public Editor() {
 
-        tiles = new int[500 * 500];
-        tileData = new int[500 * 500];
+        tiles = new int[chunkSize * chunkSize];
+        tileData = new int[chunkSize * chunkSize];
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = Tile.emptyTile.getID();
             tileData[i] = 0;
@@ -120,12 +122,12 @@ public class Editor {
     }
 
     public void renderSelectableTiles() {
-            for (int y = 0; y < pageY.length; y++) {
-                for (int x = 0; x < pageX.length; x++) {
-                    if (x + y * 3 >= tilePage[page].length) continue;
-                    Tile.getTile(tilePage[page][x + y * 3]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
-                }
+        for (int y = 0; y < pageY.length; y++) {
+            for (int x = 0; x < pageX.length; x++) {
+                if (x + y * 3 >= tilePage[page].length) continue;
+                Tile.getTile(tilePage[page][x + y * 3]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
             }
+        }
     }
 
     public Tile getTile(int x, int y, boolean tilePrecision) {
@@ -133,10 +135,10 @@ public class Editor {
             x = x / zoom;
             y = y / zoom;
         }
-        if (x < 0 || y < 0 || x >= 500 || y >= 500)
+        if (x < 0 || y < 0 || x >= chunkSize || y >= chunkSize)
             return Tile.voidTile;
 
-        return Tile.getTile(tiles[x + y * 500]);
+        return Tile.getTile(tiles[x + y * chunkSize]);
     }
 
     public int getTileData(int x, int y, boolean tilePrecision) {
@@ -144,10 +146,10 @@ public class Editor {
             x = x / zoom;
             y = y / zoom;
         }
-        if (x < 0 || y < 0 || x >= 500 || y >= 500)
+        if (x < 0 || y < 0 || x >= chunkSize || y >= chunkSize)
             return 0;
 
-        return tileData[x + y * 500];
+        return tileData[x + y * chunkSize];
     }
 
 
@@ -167,6 +169,114 @@ public class Editor {
         menuTop = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_top"));
         menuBottom = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_bottom"));
         currentTile = editorAtlas.addTexture(ImageManager.getImage("/editor/current_tile"));
+    }
+
+    public void updateScreenSize(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
+        int oneFifth = screenWidth / 5;
+        int oneHalf = screenHeight / 2;
+
+        menuTopLocation[0] = screenWidth - oneFifth;
+        menuTopLocation[1] = 0;
+        menuTopLocation[2] = oneFifth;
+        menuTopLocation[3] = oneHalf;
+        menuBottomLocation[0] = screenWidth - oneFifth;
+        menuBottomLocation[1] = oneHalf;
+        menuBottomLocation[2] = oneFifth;
+        menuBottomLocation[3] = oneHalf + 1;
+        tilePageSize = oneFifth / 4;
+        for (int x = 0; x < 3; x++) {
+            pageX[x] = (screenWidth - oneFifth) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
+        }
+        for (int y = 0; y < 8; y++) {
+            pageY[y] = (tilePageSize + tilePageSize / 8) * y + 20;
+        }
+
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    //-------------------------
+    // INPUT
+    //------------------------
+
+    private void clickScreen(int button, int x, int y) {
+        // Left click
+        if (button == 0) {
+            x = (x + Game.getXOffset()) / zoom;
+            y = (y + Game.getYOffset()) / zoom;
+            if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
+                tiles[x + y * chunkSize] = inHand.getID();
+                tileData[x + y * chunkSize] = inHand.getDurability();
+            }
+        }
+        // Right click
+        else {
+            x = (x + Game.getXOffset()) / zoom;
+            y = (y + Game.getYOffset()) / zoom;
+            if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
+                tiles[x + y * chunkSize] = Tile.emptyTile.getID();
+                tileData[x + y * chunkSize] = inHand.getDurability();
+            }
+        }
+    }
+
+    // Rotates the tile
+    public void shiftClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
+        x = (x + Game.getXOffset()) / zoom;
+        y = (y + Game.getYOffset()) / zoom;
+        if (x + y * 500 >= chunkSize && x + y * chunkSize < tiles.length) {
+            int t = tileData[x + y * chunkSize];
+            int durability = (t & 0xff);
+            int rotation = Tile.rotateTile((t & 0xff00) >> 8);
+            tileData[x + y * chunkSize] = rotation << 8 | durability;
+        }
+    }
+
+    public void controlClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
+        x = (x + Game.getXOffset()) / zoom;
+        y = (y + Game.getYOffset()) / zoom;
+        if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) inHand = Tile.getTile(tiles[x + y * chunkSize]);
+    }
+
+    public void leftClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
+        if (x < screenWidth / 5 * 4) clickScreen(0, x, y);
+        else {
+            for (int yp = 0; yp < pageY.length; yp++) {
+                for (int xp = 0; xp < pageX.length; xp++) {
+                    if (x > pageX[xp] && x < pageX[xp] + tilePageSize && y > pageY[yp] && y < pageY[yp] + tilePageSize) {
+                        if (xp + yp * 3 >= tilePage[page].length) continue;
+                        selectTileX = xp;
+                        selectTileY = yp;
+                        inHand = Tile.getTile(tilePage[page][xp + yp * 3]);
+                    }
+                }
+            }
+        }
+    }
+
+    public void rightClick(int x, int y) {
+        // invert mouse y position
+        y = Math.abs(y - Display.getHeight());
+        if (x < screenWidth / 5 * 4) clickScreen(1, x, y);
+    }
+
+    public void move(int x, int y) {
+        this.x += x;
+        this.y += y;
     }
 
     public void zoomIn() {
@@ -213,109 +323,5 @@ public class Editor {
     public void previousPage() {
         page--;
         if (page < 0) page = pages;
-    }
-
-    // Rotates the tile
-    public void shiftClick(int x, int y) {
-        // invert mouse y position
-        y = Math.abs(y - Display.getHeight());
-        x = (x + Game.getXOffset()) / zoom;
-        y = (y + Game.getYOffset()) / zoom;
-        if (x + y * 500 >= 0 && x + y * 500 < tiles.length) {
-            int t = tileData[x + y * 500];
-            int durability = (t & 0xff);
-            int rotation = Tile.rotateTile((t & 0xff00) >> 8);
-            tileData[x + y *  500] = rotation << 8 | durability;
-        }
-    }
-
-    public void controlClick(int x, int y) {
-        // invert mouse y position
-        y = Math.abs(y - Display.getHeight());
-        x = (x + Game.getXOffset()) / zoom;
-        y = (y + Game.getYOffset()) / zoom;
-        if (x + y * 500 >= 0 && x + y * 500 < tiles.length) inHand = Tile.getTile(tiles[x + y * 500]);
-    }
-
-    public void leftClick(int x, int y) {
-        // invert mouse y position
-        y = Math.abs(y - Display.getHeight());
-        if (x < screenWidth / 5 * 4) clickScreen(0, x, y);
-        else {
-            for (int yp = 0; yp < pageY.length; yp++) {
-                for (int xp = 0; xp < pageX.length; xp++) {
-                    if (x > pageX[xp] && x < pageX[xp] + tilePageSize && y > pageY[yp] && y < pageY[yp] + tilePageSize) {
-                        if (xp + yp * 3 >= tilePage[page].length) continue;
-                        selectTileX = xp;
-                        selectTileY = yp;
-                        inHand = Tile.getTile(tilePage[page][xp + yp * 3]);
-                    }
-                }
-            }
-        }
-    }
-
-    public void rightClick(int x, int y) {
-        // invert mouse y position
-        y = Math.abs(y - Display.getHeight());
-        if (x < screenWidth / 5 * 4) clickScreen(1, x, y);
-    }
-
-    private void clickScreen(int button, int x, int y) {
-        // Left click
-        if (button == 0) {
-            x = (x + Game.getXOffset()) / zoom;
-            y = (y + Game.getYOffset()) / zoom;
-            if (x + y * 500 >= 0 && x + y * 500 < tiles.length) {
-                tiles[x + y * 500] = inHand.getID();
-                tileData[x + y * 500] = inHand.getDurability();
-            }
-        }
-        // Right click
-        else {
-            x = (x + Game.getXOffset()) / zoom;
-            y = (y + Game.getYOffset()) / zoom;
-            if (x + y * 500 >= 0 && x + y * 500 < tiles.length) {
-                tiles[x + y * 500] = Tile.emptyTile.getID();
-                tileData[x + y * 500] = inHand.getDurability();
-            }
-        }
-    }
-
-    public void move(int x, int y) {
-        this.x += x;
-        this.y += y;
-    }
-
-    public void updateScreenSize(int width, int height) {
-        screenWidth = width;
-        screenHeight = height;
-        int oneFifth = screenWidth / 5;
-        int oneHalf = screenHeight / 2;
-
-        menuTopLocation[0] = screenWidth - oneFifth;
-        menuTopLocation[1] = 0;
-        menuTopLocation[2] = oneFifth;
-        menuTopLocation[3] = oneHalf;
-        menuBottomLocation[0] = screenWidth - oneFifth;
-        menuBottomLocation[1] = oneHalf;
-        menuBottomLocation[2] = oneFifth;
-        menuBottomLocation[3] = oneHalf + 1;
-        tilePageSize = oneFifth / 4;
-        for (int x = 0; x < 3; x++) {
-            pageX[x] = (screenWidth - oneFifth) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
-        }
-        for (int y = 0; y < 8; y++) {
-            pageY[y] = (tilePageSize + tilePageSize / 8) * y + 20;
-        }
-
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 }
