@@ -1,9 +1,11 @@
 package entity;
 
+import collision.shapes.Shape;
 import game.graphics.SpriteBatch;
 import level.Level;
 
-import java.awt.*;
+import java.awt.Rectangle;
+
 
 public class Entity {
 
@@ -47,6 +49,8 @@ public class Entity {
      */
     protected int width, height;
 
+    protected Shape shape;
+
     /**
      * Creates a new entity
      *
@@ -75,6 +79,10 @@ public class Entity {
      */
     public void render(SpriteBatch batch, int x, int y) {
 
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
     }
 
     /**
@@ -114,33 +122,39 @@ public class Entity {
         return removed;
     }
 
+    public Shape getShape() {
+        return shape;
+    }
+
     /**
      * @param pushingEntity The entity pushing this entity
      * @param moveX         The amount to be pushed
      * @return The amount this entity can be pushed
      */
-    public int pushX(Level level, Entity pushingEntity, int moveX) {
+    /*public int pushX(Level level, Entity pushingEntity, int moveX) {
         if (moveable && moveX != 0) {
             int moveDistance = level.getMaxMoveX(this, moveX, pushingEntity);
             x += moveDistance;
+            shape.move(moveDistance, 0);
             return moveDistance;
         }
         return 0;
-    }
+    }*/
 
     /**
      * @param pushingEntity The entity pushing this entity
      * @param moveY         The amount to be pushed
      * @return The amount this entity can be pushed
      */
-    public int pushY(Level level, Entity pushingEntity, int moveY) {
+    /*public int pushY(Level level, Entity pushingEntity, int moveY) {
         if (moveable && moveY != 0) {
             int moveDistance = level.getMaxMoveY(this, moveY, pushingEntity);
             y += moveDistance;
+            shape.move(0, moveDistance);
             return moveDistance;
         }
         return 0;
-    }
+    }*/
 
     public Rectangle getRect() {
         return rect;

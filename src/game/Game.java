@@ -27,7 +27,7 @@ public class Game extends GameLoop {
 
     private static int xOffset, yOffset;
 
-    private static int state = 2;
+    private static int state = 1;
 
     public static final int MAIN_MENU = 0, GAME = 1, MAP_EDITOR = 2;
 
@@ -59,7 +59,7 @@ public class Game extends GameLoop {
                 editorInput.update();
                 xOffset = editor.getX() - (Display.getWidth() / 2 - 32);
                 yOffset = editor.getY() - (Display.getHeight() / 2 - 32);
-                editor.update();
+                editor.update(delta);
                 break;
         }
 

@@ -19,6 +19,7 @@ public class RandomMapGenerator {
         generateDirt();
         generateStone();
         generateWater();
+
         return new Map(tiles, tileData, size, size);
     }
 

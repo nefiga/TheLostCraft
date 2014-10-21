@@ -1,10 +1,14 @@
 package entity;
 
-public class Player extends LivingEntity{
+import collision.shapes.Square;
+import math.Vector2;
+
+public class Player extends LivingEntity {
 
     public Player(int positionX, int positionY) {
         super(positionX, positionY);
         setTexture("player");
+        shape = new Square(new Vector2(x, y), 64, 64);
     }
 
     public void update(long delta) {

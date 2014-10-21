@@ -1,5 +1,6 @@
 package tile;
 
+import collision.shapes.Shape;
 import entity.Entity;
 import game.graphics.ImageManager;
 import game.graphics.SpriteBatch;
@@ -39,11 +40,6 @@ public class Tile {
      */
     public static int tilePosition;
 
-    /**
-     * The size of the tile in the sprite sheet
-     */
-    protected static final int tileSize = 64;
-
     protected String name;
 
     /**
@@ -57,12 +53,18 @@ public class Tile {
     protected int durability;
 
     /**
+     * Used for collision detection
+     */
+    protected Shape shape;
+
+    /**
      * Creates a new Tile. use the static method {@code addTile} to set the {@code id} of the Tile. Which will also
      * add the tile to the tiles array. Default durability is 1.
      */
     public Tile(String name) {
         this.name = name;
         durability = 1;
+        shape = null;
 
         if (tiles == null) {
             tiles = new Tile[1000];
@@ -82,6 +84,10 @@ public class Tile {
     public void setImage(String image) {
         this.image = ImageManager.getImage("/tiles/" + image);
         imagePosition = tileAtlas.addTexture(this.image);
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
     }
 
     /**
@@ -130,6 +136,13 @@ public class Tile {
      */
     public int getID() {
         return id;
+    }
+
+    public Shape getShape(int x, int y) {
+        int xa = x / 64 * 64;
+        int ya = y / 64 * 64;
+        shape.setPosition(xa, ya);
+        return shape;
     }
 
     public String getName() {

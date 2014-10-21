@@ -35,7 +35,6 @@ public class LevelManager {
      * @param level Level to be added to the {@code levels} HashMap
      */
     public void addLevel(String name, Level level) {
-        // Create and exception for adding multiples of the same Level
         if (levels.containsKey(name)) System.out.println("levels already contains Level");
         levels.put(name, level);
     }

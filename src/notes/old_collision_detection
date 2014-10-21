@@ -1,0 +1,129 @@
+/**
+     * @return True if there is a solid tile at x, y else return false
+     */
+    public boolean tileCollision(int xa, int ya) {
+        if (getTile(xa, ya, false).solid(xa, ya)) return true;
+        if (getTile(xa + 63, ya, false).solid(xa + 63, ya)) return true;
+        if (getTile(xa, ya + 63, false).solid(xa, ya + 63)) return true;
+        if (getTile(xa + 63, ya + 63, false).solid(xa + 63, ya + 63)) return true;
+        return false;
+    }
+
+
+/**
+     * Calculates the max distance that can be moved without colliding with any solid entities or tiles
+     *
+     * @param entity        The entity attempting to move
+     * @param moveX         The desired amount to be moved in the x axis
+     * @param excludeEntity An entity to be excluded from collision detection
+     * @return The amount the entity can move with out colliding with a solid entity or tile
+     */
+    public int getMaxMoveX(Entity entity, int moveX, Entity excludeEntity) {
+        int distance = moveX;
+        int push = moveX;
+
+        int xa = (int) entity.getX() + distance;
+        int ya = (int) entity.getY();
+
+        // Checking Tile collision
+        while (tileCollision(xa, ya)) {
+            push = distance = (int) Math.nextAfter(distance, 0);
+            xa = (int) entity.getX() + distance;
+        }
+
+
+        // Checking Rectangle collision
+        Rectangle rect = entity.getRect();
+        // Moves the Rectangle prior to check if there are any collisions.
+        rect.translate(distance, 0);
+
+        for (int i = 0; i < entities.size(); i++) {
+            // Skips checks on its self and the exclude entity.
+            if (entities.get(i) == entity || entities.get(i) == excludeEntity) continue;
+            Entity entity1 = entities.get(i);
+            Rectangle rect1 = entity1.getRect();
+
+            if (rect.intersects(rect1)) {
+                // Tries to collect the entity
+                if (entity instanceof LivingEntity && entity1 instanceof ItemEntity) {
+                    if (((LivingEntity) entity).canCollect() && ((ItemEntity) entity1).collectable()) {
+                        ((LivingEntity) entity).collectItem(((ItemEntity) entity1).getItem());
+                        removeEntity(entity1);
+                        continue;
+                    }
+                }
+
+                while (rect.intersects(rect1)) {
+                    distance = (int) Math.nextAfter(distance, 0);
+                    rect.setLocation((int) entity.getX() + distance, (int) entity.getY());
+                }
+
+                if (entity1.isMoveable()) {
+                    distance = entity1.pushX(this, entity, push);
+                }
+
+                rect.setLocation((int) entity.getX() + distance, (int) entity.getY());
+            }
+        }
+
+        return distance;
+    }
+
+    /**
+     * Calculates the max distance that can be moved without colliding with any solid entities or tiles
+     *
+     * @param entity        The entity attempting to move
+     * @param moveY         The desired amount to be moved in the Y axis
+     * @param excludeEntity An entity to be excluded from collision detection
+     * @return The amount the entity can move with out colliding with a solid entity or tile
+     */
+    public int getMaxMoveY(Entity entity, int moveY, Entity excludeEntity) {
+        int distance = moveY;
+        int push = moveY;
+
+        // Checking Tile collision
+        int xa = (int) entity.getX();
+        int ya = (int) entity.getY() + distance;
+
+        while (tileCollision(xa, ya)) {
+            push = distance = (int) Math.nextAfter(distance, 0);
+            ya = (int) entity.getY() + distance;
+        }
+
+
+        // Checking Rectangle collision
+        Rectangle rect = entity.getRect();
+        // Moves the Rectangle prior to check if there are any collisions.
+        rect.translate(0, distance);
+
+        for (int i = 0; i < entities.size(); i++) {
+            if (entities.get(i) == entity || entities.get(i) == excludeEntity) continue;
+            Entity entity1 = entities.get(i);
+            Rectangle rect1 = entity1.getRect();
+
+            if (rect.intersects(rect1)) {
+
+                // Tries to collect the entity
+                if (entity instanceof LivingEntity && entity1 instanceof ItemEntity) {
+                    if (((LivingEntity) entity).canCollect() && ((ItemEntity) entity1).collectable()) {
+                        ((LivingEntity) entity).collectItem(((ItemEntity) entity1).getItem());
+                        removeEntity(entity1);
+                        continue;
+                    }
+                }
+
+                while (rect.intersects(rect1)) {
+                    distance = (int) Math.nextAfter(distance, 0);
+                    rect.setLocation((int) entity.getX(), (int) entity.getY() + distance);
+                }
+
+                if (entity1.isMoveable()) {
+                    distance = entity1.pushY(this, entity, push);
+                }
+
+                rect.setLocation((int) entity.getX(), (int) entity.getY() + distance);
+            }
+        }
+
+        return distance;
+    }

@@ -10,7 +10,7 @@ public class EditorInput extends Input {
 
     Editor editor;
 
-    Action up, right, down, left, zoomIn, zoomOut, shift, control;
+    Action up, right, down, left, a, s, d, w, zoomIn, zoomOut, shift, control;
 
     public EditorInput(Editor editor) {
         this.editor = editor;
@@ -21,6 +21,10 @@ public class EditorInput extends Input {
         right = new Action("Right", Keyboard.KEY_RIGHT);
         down = new Action("Down", Keyboard.KEY_DOWN);
         left = new Action("Left", Keyboard.KEY_LEFT);
+        a = new Action("A", Keyboard.KEY_A);
+        s = new Action("S", Keyboard.KEY_S);
+        d = new Action("D", Keyboard.KEY_D);
+        w = new Action("W", Keyboard.KEY_W);
         zoomIn = new Action("Zoom In", Keyboard.KEY_Z);
         zoomOut = new Action("Zoom  Out", Keyboard.KEY_X);
         shift = new Action("Shift", Keyboard.KEY_LSHIFT);
@@ -30,6 +34,10 @@ public class EditorInput extends Input {
         actions.add(right);
         actions.add(down);
         actions.add(left);
+        actions.add(a);
+        actions.add(s);
+        actions.add(d);
+        actions.add(w);
         actions.add(zoomIn);
         actions.add(zoomOut);
         actions.add(shift);
@@ -38,16 +46,16 @@ public class EditorInput extends Input {
 
     public void checkInput() {
         int velocityX = 0, velocityY = 0;
-        if (right.isHolding()) {
+        if (right.isHolding() || d.isHolding()) {
             velocityX = 3;
         }
-        if (left.isHolding()) {
+        if (left.isHolding() || a.isHolding()) {
             velocityX = -3;
         }
-        if (up.isHolding()) {
+        if (up.isHolding() || w.isHolding()) {
             velocityY = -3;
         }
-        if (down.isHolding()) {
+        if (down.isHolding() || s.isHolding()) {
             velocityY = 3;
         }
         editor.move(velocityX, velocityY);

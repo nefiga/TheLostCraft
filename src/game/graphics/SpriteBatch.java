@@ -129,7 +129,7 @@ public class SpriteBatch {
     }
 
     public void draw(float x, float y, int textureX, int textureY, int width, int height) {
-        draw(x, y, width, height, textureX, textureY, NO_ROTATE);
+        draw(x, y, width, height, textureX, textureY, width, height, NO_ROTATE);
     }
 
     public void draw(float x, float y, int textureX, int textureY, int width, int height, int rotate) {

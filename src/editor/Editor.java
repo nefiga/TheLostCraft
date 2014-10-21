@@ -11,7 +11,7 @@ import tile.Tile;
 
 import java.util.Random;
 
-public class Editor {
+public class Editor{
 
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;
@@ -91,7 +91,8 @@ public class Editor {
         }
     }
 
-    public void update() {
+    public void update(long delta) {
+
     }
 
     public void render() {

@@ -8,6 +8,7 @@ import game.graphics.TextureAtlas;
 import item.Item;
 import gear.tool.Tool;
 import level.Level;
+import math.Vector2;
 
 import java.awt.image.BufferedImage;
 
@@ -89,8 +90,16 @@ public class LivingEntity extends Entity {
         if (velocityY > 0) direction = SOUTH;
         if (velocityY < 0) direction = NORTH;
 
-        x += level.getMaxMoveX(this, velocityX, null);
-        y += level.getMaxMoveY(this, velocityY, null);
+        // Moves the player and its shape
+        shape.move(velocityX, velocityY);
+        x += velocityX;
+        y += velocityY;
+
+        // Adjust the player and its shape according to any collisions
+        Vector2 movement = level.getMaxMovement(this, new Vector2(x, y));
+        shape.move(movement.x, movement.y);
+        x += movement.x;
+        y += movement.y;
     }
 
     public void render(SpriteBatch batch) {
