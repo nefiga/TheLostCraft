@@ -1,10 +1,7 @@
 package editor;
 
 import game.Game;
-import game.graphics.ImageManager;
-import game.graphics.SpriteBatch;
-import game.graphics.Texture;
-import game.graphics.TextureAtlas;
+import game.graphics.*;
 import game.util.FileIO;
 import level.Map;
 import org.lwjgl.opengl.Display;
@@ -67,8 +64,8 @@ public class Editor{
         editorAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
         editorMap = new EditorMap();
         createTextureAtlas();
-        tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 1500);
-        editorBatch = new SpriteBatch(new Texture(editorAtlas), 100);
+        tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 1500);
+        editorBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(editorAtlas), 100);
         screenWidth = Display.getWidth();
         screenHeight = Display.getHeight();
         updateScreenSize(screenWidth, screenHeight);

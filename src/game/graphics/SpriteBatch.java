@@ -35,17 +35,17 @@ public class SpriteBatch {
     /**
      * Creates a new SpriteBatcher Object
      */
-    public SpriteBatch(Texture texture, int size) {
+    public SpriteBatch(String shader, Texture texture, int size) {
         this.size = size;
         vertex = BufferUtils.createFloatBuffer(size * 8);
         texCords = BufferUtils.createFloatBuffer(size * 8);
         elements = BufferUtils.createShortBuffer(size * 10);
 
         this.texture = texture;
-        shader = new ShaderManager();
-        shader.attachVertexShader("game/glsl/tile.vert");
-        shader.attachFragmentShader("game/glsl/tile.frag");
-        shader.link();
+        this.shader = new ShaderManager();
+        this.shader.attachVertexShader(shader + ".vert");
+        this.shader.attachFragmentShader(shader + ".frag");
+        this.shader.link();
 
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);
@@ -228,7 +228,7 @@ public class SpriteBatch {
         if (renderCount >= size) flush();
     }
 
-    public void subTexture(int[] piexels, int offsetX, int offsetY, int width, int height) {
-        texture.subTexture(piexels, offsetX, offsetY, width, height);
+    public void subTexture(int[] pixels, int offsetX, int offsetY, int width, int height) {
+        texture.subTexture(pixels, offsetX, offsetY, width, height);
     }
 }

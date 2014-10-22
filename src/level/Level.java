@@ -2,6 +2,7 @@ package level;
 
 import collision.CollisionDetection;
 import collision.shapes.Shape;
+import com.sun.prism.ps.Shader;
 import entity.Entity;
 import entity.ItemEntity;
 import entity.LivingEntity;
@@ -80,12 +81,12 @@ public class Level {
         this.player = player;
         player.setLevel(this);
         interactArea = new Rectangle();
-        tileBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 700);
-        entityBatch = new SpriteBatch(new Texture(LivingEntity.livingEntityAtlas), 100);
-        misBatch = new SpriteBatch(new Texture(Tile.tileAtlas), 1500);
+        tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
+        entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE,new Texture(LivingEntity.livingEntityAtlas), 100);
+        misBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE,new Texture(Tile.tileAtlas), 1500);
 
         menu = new Menu(30, 20, 16, "corner", "side", "middle");
-        menuBatch = new SpriteBatch(new Texture(Menu.menuAtlas), 1000);
+        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE,new Texture(Menu.menuAtlas), 1000);
     }
 
     public void update(long delta) {

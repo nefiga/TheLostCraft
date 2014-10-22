@@ -15,6 +15,7 @@ public class FileUtil {
         StringBuffer source = new StringBuffer();
 
         try {
+            System.out.println(name);
             BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderManager.class.getClassLoader().getResourceAsStream(name)));
 
             String line;

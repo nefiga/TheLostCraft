@@ -25,6 +25,7 @@ public class GameLoop {
             ContextAttribs attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCompatibility(true);
 
             Display.create(pixelFormat, attribs);
+            setDisplayMode(1920, 1080, true);
             Display.setResizable(true);
 
             // Start game.GameLoop
