@@ -5,11 +5,10 @@ import game.graphics.ImageManager;
 import game.graphics.SpriteBatch;
 import game.graphics.Texture;
 import game.graphics.TextureAtlas;
+import game.util.FileIO;
 import level.Map;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
-
-import java.util.Random;
 
 public class Editor{
 
@@ -17,7 +16,7 @@ public class Editor{
     TextureAtlas editorAtlas;
     EditorMap editorMap;
 
-    private int[] menuTop, menuBottom, currentTile;
+    private int[] menu;
 
     private int[] tiles;
     private int[] tileData;
@@ -27,15 +26,14 @@ public class Editor{
     private int[] pageX = new int[3];
     private int[] pageY = new int[8];
 
-    private int selectTileX, selectTileY;
     private Tile inHand = Tile.voidTile;
+    private int currentTileX, currentTileY = 30;
 
     private int[][] tilePage;
 
     private int screenWidth, screenHeight;
 
-    private int[] menuTopLocation = new int[4];
-    private int[] menuBottomLocation = new int[4];
+    private int[] menuBackgroundLocation = new int[4];
 
     public static final int X1 = 16, X2 = 32, X3 = 64;
 
@@ -114,12 +112,11 @@ public class Editor{
     }
 
     public void renderMenuBackground() {
-        editorBatch.draw(menuTopLocation[0], menuTopLocation[1], menuTopLocation[2], menuTopLocation[3], menuTop[0], menuTop[1], menuTop[2], menuTop[3]);
-        editorBatch.draw(menuBottomLocation[0], menuBottomLocation[1], menuBottomLocation[2], menuBottomLocation[3], menuBottom[0], menuBottom[1], menuBottom[2], menuBottom[3]);
+        editorBatch.draw(menuBackgroundLocation[0], menuBackgroundLocation[1], menuBackgroundLocation[2], menuBackgroundLocation[3], menu[0], menu[1], menu[2], menu[3]);
     }
 
     private void renderMenu() {
-        editorBatch.draw(pageX[selectTileX], pageY[selectTileY], tilePageSize, tilePageSize, currentTile[0], currentTile[1], currentTile[2], currentTile[3]);
+
     }
 
     public void renderSelectableTiles() {
@@ -129,6 +126,7 @@ public class Editor{
                 Tile.getTile(tilePage[page][x + y * 3]).render(tileBatch, pageX[x], pageY[y], tilePageSize, tilePageSize);
             }
         }
+        inHand.render(tileBatch, currentTileX, currentTileY, Tile.TILE_SIZE, Tile.TILE_SIZE);
     }
 
     public Tile getTile(int x, int y, boolean tilePrecision) {
@@ -167,31 +165,25 @@ public class Editor{
     }
 
     private void createTextureAtlas() {
-        menuTop = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_top"));
-        menuBottom = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_bottom"));
-        currentTile = editorAtlas.addTexture(ImageManager.getImage("/editor/current_tile"));
+        menu = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_top"));
     }
 
     public void updateScreenSize(int width, int height) {
         screenWidth = width;
         screenHeight = height;
-        int oneFifth = screenWidth / 5;
-        int oneHalf = screenHeight / 2;
+        int tileMenuWidth = Tile.TILE_SIZE * 4;
 
-        menuTopLocation[0] = screenWidth - oneFifth;
-        menuTopLocation[1] = 0;
-        menuTopLocation[2] = oneFifth;
-        menuTopLocation[3] = oneHalf;
-        menuBottomLocation[0] = screenWidth - oneFifth;
-        menuBottomLocation[1] = oneHalf;
-        menuBottomLocation[2] = oneFifth;
-        menuBottomLocation[3] = oneHalf + 1;
-        tilePageSize = oneFifth / 4;
+        menuBackgroundLocation[0] = screenWidth - tileMenuWidth;
+        menuBackgroundLocation[1] = 0;
+        menuBackgroundLocation[2] = tileMenuWidth;
+        menuBackgroundLocation[3] = height;
+        tilePageSize = Tile.TILE_SIZE;
+        currentTileX = width - (int) (Tile.TILE_SIZE * 2.5);
         for (int x = 0; x < 3; x++) {
-            pageX[x] = (screenWidth - oneFifth) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
+            pageX[x] = (screenWidth - tileMenuWidth) + (tilePageSize + tilePageSize / 3) * x + (tilePageSize / 3 / 2);
         }
         for (int y = 0; y < 8; y++) {
-            pageY[y] = (tilePageSize + tilePageSize / 8) * y + 20;
+            pageY[y] = (tilePageSize + tilePageSize / 8) * y + Tile.TILE_SIZE + 64;
         }
 
     }
@@ -202,6 +194,11 @@ public class Editor{
 
     public int getY() {
         return y;
+    }
+
+    public void save() {
+        Map saveMap = new Map("map1", tiles, tileData, chunkSize, chunkSize);
+        FileIO.SaveClass(saveMap.getName(), saveMap);
     }
 
     //-------------------------
@@ -235,7 +232,7 @@ public class Editor{
         y = Math.abs(y - Display.getHeight());
         x = (x + Game.getXOffset()) / zoom;
         y = (y + Game.getYOffset()) / zoom;
-        if (x + y * 500 >= chunkSize && x + y * chunkSize < tiles.length) {
+        if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
             int t = tileData[x + y * chunkSize];
             int durability = (t & 0xff);
             int rotation = Tile.rotateTile((t & 0xff00) >> 8);
@@ -260,8 +257,6 @@ public class Editor{
                 for (int xp = 0; xp < pageX.length; xp++) {
                     if (x > pageX[xp] && x < pageX[xp] + tilePageSize && y > pageY[yp] && y < pageY[yp] + tilePageSize) {
                         if (xp + yp * 3 >= tilePage[page].length) continue;
-                        selectTileX = xp;
-                        selectTileY = yp;
                         inHand = Tile.getTile(tilePage[page][xp + yp * 3]);
                     }
                 }

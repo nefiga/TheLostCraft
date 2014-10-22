@@ -4,7 +4,11 @@ import game.graphics.SpriteBatch;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
-public class Map {
+import java.io.Serializable;
+
+public class Map implements Serializable{
+
+    private String name;
 
     // An array of all the tiles on the map
     public int[] tiles;
@@ -24,12 +28,17 @@ public class Map {
     // Location of the mini map on the screen
     int mapYLocation = Display.getHeight() - MINI_HEIGHT * 8;
 
-    public Map(int[] tiles, int[] tileData, int w, int h) {
+    public Map(String name, int[] tiles, int[] tileData, int w, int h) {
+        this.name = name;
         this.tiles = tiles;
         this.tileData = tileData;
         this.width = w;
         this.height = h;
 
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**

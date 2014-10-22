@@ -8,6 +8,7 @@ import entity.LivingEntity;
 import entity.Player;
 import game.Game;
 import game.graphics.*;
+import game.util.FileIO;
 import gear.tool.Tool;
 import math.Vector2;
 import menu.Menu;
@@ -64,11 +65,18 @@ public class Level {
      * @param player The player
      */
     public Level(Map map, Player player) {
-        this.map = map;
-        this.tiles = map.tiles;
-        this.tileData = map.tileData;
-        this.height = map.height;
-        this.width = map.width;
+        Map loadMap = (Map) FileIO.loadClass("map1");
+        if (loadMap != null) {
+            this.map = loadMap;
+        }
+        else {
+            this.map = map;
+        }
+
+        this.tiles = this.map.tiles;
+        this.tileData = this.map.tileData;
+        this.height = this.map.height;
+        this.width = this.map.width;
         this.player = player;
         player.setLevel(this);
         interactArea = new Rectangle();

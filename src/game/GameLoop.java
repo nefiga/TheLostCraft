@@ -63,6 +63,8 @@ public class GameLoop {
             Display.sync(FPS);
             updateFPS();
         }
+
+        dispose();
     }
 
     public void update(long delta) {

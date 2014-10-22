@@ -3,11 +3,13 @@ package game;
 import editor.Editor;
 import entity.Player;
 import game.graphics.TextureAtlas;
+import game.util.FileIO;
 import input.EditorInput;
 import input.Input;
 import input.PlayerInput;
 import level.Level;
 import level.LevelManager;
+import level.Map;
 import level.RandomMapGenerator;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
@@ -35,7 +37,14 @@ public class Game extends GameLoop {
         player = new Player(64 * 50, 64 * 50);
         playerInput = new PlayerInput(player);
 
-        editor = new Editor();
+        Map loadMap = (Map) FileIO.loadClass("map1");
+        if (loadMap != null) {
+            editor = new Editor(loadMap);
+        }
+        else {
+            editor = new Editor();
+        }
+
         editorInput = new EditorInput(editor);
 
         levelManager = new LevelManager();
@@ -88,6 +97,12 @@ public class Game extends GameLoop {
 
     public void resized() {
         editor.updateScreenSize(Display.getWidth(), Display.getHeight());
+    }
+
+    public void dispose() {
+        if (state == MAP_EDITOR) {
+            editor.save();
+        }
     }
 
     public static void setState(int state) {

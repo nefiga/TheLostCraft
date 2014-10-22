@@ -20,7 +20,7 @@ public class RandomMapGenerator {
         generateStone();
         generateWater();
 
-        return new Map(tiles, tileData, size, size);
+        return new Map("Map1", tiles, tileData, size, size);
     }
 
     private static void generateDirt() {

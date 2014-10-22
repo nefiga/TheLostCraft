@@ -25,6 +25,8 @@ public class Tile {
      */
     public static TextureAtlas tileAtlas;
 
+    public static final int TILE_SIZE = 64;
+
     //Stores the images position in TextureAtlas in this order x, y, width, height
     protected int[] imagePosition;
 
