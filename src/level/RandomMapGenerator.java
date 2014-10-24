@@ -28,7 +28,7 @@ public class RandomMapGenerator {
             int place = r.nextInt(10);
             if (place == 1) {
                 tiles[i] = Tile.dirt.getID();
-                tileData[i] = Tile.dirt.getDurability();
+                tileData[i] = Tile.dirt.getStartDurability();
             }
         }
     }
@@ -38,7 +38,7 @@ public class RandomMapGenerator {
             int place = r.nextInt(15);
             if (place == 1) {
                 tiles[i] = Tile.stone.getID();
-                tileData[i] = Tile.stone.getDurability();
+                tileData[i] = Tile.stone.getStartDurability();
             }
         }
     }
@@ -46,7 +46,7 @@ public class RandomMapGenerator {
     private static void generateGrass() {
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = Tile.grass.getID();
-            tileData[i] = Tile.grass.getDurability();
+            tileData[i] = Tile.grass.getStartDurability();
         }
     }
 
@@ -55,7 +55,7 @@ public class RandomMapGenerator {
             int place = r.nextInt(10);
             if (place == 1) {
                 tiles[i] = Tile.water.getID();
-                tileData[i] = Tile.water.getDurability();
+                tileData[i] = Tile.water.getStartDurability();
             }
         }
     }

@@ -120,17 +120,61 @@ public class Tile {
     }
 
     /**
-     * Sets the durability of this tile
+     * Sets the durability this tile will start with
      */
-    public void setDurability(int durability) {
+    public void setStartDurability(int durability) {
         this.durability = durability;
     }
 
     /**
-     * @return The durability of this tile
+     * @return The durability this tile will start with
      */
-    public int getDurability() {
+    public int getStartDurability() {
         return durability;
+    }
+
+    /**
+     * Extracts the durability from the tile data and returns it
+     */
+    public static int getDurability(int tileData) {
+        return tileData & 0xff;
+    }
+
+    /**
+     * Takes the durability and inserts it into the tileData.
+     * Then returns the new tileData.
+     */
+    public static int setDurability(int durability, int tileData) {
+        int rotation = (tileData & 0xff00) >> 8;
+        return rotation << 8 | durability;
+    }
+
+    /**
+     * Extracts the rotation from the tileData and returns it
+     */
+    public static int getRotation(int tileData) {
+        return (tileData & 0xff00) >> 8;
+    }
+
+    /**
+     * Takes the rotation and inserts it into the tileData.
+     * Then returns the new tileData
+     */
+    public static int setRotation(int rotation, int tileData) {
+        int durability = tileData & 0xff;
+        return rotation << 8 | durability;
+    }
+
+    /**
+     * Changes the rotation clockwise in the tileData by one.
+     * Returns the new tileData
+     */
+    public static int rotateTile(int tileData) {
+        int direction = (tileData & 0xff00) >> 8;
+        int durability = tileData & 0xff;
+        direction++;
+        if (direction > 3) direction = 0;
+        return direction << 8 | durability;
     }
 
     /**
@@ -179,12 +223,6 @@ public class Tile {
         tiles[tilePosition] = tile;
         tilePosition++;
         return tilePosition - 1;
-    }
-
-    public static int rotateTile(int direction) {
-        direction++;
-        if (direction > 3) direction = 0;
-        return direction;
     }
 
     /**

@@ -53,6 +53,9 @@ public class PlayerInput extends Input {
         if (interact.isPressed()) {
             player.interactWith();
         }
-        player.move(velocityX, velocityY);
+        if (velocityX != 0 || velocityY != 0) {
+            player.move(velocityX, velocityY);
+        }
+
     }
 }

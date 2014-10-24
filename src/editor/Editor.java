@@ -47,7 +47,7 @@ public class Editor{
         tiles = new int[chunkSize * chunkSize];
         tileData = new int[chunkSize * chunkSize];
         for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = Tile.emptyTile.getID();
+            tiles[i] = Tile.grass.getID();
             tileData[i] = 0;
         }
         init();
@@ -126,6 +126,18 @@ public class Editor{
         inHand.render(tileBatch, currentTileX, currentTileY, Tile.TILE_SIZE, Tile.TILE_SIZE);
     }
 
+    protected void renderTiles() {
+        int startX = Game.getXOffset() / zoom - 1;
+        int endX = (Display.getWidth() + Game.getXOffset()) / zoom + 1;
+        int startY = Game.getYOffset() / zoom - 1;
+        int endY = (Display.getHeight() + Game.getYOffset()) / zoom + 1;
+        for (int y = startY; y < endY; y++) {
+            for (int x = startX; x < endX; x++) {
+                getTile(x, y, true).render(tileBatch, x * zoom - Game.getXOffset(), y * zoom - Game.getYOffset(), zoom, zoom, Tile.getRotation(getTileData(x, y, true)));
+            }
+        }
+    }
+
     public Tile getTile(int x, int y, boolean tilePrecision) {
         if (!tilePrecision) {
             x = x / zoom;
@@ -146,19 +158,6 @@ public class Editor{
             return 0;
 
         return tileData[x + y * chunkSize];
-    }
-
-
-    protected void renderTiles() {
-        int startX = Game.getXOffset() / zoom - 1;
-        int endX = (Display.getWidth() + Game.getXOffset()) / zoom + 1;
-        int startY = Game.getYOffset() / zoom - 1;
-        int endY = (Display.getHeight() + Game.getYOffset()) / zoom + 1;
-        for (int y = startY; y < endY; y++) {
-            for (int x = startX; x < endX; x++) {
-                getTile(x, y, true).render(tileBatch, x * zoom - Game.getXOffset(), y * zoom - Game.getYOffset(), zoom, zoom, (getTileData(x, y, true) & 0xff00) >> 8);
-            }
-        }
     }
 
     private void createTextureAtlas() {
@@ -209,7 +208,7 @@ public class Editor{
             y = (y + Game.getYOffset()) / zoom;
             if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
                 tiles[x + y * chunkSize] = inHand.getID();
-                tileData[x + y * chunkSize] = inHand.getDurability();
+                tileData[x + y * chunkSize] = Tile.getDurability(tileData[x + y * chunkSize]);
             }
         }
         // Right click
@@ -218,7 +217,7 @@ public class Editor{
             y = (y + Game.getYOffset()) / zoom;
             if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
                 tiles[x + y * chunkSize] = Tile.emptyTile.getID();
-                tileData[x + y * chunkSize] = inHand.getDurability();
+                tileData[x + y * chunkSize] = -1;
             }
         }
     }
@@ -230,10 +229,7 @@ public class Editor{
         x = (x + Game.getXOffset()) / zoom;
         y = (y + Game.getYOffset()) / zoom;
         if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
-            int t = tileData[x + y * chunkSize];
-            int durability = (t & 0xff);
-            int rotation = Tile.rotateTile((t & 0xff00) >> 8);
-            tileData[x + y * chunkSize] = rotation << 8 | durability;
+            tileData[x + y * chunkSize] = Tile.rotateTile(tileData[x + y * chunkSize]);
         }
     }
 

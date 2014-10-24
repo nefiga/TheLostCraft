@@ -16,17 +16,8 @@ public class Map implements Serializable{
     // An array that holds the durability of the tiles
     public int[] tileData;
 
-    // Width and height of the minimMap. each pixels equals one tile
-    public static final int MINI_WIDTH = 50, MINI_HEIGHT = 30;
-
     // Width and height of the map
     public int width, height;
-
-    // Location of the minim map on the screen
-    int mapXLocation = Display.getWidth() - MINI_WIDTH * 8;
-
-    // Location of the mini map on the screen
-    int mapYLocation = Display.getHeight() - MINI_HEIGHT * 8;
 
     public Map(String name, int[] tiles, int[] tileData, int w, int h) {
         this.name = name;
@@ -34,29 +25,9 @@ public class Map implements Serializable{
         this.tileData = tileData;
         this.width = w;
         this.height = h;
-
     }
 
     public String getName() {
         return name;
-    }
-
-    /**
-     * Renders the miniMap. Image is stored in the misBatch in the Game class. Each tile is 8 pixels on the mini map.
-     *
-     * @param startX The x position in the map that the miniMap will start rendering at
-     * @param startY The y position in the map that the miniMap will start rendering at
-     */
-
-    public void renderMiniMap(SpriteBatch batch, int startX, int startY) {
-        for (int y = 0; y < MINI_HEIGHT; y++) {
-            for (int x = 0; x < MINI_WIDTH; x++) {
-                if (startX + x < 0 || startX + x >= width || startY + y < 0 || startY + y >= height) {
-                    Tile.voidTile.render(batch, mapXLocation + x * 8, mapYLocation + y * 8, 8, 8);
-                } else {
-                    Tile.getTile(tiles[(x + startX) + (y + startY) * width]).render(batch, mapXLocation + x * 8, mapYLocation + y * 8, 8, 8);
-                }
-            }
-        }
     }
 }

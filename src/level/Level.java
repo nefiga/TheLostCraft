@@ -24,10 +24,10 @@ public class Level {
 
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
-    private SpriteBatch misBatch;
     private SpriteBatch menuBatch;
 
     Map map;
+    MiniMap miniMap;
 
     /**
      * A list of all the tiles in the level
@@ -69,11 +69,10 @@ public class Level {
         Map loadMap = (Map) FileIO.loadClass("map1");
         if (loadMap != null) {
             this.map = loadMap;
-        }
-        else {
+        } else {
             this.map = map;
         }
-
+        miniMap = new MiniMap(this.map);
         this.tiles = this.map.tiles;
         this.tileData = this.map.tileData;
         this.height = this.map.height;
@@ -82,11 +81,10 @@ public class Level {
         player.setLevel(this);
         interactArea = new Rectangle();
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
-        entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE,new Texture(LivingEntity.livingEntityAtlas), 100);
-        misBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE,new Texture(Tile.tileAtlas), 1500);
+        entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
 
         menu = new Menu(30, 20, 16, "corner", "side", "middle");
-        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE,new Texture(Menu.menuAtlas), 1000);
+        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), 1000);
     }
 
     public void update(long delta) {
@@ -106,19 +104,12 @@ public class Level {
         renderEntities();
         entityBatch.end();
 
-        misBatch.begin();
-        renderMis();
-        misBatch.end();
+        miniMap.renderMiniMap(Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
 
         menuBatch.begin();
         menu.render(menuBatch, 10, 20);
         menuBatch.end();
     }
-
-    protected void renderMis() {
-        map.renderMiniMap(misBatch, Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
-    }
-
 
     protected void renderEntities() {
         player.render(entityBatch);
@@ -214,30 +205,38 @@ public class Level {
         int endY = Game.pixelToTile(Display.getHeight() + Game.getYOffset()) + 1;
         for (int y = startY; y < endY; y++) {
             for (int x = startX; x < endX; x++) {
-                getTile(x, y, true).render(tileBatch, Game.tileToPixel(x) - Game.getXOffset(), Game.tileToPixel(y) - Game.getYOffset(), Tile.rotateTile(getTileData(x, y, true)));
+                getTile(x, y, true).render(tileBatch, Game.tileToPixel(x) - Game.getXOffset(), Game.tileToPixel(y) - Game.getYOffset(), Tile.getRotation(getTileData(x, y, true)));
             }
         }
     }
 
-    /**
-     * @return True if there is a solid tile at x, y else return false
-     */
-    public boolean tileCollision(int xa, int ya) {
-        if (getTile(xa, ya, false).solid(xa, ya)) return true;
-        if (getTile(xa + 63, ya, false).solid(xa + 63, ya)) return true;
-        if (getTile(xa, ya + 63, false).solid(xa, ya + 63)) return true;
-        if (getTile(xa + 63, ya + 63, false).solid(xa + 63, ya + 63)) return true;
-        return false;
+    public int getMaxMoveX(Entity entity, int moveX) {
+        Shape entityShape = entity.getShape();
+        entityShape.move(moveX, 0);
+        int overlap = 0;
+        for (int i = 0; i < entityShape.getVertices().length; i++) {
+            Vector2 vertex = entityShape.getVertices()[i];
+            Tile tile = getTile((int) vertex.x, (int) vertex.y, false);
+            if (!tile.solid(0, 0)) continue;
+            int collision = (int) CollisionDetection.collision(entityShape, tile.getShape((int) vertex.x, (int) vertex.y)).x;
+            if (Math.abs(collision) > Math.abs(overlap)) overlap = collision;
+        }
+        entityShape.move(-moveX, 0);
+        return moveX - overlap;
     }
 
-    public Vector2 getMaxMovement(Entity entity, Vector2 movement) {
+    public int getMaxMoveY(Entity entity, int moveY) {
         Shape entityShape = entity.getShape();
-        for (int i =0; i < entityShape.getVertices().length; i++) {
-            Vector2 Vertex = entityShape.getVertices()[i];
-            Tile tile = getTile((int) Vertex.x, (int) Vertex.y, false);
+        entityShape.move(0, moveY);
+        int overlap = 0;
+        for (int i = 0; i < entityShape.getVertices().length; i++) {
+            Vector2 vertex = entityShape.getVertices()[i];
+            Tile tile = getTile((int) vertex.x, (int) vertex.y, false);
             if (!tile.solid(0, 0)) continue;
-            return CollisionDetection.collision(entityShape, tile.getShape((int) Vertex.x, (int) Vertex.y));
+            int collision = (int) CollisionDetection.collision(entityShape, tile.getShape((int) vertex.x, (int) vertex.y)).y;
+            if (Math.abs(collision) > Math.abs(overlap)) overlap = collision;
         }
-        return new Vector2(0, 0);
+        entityShape.move(0, -moveY);
+        return moveY - overlap;
     }
 }

@@ -55,7 +55,7 @@ public class CollisionDetection {
         Vector2 A = s1.getCenter();
         Vector2 B = s2.getCenter();
         Vector2 AB = A.minus(B);
-        if (V.dot(AB.normalise()) < 0) {
+        if (V.dot(AB.normalise()) >= 0) {
             V.negate();
         }
         return V;

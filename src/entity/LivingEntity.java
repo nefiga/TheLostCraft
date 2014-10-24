@@ -90,16 +90,13 @@ public class LivingEntity extends Entity {
         if (velocityY > 0) direction = SOUTH;
         if (velocityY < 0) direction = NORTH;
 
-        // Moves the player and its shape
-        shape.move(velocityX, velocityY);
-        x += velocityX;
-        y += velocityY;
+        int moveX = level.getMaxMoveX(this, velocityX);
+        x += moveX;
+        shape.move(moveX, 0);
 
-        // Adjust the player and its shape according to any collisions
-        Vector2 movement = level.getMaxMovement(this, new Vector2(x, y));
-        shape.move(movement.x, movement.y);
-        x += movement.x;
-        y += movement.y;
+        int moveY = level.getMaxMoveY(this, velocityY);
+        y += moveY;
+        shape.move(0, moveY);
     }
 
     public void render(SpriteBatch batch) {

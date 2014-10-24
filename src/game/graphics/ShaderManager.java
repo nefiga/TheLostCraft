@@ -12,7 +12,7 @@ public class ShaderManager {
 
     private int program, vertexShader, fragmentShader;
 
-    public static final String NORMAL_TEXTURE = "game/glsl/normal";
+    public static final String NORMAL_TEXTURE = "game/glsl/texture";
 
     public ShaderManager() {
         program = glCreateProgram();

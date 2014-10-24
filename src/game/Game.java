@@ -29,7 +29,7 @@ public class Game extends GameLoop {
 
     private static int xOffset, yOffset;
 
-    private static int state = 2;
+    private static int state = 1;
 
     public static final int MAIN_MENU = 0, GAME = 1, MAP_EDITOR = 2;
 
