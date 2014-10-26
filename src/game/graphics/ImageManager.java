@@ -9,8 +9,7 @@ public class ImageManager {
 
     public static BufferedImage getImage(String fileName) {
         try {
-            BufferedImage image = ImageIO.read(ImageManager.class.getResourceAsStream(fileName + ".png"));
-            return image;
+            return  ImageIO.read(ImageManager.class.getResourceAsStream(fileName + ".png"));
         } catch (IOException e) {
             throw new RuntimeException("Image did not load: " + fileName);
         }
@@ -18,8 +17,8 @@ public class ImageManager {
 
     public static BufferedImage combineImages(BufferedImage... images) {
         int width = images[0].getWidth();
-        int heigth = images[0].getHeight();
-        BufferedImage returnImage = new BufferedImage(width, heigth, BufferedImage.TYPE_4BYTE_ABGR);
+        int height = images[0].getHeight();
+        BufferedImage returnImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 
         Graphics g = returnImage.getGraphics();
         for (int i = 0; i < images.length; i++) {

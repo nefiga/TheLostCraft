@@ -7,6 +7,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 
+import static org.lwjgl.opengl.GL11.glClearColor;
+
 public class GameLoop {
 
     private static GameLoop gameLoop;
@@ -36,6 +38,7 @@ public class GameLoop {
     }
 
     public void init() {
+        glClearColor(255, 255, 255, 1);
     }
 
     public void loop() {
@@ -140,8 +143,8 @@ public class GameLoop {
                         }
 
                         // if we've found a match for bpp and frequency against the
-                        // original display mode then it's probably best to go for this one
-                        // since it's most likely compatible with the monitor
+                        // original display mode then it'screenManager probably best to go for this one
+                        // since it'screenManager most likely compatible with the monitor
                         if ((current.getBitsPerPixel() == Display.getDesktopDisplayMode().getBitsPerPixel()) &&
                                 (current.getFrequency() == Display.getDesktopDisplayMode().getFrequency())) {
                             targetDisplayMode = current;

@@ -1,12 +1,13 @@
 package entity;
 
 import collision.shapes.Square;
+import level.Level;
 import math.Vector2;
 
 public class Player extends LivingEntity {
 
-    public Player(int positionX, int positionY) {
-        super(positionX, positionY);
+    public Player() {
+        super(0, 0);
         setTexture("player");
         shape = new Square(new Vector2(x, y), 64, 64);
     }

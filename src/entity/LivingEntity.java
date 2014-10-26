@@ -8,7 +8,6 @@ import game.graphics.TextureAtlas;
 import item.Item;
 import gear.tool.Tool;
 import level.Level;
-import math.Vector2;
 
 import java.awt.image.BufferedImage;
 
@@ -43,9 +42,9 @@ public class LivingEntity extends Entity {
         super(positionX, positionY);
         if (livingEntityAtlas == null) {
             livingEntityAtlas = new TextureAtlas(TextureAtlas.LARGE);
-            image = ImageManager.getImage("/sprites/void_entity");
-            imagePosition = livingEntityAtlas.addTexture(image);
         }
+        image = ImageManager.getImage("/sprites/void_entity");
+        imagePosition = livingEntityAtlas.addTexture(image);
         this.width = this.height = entitySize;
     }
 

@@ -1,14 +1,13 @@
 package menu;
 
-import game.graphics.ImageManager;
-import game.graphics.SpriteBatch;
-import game.graphics.TextureAtlas;
+import game.graphics.*;
 
 import java.awt.image.BufferedImage;
 
 public class Menu {
 
-    public static TextureAtlas menuAtlas;
+    public static TextureAtlas menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
+    private SpriteBatch menuBatch;
 
     private BufferedImage cornerImage, sideImage, middleImage;
 
@@ -40,10 +39,6 @@ public class Menu {
         this.height = height;
         this.tileSize = tileSize;
 
-        if (menuAtlas == null) {
-            menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
-        }
-
         this.cornerImage = ImageManager.getImage("/menus/" + cornerImage);
         this.sideImage = ImageManager.getImage("/menus/" + sideImage);
         this.middleImage = ImageManager.getImage("/menus/" + middleImage);
@@ -51,6 +46,8 @@ public class Menu {
         corner = menuAtlas.addTexture(this.cornerImage);
         side = menuAtlas.addTexture(this.sideImage);
         middle = menuAtlas.addTexture(this.middleImage);
+
+        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), 1000);
     }
 
     public void moveCursorUp() {
@@ -77,30 +74,32 @@ public class Menu {
 
     }
 
-    public void render(SpriteBatch batch, int x, int y) {
+    public void render(int x, int y) {
+        menuBatch.begin();
         // Drawing the corners
-        batch.draw(x, y, corner[0], corner[1], tileSize, tileSize);
-        batch.draw(x + width * tileSize, y, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_90);
-        batch.draw(x, y + height * tileSize, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_270);
-        batch.draw(x + width * tileSize, y + height * tileSize, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_180);
+        menuBatch.draw(x, y, corner[0], corner[1], tileSize, tileSize);
+        menuBatch.draw(x + width * tileSize, y, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_90);
+        menuBatch.draw(x, y + height * tileSize, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_270);
+        menuBatch.draw(x + width * tileSize, y + height * tileSize, corner[0], corner[1], tileSize, tileSize, SpriteBatch.ROTATE_180);
 
         // Draw top and bottom
         for (int i = 1; i < width; i++) {
-            batch.draw(x + i * tileSize, y, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_90);
-            batch.draw(x + i * tileSize, y + height * tileSize, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_270);
+            menuBatch.draw(x + i * tileSize, y, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_90);
+            menuBatch.draw(x + i * tileSize, y + height * tileSize, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_270);
         }
 
         // Draw sides
         for (int i = 1; i < height; i++) {
-            batch.draw(x, y + i * tileSize, side[0], side[1], tileSize, tileSize);
-            batch.draw(x + width * tileSize, y + i * tileSize, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_180);
+            menuBatch.draw(x, y + i * tileSize, side[0], side[1], tileSize, tileSize);
+            menuBatch.draw(x + width * tileSize, y + i * tileSize, side[0], side[1], tileSize, tileSize, SpriteBatch.ROTATE_180);
         }
 
         //Draw middle
         for (int yp = 1; yp < height; yp++) {
             for (int xp = 1; xp < width; xp++) {
-                batch.draw(x + xp * tileSize, y + yp * tileSize, middle[0], middle[1], tileSize, tileSize);
+                menuBatch.draw(x + xp * tileSize, y + yp * tileSize, middle[0], middle[1], tileSize, tileSize);
             }
         }
+        menuBatch.end();
     }
 }

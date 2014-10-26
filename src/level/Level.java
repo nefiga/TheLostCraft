@@ -8,6 +8,7 @@ import entity.ItemEntity;
 import entity.LivingEntity;
 import entity.Player;
 import game.Game;
+import game.Screen;
 import game.graphics.*;
 import game.util.FileIO;
 import gear.tool.Tool;
@@ -20,28 +21,18 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level {
+public class Level implements game.Screen {
 
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
-    private SpriteBatch menuBatch;
+
 
     Map map;
     MiniMap miniMap;
 
-    /**
-     * A list of all the tiles in the level
-     */
-    private int[] tiles;
-
-    /**
-     * Holds the durability of each tile
-     */
-    private int[] tileData;
+    public static final String NAME = "Level";
 
     LivingEntity player;
-
-    Menu menu;
 
     /**
      * A rectangle used to see if a action intersects with any other entities rectangle
@@ -54,37 +45,20 @@ public class Level {
     private List<Entity> entities = new ArrayList<Entity>();
 
     /**
-     * Width and height of the tile map
-     */
-    private int width, height;
-
-    /**
      * Every Level should be created with a public static final String "name" variable for a quick and easy way
      * to reference them in the LevelManager class.
-     *
-     * @param map    The map object that contains the data this level will use
-     * @param player The player
      */
-    public Level(Map map, Player player) {
-        Map loadMap = (Map) FileIO.loadClass("map1");
-        if (loadMap != null) {
-            this.map = loadMap;
-        } else {
-            this.map = map;
-        }
-        miniMap = new MiniMap(this.map);
-        this.tiles = this.map.tiles;
-        this.tileData = this.map.tileData;
-        this.height = this.map.height;
-        this.width = this.map.width;
-        this.player = player;
-        player.setLevel(this);
+    public Level() {
         interactArea = new Rectangle();
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
+    }
 
-        menu = new Menu(30, 20, 16, "corner", "side", "middle");
-        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), 1000);
+    public void loadLevel(Map map, Player player) {
+        this.map = map;
+        this.player = player;
+        miniMap = new MiniMap(this.map);
+        player.setLevel(this);
     }
 
     public void update(long delta) {
@@ -104,11 +78,7 @@ public class Level {
         renderEntities();
         entityBatch.end();
 
-        miniMap.renderMiniMap(Game.pixelToTile((int) player.getX()) - Map.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - Map.MINI_HEIGHT / 2);
-
-        menuBatch.begin();
-        menu.render(menuBatch, 10, 20);
-        menuBatch.end();
+        miniMap.renderMiniMap(Game.pixelToTile((int) player.getX()) - MiniMap.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - MiniMap.MINI_HEIGHT / 2);
     }
 
     protected void renderEntities() {
@@ -171,10 +141,10 @@ public class Level {
             x = Game.pixelToTile(x);
             y = Game.pixelToTile(y);
         }
-        if (x < 0 || y < 0 || x >= width || y >= height)
+        if (x < 0 || y < 0 || x >= map.width || y >= map.height)
             return Tile.voidTile;
 
-        return Tile.getTile(tiles[x + y * width]);
+        return Tile.getTile(map.tiles[x + y * map.width]);
     }
 
     /**
@@ -189,10 +159,10 @@ public class Level {
             y = Game.pixelToTile(y);
         }
         //Player should not be able to access tiles outside of the map
-        if (x < 0 || y < 0 || x >= width || y >= height)
+        if (x < 0 || y < 0 || x >= map.width || y >= map.height)
             return 0;
 
-        return tileData[x + y * width];
+        return map.tileData[x + y * map.width];
     }
 
     /**

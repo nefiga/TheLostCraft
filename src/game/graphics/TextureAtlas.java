@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class TextureAtlas {
 
-    public static final int SUPER_SMALL = 320, SMALL = 640, MEDIUM = 960, LARGE = 1024;
+    public static final int FONT_NORMAL = 0, SUPER_SMALL = 320, SMALL = 640, MEDIUM = 960, LARGE = 1024;
 
     private int[] atlas;
 
@@ -35,6 +35,15 @@ public class TextureAtlas {
         height = atlasSize;
         atlas = new int[atlasSize * atlasSize];
         textureCapacity = rows * columns;
+        tiles = new int[rows * columns];
+    }
+
+    public TextureAtlas(int atlasWidth, int atlasHeight) {
+        rows = atlasHeight / TILE_SIZE;
+        columns = atlasWidth / TILE_SIZE;
+        width = atlasWidth;
+        height = atlasHeight;
+        atlas = new int[atlasWidth * atlasHeight];
         tiles = new int[rows * columns];
     }
 
@@ -75,7 +84,7 @@ public class TextureAtlas {
             }
         }
 
-        System.err.print("Atlas out off space  " + this.toString());
+        System.err.print("Atlas out off space " + this.toString());
         return null;
     }
 
@@ -109,7 +118,7 @@ public class TextureAtlas {
             }
         }
 
-        System.err.print("Atlas out off space  " + this.toString());
+        System.out.println("Atlas out off space rows: " + textureRows + " columns: " + textureColumns);
         return null;
     }
 
@@ -137,7 +146,7 @@ public class TextureAtlas {
      * @return true if there is enough space
      */
     public boolean checkSpace(int c, int r, int numCol, int numRow) {
-        if (tiles[c + r * columns] == 0 && c + numCol < columns && r + numRow < rows) {
+        if (tiles[c + r * columns] == 0 && c + numCol <= columns && r + numRow <= rows) {
             for (int y = 0; y < numRow; y++) {
                 for (int x = 0; x < numCol; x++) {
                     if (tiles[(c + x) + (r + y) * rows] == 1) return false;

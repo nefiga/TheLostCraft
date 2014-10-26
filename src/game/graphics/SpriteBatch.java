@@ -104,7 +104,6 @@ public class SpriteBatch {
     }
 
     private void flush() {
-        //System.out.println("Capped  " + size);
         end();
         begin();
     }

@@ -8,7 +8,7 @@ import tile.Tile;
 
 public class MiniMap {
 
-    private SpriteBatch misBatch;
+    private static SpriteBatch misBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 1500);
 
     // An array of all the tiles on the map
     public int[] tiles;
@@ -29,7 +29,6 @@ public class MiniMap {
     int mapYLocation = Display.getHeight() - MINI_HEIGHT * 8;
 
     public MiniMap(Map map) {
-        misBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 1500);
         this.tiles = map.tiles;
         this.tileData = map.tileData;
         this.width = map.width;

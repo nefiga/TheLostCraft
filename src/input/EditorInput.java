@@ -1,19 +1,17 @@
 package input;
 
-import editor.Editor;
+import editor.MapEditor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import java.awt.event.MouseEvent;
-
 public class EditorInput extends Input {
 
-    Editor editor;
+    MapEditor mapEditor;
 
     Action up, right, down, left, a, s, d, w, zoomIn, zoomOut, shift, control;
 
-    public EditorInput(Editor editor) {
-        this.editor = editor;
+    public EditorInput(MapEditor mapEditor) {
+        this.mapEditor = mapEditor;
     }
 
     public void initActions() {
@@ -58,26 +56,26 @@ public class EditorInput extends Input {
         if (down.isHolding() || s.isHolding()) {
             velocityY = 3;
         }
-        editor.move(velocityX, velocityY);
+        mapEditor.move(velocityX, velocityY);
 
-        if (zoomIn.isPressed()) editor.zoomIn();
-        if (zoomOut.isPressed()) editor.zoomOut();
+        if (zoomIn.isPressed()) mapEditor.zoomIn();
+        if (zoomOut.isPressed()) mapEditor.zoomOut();
 
         if (shift.isHolding()) {
             if (leftButton.isPressed()) {
-                editor.shiftClick(Mouse.getX(), Mouse.getY());
+                mapEditor.shiftClick(Mouse.getX(), Mouse.getY());
             }
         }
         else if(control.isHolding()) {
             if (leftButton.isPressed()) {
-                editor.controlClick(Mouse.getX(), Mouse.getY());
+                mapEditor.controlClick(Mouse.getX(), Mouse.getY());
             }
         }
         else if (leftButton.isHolding()) {
-            editor.leftClick(Mouse.getX(), Mouse.getY());
+            mapEditor.leftClick(Mouse.getX(), Mouse.getY());
         }
         else if (rightButton.isHolding()) {
-            editor.rightClick(Mouse.getX(), Mouse.getY());
+            mapEditor.rightClick(Mouse.getX(), Mouse.getY());
         }
     }
 }

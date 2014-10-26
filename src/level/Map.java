@@ -1,12 +1,10 @@
 package level;
 
-import game.graphics.SpriteBatch;
-import org.lwjgl.opengl.Display;
-import tile.Tile;
-
 import java.io.Serializable;
 
 public class Map implements Serializable{
+
+    public static Map tempMap = new Map("TestMap", new int[500 * 500], new int [500 * 500], 500, 500);
 
     private String name;
 

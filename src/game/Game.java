@@ -1,74 +1,68 @@
 package game;
 
-import editor.Editor;
+import editor.MapEditor;
 import entity.Player;
-import game.graphics.TextureAtlas;
 import game.util.FileIO;
+import game.util.LevelData;
 import input.EditorInput;
-import input.Input;
 import input.PlayerInput;
+import level.*;
 import level.Level;
-import level.LevelManager;
-import level.Map;
-import level.RandomMapGenerator;
+import menu.MainMenu;
 import org.lwjgl.opengl.Display;
-import tile.Tile;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
 
 public class Game extends GameLoop {
 
     public long time = 0;
 
-    LevelManager levelManager;
-    Editor editor;
-    Player player;
-    Input playerInput, editorInput;
+    private static ScreenManager screenManager;
+    private static Level level;
+    private static MapEditor mapEditor;
+    private static MainMenu mainMenu;
+    private static Player player;
+    private static PlayerInput playerInput;
+    private static EditorInput editorInput;
 
     private static int xOffset, yOffset;
 
-    private static int state = 1;
+    private static int state = 0;
 
     public static final int MAIN_MENU = 0, GAME = 1, MAP_EDITOR = 2;
 
     public void init() {
-        player = new Player(64 * 50, 64 * 50);
-        playerInput = new PlayerInput(player);
-
-        Map loadMap = (Map) FileIO.loadClass("map1");
-        if (loadMap != null) {
-            editor = new Editor(loadMap);
-        }
-        else {
-            editor = new Editor();
-        }
-
-        editorInput = new EditorInput(editor);
-
-        levelManager = new LevelManager();
-        levelManager.addLevel("Testing", new Level(RandomMapGenerator.generateMap(1000), player));
-        levelManager.setCurrentLevel("Testing");
-        glClearColor(255, 255, 255, 1);
+        super.init();
+        player = new Player();
+        level = new Level();
+        mapEditor = new MapEditor();
+        mainMenu = new MainMenu();
+        playerInput = new PlayerInput();
+        editorInput = new EditorInput(mapEditor);
+        screenManager = new ScreenManager();
+        screenManager.addScreen(Level.NAME, level);
+        screenManager.addScreen(MapEditor.NAME, mapEditor);
+        screenManager.addScreen(MainMenu.NAME, mainMenu);
+        screenManager.setCurrentLevel(MainMenu.NAME);
+        loadMap("TestMap");
     }
 
     public void update(long delta) {
         switch (state) {
             case MAIN_MENU:
-
+                mainMenu.update(delta);
                 break;
             case GAME:
                 playerInput.update();
                 xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
                 yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
-                levelManager.update(delta);
                 break;
             case MAP_EDITOR:
                 editorInput.update();
-                xOffset = editor.getX() - (Display.getWidth() / 2 - 32);
-                yOffset = editor.getY() - (Display.getHeight() / 2 - 32);
-                editor.update(delta);
+                xOffset = mapEditor.getX() - (Display.getWidth() / 2 - 32);
+                yOffset = mapEditor.getY() - (Display.getHeight() / 2 - 32);
+                mapEditor.update(delta);
                 break;
         }
 
@@ -77,17 +71,23 @@ public class Game extends GameLoop {
 
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        switch (state) {
-            case MAIN_MENU:
+        screenManager.render();
+    }
 
-                break;
-            case GAME:
-                levelManager.render();
-                break;
-            case MAP_EDITOR:
-                editor.render();
-                break;
-        }
+    public static void loadGame(String name) {
+        LevelData data = (LevelData) FileIO.loadClass(name);
+        level.loadLevel(data.map, data.player);
+        player = data.player;
+        PlayerInput.setPlayer(data.player);
+        screenManager.setCurrentLevel(Level.NAME);
+        setState(GAME);
+    }
+
+    public static void loadMap(String name) {
+        Map map = (Map) FileIO.loadClass(name);
+        mapEditor.loadEditor(map);
+        screenManager.setCurrentLevel(MapEditor.NAME);
+        setState(MAP_EDITOR);
     }
 
     public void updateTime(long delta) {
@@ -96,12 +96,12 @@ public class Game extends GameLoop {
     }
 
     public void resized() {
-        editor.updateScreenSize(Display.getWidth(), Display.getHeight());
+        mapEditor.updateScreenSize(Display.getWidth(), Display.getHeight());
     }
 
     public void dispose() {
         if (state == MAP_EDITOR) {
-            editor.save();
+            mapEditor.save();
         }
     }
 

@@ -1,17 +1,22 @@
 package editor;
 
 import game.Game;
+import game.Screen;
+import game.fonts.Font;
 import game.graphics.*;
 import game.util.FileIO;
 import level.Map;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
-public class Editor{
+public class MapEditor implements Screen{
 
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;
     EditorMap editorMap;
+    Map map;
+
+    public static final String NAME = "Editor";
 
     private int[] menu;
 
@@ -42,20 +47,10 @@ public class Editor{
 
     private int chunkSize = 500;
 
-    public Editor() {
-
-        tiles = new int[chunkSize * chunkSize];
-        tileData = new int[chunkSize * chunkSize];
-        for (int i = 0; i < tiles.length; i++) {
-            tiles[i] = Tile.grass.getID();
-            tileData[i] = 0;
-        }
-        init();
-    }
-
-    public Editor(Map map) {
-        tiles = map.tiles;
-        tileData = map.tileData;
+    public void loadEditor(Map map) {
+        this.map = map;
+        this.tiles = map.tiles;
+        this.tileData = map.tileData;
         init();
     }
 
@@ -106,6 +101,10 @@ public class Editor{
         editorBatch.begin();
         renderMenu();
         editorBatch.end();
+
+        Font.generalFont.begin();
+        Font.generalFont.DrawString("testing", 0, 0);
+        Font.generalFont.end();
     }
 
     public void renderMenuBackground() {
@@ -192,9 +191,12 @@ public class Editor{
         return y;
     }
 
-    public void save() {
-        Map saveMap = new Map("map1", tiles, tileData, chunkSize, chunkSize);
-        FileIO.SaveClass(saveMap.getName(), saveMap);
+    /**
+     * Saves the current map and returns a String of where the map was saved.
+     */
+    public String save() {
+        FileIO.SaveClass(map.getName(), map);
+        return map.getName();
     }
 
     //-------------------------

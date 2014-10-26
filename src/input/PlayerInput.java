@@ -6,13 +6,9 @@ import org.lwjgl.input.Keyboard;
 
 public class PlayerInput extends Input {
 
-    LivingEntity player;
+    static LivingEntity player;
 
     Action up, right, down, left, a, s, d, w, interact;
-
-    public PlayerInput(Player player) {
-        this.player = player;
-    }
 
     public void initActions() {
         up = new Action("Up", Keyboard.KEY_UP);
@@ -57,5 +53,9 @@ public class PlayerInput extends Input {
             player.move(velocityX, velocityY);
         }
 
+    }
+
+    public static void setPlayer(Player p) {
+        player = p;
     }
 }
