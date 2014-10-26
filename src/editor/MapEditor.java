@@ -103,7 +103,9 @@ public class MapEditor implements Screen{
         editorBatch.end();
 
         Font.generalFont.begin();
-        Font.generalFont.DrawString("testing", 0, 0);
+        Font.generalFont.DrawString("will a long text work", 100, 100);
+        Font.generalFont.DrawString("testing a second string!", 100, 120);
+        Font.generalFont.DrawString("we have some big problems!!!!!", 100, 140);
         Font.generalFont.end();
     }
 

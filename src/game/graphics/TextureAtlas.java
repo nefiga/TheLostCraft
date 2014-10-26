@@ -118,7 +118,7 @@ public class TextureAtlas {
             }
         }
 
-        System.out.println("Atlas out off space rows: " + textureRows + " columns: " + textureColumns);
+       // System.out.println("Atlas out off space textureRows: " + textureRows + " textureColumns: " + textureColumns + " rows " + rows + " columns " + columns);
         return null;
     }
 

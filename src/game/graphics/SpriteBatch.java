@@ -103,7 +103,7 @@ public class SpriteBatch {
         render();
     }
 
-    private void flush() {
+    public void flush() {
         end();
         begin();
     }
