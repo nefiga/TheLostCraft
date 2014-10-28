@@ -65,7 +65,7 @@ public class StringMenu extends Menu{
     public void select() {
         result.setReturnString(stringList.get(currentSelection));
         result.setSelection(currentSelection);
-        returnResultAndClose();
+        returnResult();
     }
 
     @Override
@@ -88,17 +88,11 @@ public class StringMenu extends Menu{
             insetX[i] = x + (width * drawSize - font.getStringWidth(stringList.get(i))) / 2 + 10;
             insetY[i] = y + i * (font.getTextSize() + verticalSpacing) + 20;
         }
-
+        if (stringList.size() < 1) renderCursor = false;
     }
 
     @Override
     public void returnResult() {
-        screen.returnResult(result);
-    }
-
-    @Override
-    public void returnResultAndClose() {
-        Game.closeMenu();
         screen.returnResult(result);
     }
 }

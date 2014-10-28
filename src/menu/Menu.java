@@ -15,6 +15,8 @@ public abstract class Menu {
 
     protected Screen screen;
 
+    protected boolean renderCursor = true;
+
     protected int verticalSpacing = 10;
 
     // The amount of tiles wide and high the menu is
@@ -94,7 +96,7 @@ public abstract class Menu {
                 menuBatch.draw(x + xp * drawSize, y + yp * drawSize, drawSize, drawSize, middleImage[0], middleImage[1], tileSize, tileSize);
             }
         }
-        menuBatch.draw(insetX[currentSelection] - 30, insetY[currentSelection] + 5, cursorImage[0], cursorImage[1], cursorImage[2], cursorImage[3]);
+        if (renderCursor) menuBatch.draw(insetX[currentSelection] - 30, insetY[currentSelection] + 5, cursorImage[0], cursorImage[1], cursorImage[2], cursorImage[3]);
         menuBatch.end();
     }
 
@@ -113,8 +115,6 @@ public abstract class Menu {
     public abstract void openForResult(Result result, Screen screen, int x, int y);
 
     public abstract void returnResult();
-
-    public abstract void returnResultAndClose();
 
     public void setVerticalSpacing(int spacing) {
         this.verticalSpacing = spacing;

@@ -41,7 +41,7 @@ public class MainMenu implements Screen {
         options.add("new game");
         options.add("load game");
         options.add("map editor");
-        savedMaps.add("New Map");
+        savedMaps.add("new map");
         Menu menu = new StringMenu(25, 11, 16, 16, "corner", "side", "middle");
         menu.setVerticalSpacing(40);
         Result result = new Result();
@@ -70,36 +70,27 @@ public class MainMenu implements Screen {
             case MAIN_MENU:
                 int selection =  result.getSelection();
                 if (selection == 0) {
+                    Game.closeMenu();
                     Game.loadNewGame("new Game");
                 }
                 else if (selection == 1) {
-                    if (savedGames != null) {
+                    if (savedGames.size() > 0) {
+                        Game.closeMenu();
                         Menu menu = new StringMenu(25, 11, 16, 16, "corner", "side", "middle");
                         Result r = new Result();
                         r.setStringList(savedGames);
                         menu.openForResult(r, this, Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300);
-                    }
-                    else {
-                        Menu menu = new StringMenu(25, 11, 16, 16, "corner", "side", "middle");
-                        menu.setVerticalSpacing(40);
-                        Result r = new Result();
-                        result.setStringList(options);
-                        menu.openForResult(r, this, Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300);
+                        state = LOAD_MENU;
                     }
                 }
                 else if (selection == 2) {
-                    if (savedMaps != null) {
+                    if (savedMaps.size() > 0) {
+                        Game.closeMenu();
                         Menu menu = new StringMenu(25, 11, 16, 16, "corner", "side", "middle");
                         Result r = new Result();
                         r.setStringList(savedMaps);
                         menu.openForResult(r, this, Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300);
-                    }
-                    else {
-                        Menu menu = new StringMenu(25, 11, 16, 16, "corner", "side", "middle");
-                        menu.setVerticalSpacing(40);
-                        Result r = new Result();
-                        result.setStringList(options);
-                        menu.openForResult(r, this, Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300);
+                        state = EDITOR_MENU;
                     }
                 }
                 break;
@@ -107,7 +98,13 @@ public class MainMenu implements Screen {
 
                 break;
             case EDITOR_MENU:
-
+                if (result.getReturnString().equals("new map")) {
+                    Game.closeMenu();
+                    Game.loadNewMap("new map");
+                }
+                else {
+                    Game.loadMap(result.getReturnString());
+                }
                 break;
         }
     }

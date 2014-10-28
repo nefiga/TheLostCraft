@@ -1,5 +1,7 @@
 package level;
 
+import tile.Tile;
+
 import java.io.Serializable;
 
 public class Map implements Serializable{
@@ -16,6 +18,16 @@ public class Map implements Serializable{
 
     // Width and height of the map
     public int width, height;
+
+    public Map(String name) {
+        this.tiles = new int[500 * 500];
+        this.tileData = new int[500 * 500];
+        this.width = 500;
+        this.height = 500;
+        for (int i = 0; i < this.tiles.length; i++) {
+            this.tiles[i] = Tile.emptyTile.getID();
+        }
+    }
 
     public Map(String name, int[] tiles, int[] tileData, int w, int h) {
         this.name = name;

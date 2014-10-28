@@ -13,7 +13,6 @@ public class MapEditor implements Screen{
 
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;
-    EditorMap editorMap;
     Map map;
 
     public static final String NAME = "Editor";
@@ -59,7 +58,6 @@ public class MapEditor implements Screen{
     private void init() {
         loadTileList();
         editorAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
-        editorMap = new EditorMap();
         createTextureAtlas();
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 1500);
         editorBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(editorAtlas), 100);

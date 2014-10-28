@@ -113,6 +113,13 @@ public class Game extends GameLoop {
         setState(MAP_EDITOR);
     }
 
+    public static void loadNewMap(String name) {
+        Map map =  new Map(name);
+        mapEditor.loadEditor(map);
+        screenManager.setCurrentLevel(MapEditor.NAME);
+        setState(MAP_EDITOR);
+    }
+
     public void updateTime(long delta) {
         time += delta;
         if (delta >= 2100) delta = 0;
