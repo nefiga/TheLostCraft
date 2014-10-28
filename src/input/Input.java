@@ -6,7 +6,7 @@ import org.lwjgl.input.Mouse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Input {
+public abstract class Input {
 
     protected  List<Action> actions = new ArrayList<Action>();
 
@@ -17,8 +17,7 @@ public class Input {
         initActions();
     }
 
-    public void initActions() {
-    }
+    public abstract void initActions();
 
     public void update() {
         while (Keyboard.next()) {
@@ -41,7 +40,5 @@ public class Input {
         else rightButton.release();
     }
 
-    public void checkInput() {
-
-    }
+    public abstract void checkInput();
 }

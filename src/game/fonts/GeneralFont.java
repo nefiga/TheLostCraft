@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class GeneralFont extends Font{
 
-    public GeneralFont(BufferedImage image, int charWidth, int charHeight) {
-        super(image, charWidth, charHeight);
+    public GeneralFont(BufferedImage image) {
+        super(image);
     }
 }

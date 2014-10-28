@@ -14,7 +14,7 @@ public class GameLoop {
     private static GameLoop gameLoop;
 
     // Last recorded max frame rate was 2000. With no other apps running
-    private int FPS = 6000;
+    private int FPS = 60;
     private long lastFPS;
     int fps;
 

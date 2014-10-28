@@ -2,18 +2,15 @@ package level;
 
 import collision.CollisionDetection;
 import collision.shapes.Shape;
-import com.sun.prism.ps.Shader;
 import entity.Entity;
-import entity.ItemEntity;
 import entity.LivingEntity;
 import entity.Player;
 import game.Game;
 import game.Screen;
 import game.graphics.*;
-import game.util.FileIO;
 import gear.tool.Tool;
 import math.Vector2;
-import menu.Menu;
+import menu.result.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -21,7 +18,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level implements game.Screen {
+public class Level implements Screen {
 
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
@@ -208,5 +205,10 @@ public class Level implements game.Screen {
         }
         entityShape.move(0, -moveY);
         return moveY - overlap;
+    }
+
+    @Override
+    public void returnResult(Result result) {
+
     }
 }

@@ -118,16 +118,17 @@ public class TextureAtlas {
             }
         }
 
-       // System.out.println("Atlas out off space textureRows: " + textureRows + " textureColumns: " + textureColumns + " rows " + rows + " columns " + columns);
+        System.out.println("Atlas out off space textureRows: " + textureRows + " textureColumns: " + textureColumns + " rows " + rows + " columns " + columns);
         return null;
     }
 
     /**
      * Sets the location in the tiles array to 1 (full)
-     * @param c The starting column
-     * @param r The starting row
+     *
+     * @param c          The starting column
+     * @param r          The starting row
      * @param numColumns The number of columns to set
-     * @param numRows The number of rows to set
+     * @param numRows    The number of rows to set
      */
     public void fillTile(int c, int r, int numColumns, int numRows) {
         for (int y = 0; y < numRows; y++) {
@@ -139,8 +140,9 @@ public class TextureAtlas {
 
     /**
      * Checks if there is enough space for the image at the given location
-     * @param c The starting column
-     * @param r The starting row
+     *
+     * @param c      The starting column
+     * @param r      The starting row
      * @param numCol The number of columns the image will take up
      * @param numRow The number of rows the image will take up
      * @return true if there is enough space

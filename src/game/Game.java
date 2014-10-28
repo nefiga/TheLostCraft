@@ -5,10 +5,12 @@ import entity.Player;
 import game.util.FileIO;
 import game.util.LevelData;
 import input.EditorInput;
+import input.MenuInput;
 import input.PlayerInput;
 import level.*;
 import level.Level;
 import menu.MainMenu;
+import menu.Menu;
 import org.lwjgl.opengl.Display;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -25,45 +27,55 @@ public class Game extends GameLoop {
     private static Player player;
     private static PlayerInput playerInput;
     private static EditorInput editorInput;
+    private static MenuInput menuInput;
+    private static Menu menu;
 
     private static int xOffset, yOffset;
 
-    private static int state = 0;
-
     public static final int MAIN_MENU = 0, GAME = 1, MAP_EDITOR = 2;
+    private static boolean menuOpen;
+
+    private static int state = MAIN_MENU;
 
     public void init() {
         super.init();
         player = new Player();
+        playerInput = new PlayerInput();
         level = new Level();
         mapEditor = new MapEditor();
-        mainMenu = new MainMenu();
-        playerInput = new PlayerInput();
         editorInput = new EditorInput(mapEditor);
+        menuInput = new MenuInput();
+        mainMenu = new MainMenu();
         screenManager = new ScreenManager();
         screenManager.addScreen(Level.NAME, level);
         screenManager.addScreen(MapEditor.NAME, mapEditor);
         screenManager.addScreen(MainMenu.NAME, mainMenu);
         screenManager.setCurrentLevel(MainMenu.NAME);
-        loadMap("TestMap");
+        //loadMap("TestMap");
     }
 
     public void update(long delta) {
-        switch (state) {
-            case MAIN_MENU:
-                mainMenu.update(delta);
-                break;
-            case GAME:
-                playerInput.update();
-                xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
-                yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
-                break;
-            case MAP_EDITOR:
-                editorInput.update();
-                xOffset = mapEditor.getX() - (Display.getWidth() / 2 - 32);
-                yOffset = mapEditor.getY() - (Display.getHeight() / 2 - 32);
-                mapEditor.update(delta);
-                break;
+        if (menuOpen) {
+            menuInput.update();
+            menu.update(delta);
+        }
+        else {
+            switch (state) {
+                case MAIN_MENU:
+                    mainMenu.update(delta);
+                    break;
+                case GAME:
+                    playerInput.update();
+                    xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
+                    yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
+                    break;
+                case MAP_EDITOR:
+                    editorInput.update();
+                    xOffset = mapEditor.getX() - (Display.getWidth() / 2 - 32);
+                    yOffset = mapEditor.getY() - (Display.getHeight() / 2 - 32);
+                    mapEditor.update(delta);
+                    break;
+            }
         }
 
         updateTime(delta);
@@ -72,6 +84,8 @@ public class Game extends GameLoop {
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT);
         screenManager.render();
+
+        if (menuOpen) menu.render();
     }
 
     public static void loadGame(String name) {
@@ -79,6 +93,15 @@ public class Game extends GameLoop {
         level.loadLevel(data.map, data.player);
         player = data.player;
         PlayerInput.setPlayer(data.player);
+        screenManager.setCurrentLevel(Level.NAME);
+        setState(GAME);
+    }
+
+    public static void loadNewGame(String name) {
+        Player p = new Player();
+        level.loadLevel(new Map(name, new int[500 * 500], new int[500 * 500], 500, 500), p);
+        player = p;
+        PlayerInput.setPlayer(player);
         screenManager.setCurrentLevel(Level.NAME);
         setState(GAME);
     }
@@ -103,6 +126,16 @@ public class Game extends GameLoop {
         if (state == MAP_EDITOR) {
             mapEditor.save();
         }
+    }
+
+    public static void openMenu(Menu m) {
+        menu = m;
+        menuInput.setMenu(menu);
+        menuOpen = true;
+    }
+
+    public static void closeMenu() {
+        menuOpen = false;
     }
 
     public static void setState(int state) {

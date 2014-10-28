@@ -2,10 +2,10 @@ package editor;
 
 import game.Game;
 import game.Screen;
-import game.fonts.Font;
 import game.graphics.*;
 import game.util.FileIO;
 import level.Map;
+import menu.result.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -36,6 +36,8 @@ public class MapEditor implements Screen{
     private int screenWidth, screenHeight;
 
     private int[] menuBackgroundLocation = new int[4];
+
+    private int tileMenuWidth = Tile.TILE_SIZE * 4;
 
     public static final int X1 = 16, X2 = 32, X3 = 64;
 
@@ -101,12 +103,6 @@ public class MapEditor implements Screen{
         editorBatch.begin();
         renderMenu();
         editorBatch.end();
-
-        Font.generalFont.begin();
-        Font.generalFont.DrawString("will a long text work", 100, 100);
-        Font.generalFont.DrawString("testing a second string!", 100, 120);
-        Font.generalFont.DrawString("we have some big problems!!!!!", 100, 140);
-        Font.generalFont.end();
     }
 
     public void renderMenuBackground() {
@@ -168,7 +164,6 @@ public class MapEditor implements Screen{
     public void updateScreenSize(int width, int height) {
         screenWidth = width;
         screenHeight = height;
-        int tileMenuWidth = Tile.TILE_SIZE * 4;
 
         menuBackgroundLocation[0] = screenWidth - tileMenuWidth;
         menuBackgroundLocation[1] = 0;
@@ -248,7 +243,7 @@ public class MapEditor implements Screen{
     public void leftClick(int x, int y) {
         // invert mouse y position
         y = Math.abs(y - Display.getHeight());
-        if (x < screenWidth / 5 * 4) clickScreen(0, x, y);
+        if (x < screenWidth - tileMenuWidth) clickScreen(0, x, y);
         else {
             for (int yp = 0; yp < pageY.length; yp++) {
                 for (int xp = 0; xp < pageX.length; xp++) {
@@ -316,5 +311,10 @@ public class MapEditor implements Screen{
     public void previousPage() {
         page--;
         if (page < 0) page = pages;
+    }
+
+    @Override
+    public void returnResult(Result result) {
+
     }
 }
