@@ -78,4 +78,9 @@ public class EditorInput extends Input {
             mapEditor.rightClick(Mouse.getX(), Mouse.getY());
         }
     }
+
+    @Override
+    public void getPressedChar(char c) {
+
+    }
 }

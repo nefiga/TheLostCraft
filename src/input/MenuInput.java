@@ -21,7 +21,7 @@ public class MenuInput extends Input{
         right = new Action("Right", Keyboard.KEY_RIGHT);
         up = new Action("Up", Keyboard.KEY_UP);
         down = new Action("Down", Keyboard.KEY_DOWN);
-        enter = new Action("Enter", Keyboard.KEY_SPACE);
+        enter = new Action("Enter", Keyboard.KEY_RETURN);
         back = new Action("Back", Keyboard.KEY_B);
 
         actions.add(left);
@@ -40,5 +40,10 @@ public class MenuInput extends Input{
         if (down.isPressed()) menu.moveCursorDown();
         if (enter.isPressed()) menu.select();
         if (back.isPressed()) menu.back();
+    }
+
+    @Override
+    public void getPressedChar(char c) {
+        menu.charPressed(c);
     }
 }

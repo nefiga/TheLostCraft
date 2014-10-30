@@ -8,6 +8,8 @@ import entity.Player;
 import game.Game;
 import game.Screen;
 import game.graphics.*;
+import game.util.GameData;
+import game.util.LevelData;
 import gear.tool.Tool;
 import math.Vector2;
 import menu.result.Result;
@@ -210,5 +212,9 @@ public class Level implements Screen {
     @Override
     public void returnResult(Result result) {
 
+    }
+
+    public void save(GameData gameData) {
+        gameData.saveGame(new LevelData(map, (Player) player));
     }
 }

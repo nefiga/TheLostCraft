@@ -8,9 +8,7 @@ import java.util.List;
 
 public class StringMenu extends Menu{
 
-    private Result result;
-
-    private List<String> stringList;
+    private String[] stringList;
 
     /**
      * Creates a new menu. The size of the menu can be controlled in two ways.
@@ -32,8 +30,8 @@ public class StringMenu extends Menu{
         super.render();
 
         font.begin();
-        for (int i = 0; i < stringList.size(); i++) {
-            String string = stringList.get(i);
+        for (int i = 0; i < stringList.length; i++) {
+            String string = stringList[i];
             font.drawString(string, insetX[i], insetY[i]);
         }
         font.end();
@@ -42,7 +40,7 @@ public class StringMenu extends Menu{
     @Override
     public void moveCursorUp() {
         currentSelection--;
-        if (currentSelection < 0) currentSelection = stringList.size() - 1;
+        if (currentSelection < 0) currentSelection = stringList.length - 1;
     }
 
     @Override
@@ -53,7 +51,7 @@ public class StringMenu extends Menu{
     @Override
     public void moveCursorDown() {
         currentSelection++;
-        if (currentSelection > stringList.size() - 1) currentSelection = 0;
+        if (currentSelection > stringList.length - 1) currentSelection = 0;
     }
 
     @Override
@@ -62,8 +60,13 @@ public class StringMenu extends Menu{
     }
 
     @Override
+    public void charPressed(char c) {
+
+    }
+
+    @Override
     public void select() {
-        result.setReturnString(stringList.get(currentSelection));
+        result.setReturnString(stringList[currentSelection]);
         result.setSelection(currentSelection);
         returnResult();
     }
@@ -81,14 +84,14 @@ public class StringMenu extends Menu{
         this.y = y;
         Game.openMenu(this);
         stringList = result.getStrings();
-        insetX = new int[stringList.size()];
-        insetY = new int[stringList.size()];
+        insetX = new int[stringList.length];
+        insetY = new int[stringList.length];
 
-        for (int i = 0; i < stringList.size(); i++) {
-            insetX[i] = x + (width * drawSize - font.getStringWidth(stringList.get(i))) / 2 + 10;
+        for (int i = 0; i < stringList.length; i++) {
+            insetX[i] = x + (width * drawSize - font.getStringWidth(stringList[i])) / 2 + 10;
             insetY[i] = y + i * (font.getTextSize() + verticalSpacing) + 20;
         }
-        if (stringList.size() < 1) renderCursor = false;
+        if (stringList.length < 1) renderCursor = false;
     }
 
     @Override

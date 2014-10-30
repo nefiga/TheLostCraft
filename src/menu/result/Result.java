@@ -1,20 +1,19 @@
 package menu.result;
 
-import java.util.List;
 
 public class Result {
 
-    public List<String> strings;
+    private String[] strings;
 
-    String string;
+    private String string;
 
-    int selection;
+    private int selection;
 
-    public List<String> getStrings() {
+    public String[] getStrings() {
         return strings;
     }
 
-    public String getReturnString() {
+    public String getString() {
         return string;
     }
 
@@ -22,8 +21,12 @@ public class Result {
         return selection;
     }
 
-    public void setStringList(List<String> strings) {
+    public void setStringArray(String[] strings) {
         this.strings = strings;
+    }
+
+    public void setString(String string) {
+        this.string = string;
     }
 
     public void setReturnString(String string) {

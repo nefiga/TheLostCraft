@@ -59,9 +59,12 @@ public class Font {
     }
 
     public void drawString(String string, int x, int y) {
+        int index = 0;
         for (int i = 0; i < string.length(); i++) {
             int[] position = getChar(string.charAt(i));
-            fontBatch.draw(x + i * textSize, y, textSize, textSize, position[0], position[1], CHAR_SIZE, CHAR_SIZE);
+            if (position == null) continue;
+            fontBatch.draw(x + index * textSize, y, textSize, textSize, position[0], position[1], CHAR_SIZE, CHAR_SIZE);
+            index++;
         }
     }
 
@@ -86,11 +89,11 @@ public class Font {
             return characters[character + 4];
         }
         // 0 - 9
-        else if (character < 58) {
+        else if (character >  47 && character < 58) {
             return characters[character - 48];
         }
         //  : - @
-        else if (character < 65) {
+        else if (character > 57 && character < 65) {
             return characters[character - 6];
         }
         // [ - `
@@ -98,11 +101,11 @@ public class Font {
             return characters[character - 32];
         }
         // a - z
-        else if (character < 123) {
+        else if (character > 96 && character < 123) {
             return characters[character - 87];
         }
         // { - ~
-        else if (character < 127) {
+        else if (character > 122 && character < 127) {
             return characters[character - 58];
         }
         return null;

@@ -20,6 +20,7 @@ public class Map implements Serializable{
     public int width, height;
 
     public Map(String name) {
+        this.name  = name;
         this.tiles = new int[500 * 500];
         this.tileData = new int[500 * 500];
         this.width = 500;

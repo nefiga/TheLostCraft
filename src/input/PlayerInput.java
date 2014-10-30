@@ -55,6 +55,11 @@ public class PlayerInput extends Input {
 
     }
 
+    @Override
+    public void getPressedChar(char c) {
+
+    }
+
     public static void setPlayer(Player p) {
         player = p;
     }

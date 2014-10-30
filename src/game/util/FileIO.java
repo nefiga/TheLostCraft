@@ -4,7 +4,7 @@ import java.io.*;
 
 public class FileIO {
 
-    public static void SaveClass(String fileName, Object classObject) {
+    public static void saveClass(String fileName, Object classObject) {
         try {
             FileOutputStream f_out = new FileOutputStream("saves/" + fileName);
             ObjectOutputStream objectOut = new ObjectOutputStream(f_out);

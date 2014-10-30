@@ -19,7 +19,7 @@ public class TextureAtlas {
     private int width, height;
 
     // The size of a column and row
-    public static final int TILE_SIZE = 8;
+    public static final int TILE_SIZE = 1;
 
     private int textureCapacity;
 

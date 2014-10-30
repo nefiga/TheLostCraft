@@ -15,6 +15,8 @@ public abstract class Menu {
 
     protected Screen screen;
 
+    protected Result result;
+
     protected boolean renderCursor = true;
 
     protected int verticalSpacing = 10;
@@ -39,7 +41,7 @@ public abstract class Menu {
     protected int currentSelection;
 
     // The location of the three images in the texture atlas used to create the menu
-    protected int[] cornerImage, sideImage, middleImage, cursorImage;
+    protected int[] cornerImage, sideImage, middleImage, cursorImage, textViewImage;
 
     /**
      * Creates a new menu. The size of the menu can be controlled in two ways.
@@ -62,6 +64,7 @@ public abstract class Menu {
         this.sideImage = menuAtlas.addTexture(ImageManager.getImage("/menu/" + sideImage));
         this.middleImage = menuAtlas.addTexture(ImageManager.getImage("/menu/" + middleImage));
         cursorImage = menuAtlas.addTexture(ImageManager.getImage("/menu/cursor"));
+        textViewImage = menuAtlas.addTexture(ImageManager.getImage("/menu/text_view"));
 
         menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), 1000);
     }
@@ -107,6 +110,8 @@ public abstract class Menu {
     public abstract void moveCursorDown();
 
     public abstract void moveCursorLeft();
+
+    public abstract void charPressed(char c);
 
     public abstract void select();
 

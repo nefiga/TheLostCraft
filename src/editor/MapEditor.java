@@ -3,7 +3,7 @@ package editor;
 import game.Game;
 import game.Screen;
 import game.graphics.*;
-import game.util.FileIO;
+import game.util.GameData;
 import level.Map;
 import menu.result.Result;
 import org.lwjgl.opengl.Display;
@@ -189,9 +189,8 @@ public class MapEditor implements Screen{
     /**
      * Saves the current map and returns a String of where the map was saved.
      */
-    public String save() {
-        FileIO.SaveClass(map.getName(), map);
-        return map.getName();
+    public void save(GameData gameData) {
+        gameData.saveMap(map);
     }
 
     //-------------------------
