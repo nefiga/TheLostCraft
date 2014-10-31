@@ -1,14 +1,13 @@
 package input;
 
-import entity.LivingEntity;
 import entity.Player;
 import org.lwjgl.input.Keyboard;
 
-public class PlayerInput extends Input {
+public class PlayerInputReceiver extends InputReceiver {
 
-    static LivingEntity player;
+    static Player player;
 
-    Action up, right, down, left, a, s, d, w, interact;
+    Action up, right, down, left, a, s, d, w, interact, escape;
 
     public void initActions() {
         up = new Action("Up", Keyboard.KEY_UP);
@@ -20,6 +19,7 @@ public class PlayerInput extends Input {
         d = new Action("D", Keyboard.KEY_D);
         w = new Action("W", Keyboard.KEY_W);
         interact = new Action("Interact", Keyboard.KEY_F);
+        escape = new Action("Escape", Keyboard.KEY_ESCAPE);
 
         actions.add(up);
         actions.add(right);
@@ -30,6 +30,7 @@ public class PlayerInput extends Input {
         actions.add(d);
         actions.add(w);
         actions.add(interact);
+        actions.add(escape);
     }
 
     public void checkInput() {
@@ -49,6 +50,7 @@ public class PlayerInput extends Input {
         if (interact.isPressed()) {
             player.interactWith();
         }
+        if (escape.isPressed()) player.onEscapedPressed();
         if (velocityX != 0 || velocityY != 0) {
             player.move(velocityX, velocityY);
         }

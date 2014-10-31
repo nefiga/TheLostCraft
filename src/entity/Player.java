@@ -1,13 +1,20 @@
 package entity;
 
 import collision.shapes.Square;
+import game.Game;
 import level.Level;
 import math.Vector2;
+import menu.Menu;
+import menu.StringMenu;
 
-public class Player extends LivingEntity {
+import java.io.Serializable;
 
-    public Player() {
-        super(0, 0);
+public class Player extends LivingEntity{
+
+    Menu menu;
+
+    public Player(int x, int y) {
+        super(x, y);
         setTexture("player");
         shape = new Square(new Vector2(x, y), 64, 64);
     }
@@ -17,5 +24,9 @@ public class Player extends LivingEntity {
 
     public void interactWith() {
         level.interact(this, currentTool, (int) x + interactX[direction], (int) y + interactY[direction], 10, 32);
+    }
+
+    public void onEscapedPressed() {
+        level.onEscapePressed();
     }
 }

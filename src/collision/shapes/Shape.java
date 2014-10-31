@@ -3,6 +3,8 @@ package collision.shapes;
 import collision.Projection;
 import math.Vector2;
 
+import java.io.Serializable;
+
 public abstract class Shape {
 
     protected Vector2 V1;

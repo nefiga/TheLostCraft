@@ -155,15 +155,13 @@ public class SpriteBatch {
     public void draw(float x, float y, int drawWidth, int drawHeight, int textureX, int textureY, int textureWidth, int textureHeight, int rotate) {
         float disWidth = Display.getWidth();
         float disHeight = Display.getHeight();
-        float scaleX = 1920 / disWidth;
-        float scaleY = 1080 / disHeight;
         float atlasWidth = texture.getWidth();
         float atlasHeight = texture.getHeight();
 
-        float x1 = (x / disWidth * 2 - 1) * scaleX;
-        float y1 = (1 - y / disHeight * 2) * scaleY;
-        float x2 = (x / disWidth * 2 + drawWidth / disWidth * 2 - 1) * scaleX;
-        float y2 = ((1 - y / disHeight * 2) - (drawHeight / disHeight * 2)) * scaleY;
+        float x1 = x / disWidth * 2 - 1;
+        float y1 = 1 - y / disHeight * 2;
+        float x2 = x / disWidth * 2 + drawWidth / disWidth * 2 - 1;
+        float y2 = (1 - y / disHeight * 2) - (drawHeight / disHeight * 2);
 
         float tx1 = (textureX * TextureAtlas.TILE_SIZE) / atlasWidth;
         float ty1 = (textureY * TextureAtlas.TILE_SIZE) / atlasHeight;

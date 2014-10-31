@@ -5,6 +5,7 @@ import game.graphics.SpriteBatch;
 import level.Level;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 
 
 public class Entity {

@@ -7,14 +7,15 @@ import java.io.Serializable;
 
 public class LevelData implements Serializable{
 
+    private int x, y;
     private String name;
     private Map map;
-    private Player player;
 
-    public LevelData(Map map, Player player) {
+    public LevelData(Map map, int x, int y) {
         this.map = map;
-        this.player = player;
         this.name = map.getName();
+        this.x = x;
+        this.y = y;
     }
 
     public String getName() {
@@ -26,6 +27,6 @@ public class LevelData implements Serializable{
     }
 
     public Player getPlayer() {
-        return player;
+        return new Player(x, y);
     }
 }

@@ -1,16 +1,17 @@
 package input;
 
 import editor.MapEditor;
+import game.Game;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-public class EditorInput extends Input {
+public class EditorInputReceiver extends InputReceiver {
 
     MapEditor mapEditor;
 
-    Action up, right, down, left, a, s, d, w, zoomIn, zoomOut, shift, control;
+    Action up, right, down, left, a, s, d, w, zoomIn, zoomOut, shift, control, escape;
 
-    public EditorInput(MapEditor mapEditor) {
+    public EditorInputReceiver(MapEditor mapEditor) {
         this.mapEditor = mapEditor;
     }
 
@@ -27,6 +28,7 @@ public class EditorInput extends Input {
         zoomOut = new Action("Zoom  Out", Keyboard.KEY_X);
         shift = new Action("Shift", Keyboard.KEY_LSHIFT);
         control = new Action("Control", Keyboard.KEY_LCONTROL);
+        escape = new Action("Escape", Keyboard.KEY_ESCAPE);
 
         actions.add(up);
         actions.add(right);
@@ -40,6 +42,7 @@ public class EditorInput extends Input {
         actions.add(zoomOut);
         actions.add(shift);
         actions.add(control);
+        actions.add(escape);
     }
 
     public void checkInput() {
@@ -58,6 +61,7 @@ public class EditorInput extends Input {
         }
         mapEditor.move(velocityX, velocityY);
 
+        if (escape.isPressed()) escape();
         if (zoomIn.isPressed()) mapEditor.zoomIn();
         if (zoomOut.isPressed()) mapEditor.zoomOut();
 
@@ -77,6 +81,10 @@ public class EditorInput extends Input {
         else if (rightButton.isHolding()) {
             mapEditor.rightClick(Mouse.getX(), Mouse.getY());
         }
+    }
+
+    public void escape() {
+        mapEditor.onEscapePressed();
     }
 
     @Override

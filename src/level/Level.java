@@ -8,10 +8,11 @@ import entity.Player;
 import game.Game;
 import game.Screen;
 import game.graphics.*;
-import game.util.GameData;
 import game.util.LevelData;
 import gear.tool.Tool;
 import math.Vector2;
+import menu.Menu;
+import menu.StringMenu;
 import menu.result.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
@@ -27,11 +28,14 @@ public class Level implements Screen {
 
 
     Map map;
+    Menu menu;
     MiniMap miniMap;
 
     public static final String NAME = "Level";
 
-    LivingEntity player;
+    private boolean paused;
+
+    Player player;
 
     /**
      * A rectangle used to see if a action intersects with any other entities rectangle
@@ -49,8 +53,6 @@ public class Level implements Screen {
      */
     public Level() {
         interactArea = new Rectangle();
-        tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
-        entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
     }
 
     public void loadLevel(Map map, Player player) {
@@ -58,12 +60,16 @@ public class Level implements Screen {
         this.player = player;
         miniMap = new MiniMap(this.map);
         player.setLevel(this);
+        tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
+        entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
     }
 
     public void update(long delta) {
-        for (int i = 0; i < entities.size(); i++) {
-            entities.get(i).update(delta);
-            if (entities.get(i).isRemoved()) removeEntity(entities.get(i));
+        if (!paused) {
+            for (int i = 0; i < entities.size(); i++) {
+                entities.get(i).update(delta);
+                if (entities.get(i).isRemoved()) removeEntity(entities.get(i));
+            }
         }
         player.update(delta);
     }
@@ -185,6 +191,11 @@ public class Level implements Screen {
         int overlap = 0;
         for (int i = 0; i < entityShape.getVertices().length; i++) {
             Vector2 vertex = entityShape.getVertices()[i];
+            // Break out early if player is out of the map bounds
+            if (vertex.x < 0 || vertex.y < 0 || vertex.x >= map.width  * Tile.TILE_SIZE|| vertex.y >= map.height * Tile.TILE_SIZE) {
+                overlap = moveX;
+                break;
+            }
             Tile tile = getTile((int) vertex.x, (int) vertex.y, false);
             if (!tile.solid(0, 0)) continue;
             int collision = (int) CollisionDetection.collision(entityShape, tile.getShape((int) vertex.x, (int) vertex.y)).x;
@@ -200,6 +211,11 @@ public class Level implements Screen {
         int overlap = 0;
         for (int i = 0; i < entityShape.getVertices().length; i++) {
             Vector2 vertex = entityShape.getVertices()[i];
+            // Break out early if player is out of the map bounds
+            if (vertex.x < 0 || vertex.y < 0 || vertex.x >= map.width * Tile.TILE_SIZE|| vertex.y >= map.height * Tile.TILE_SIZE) {
+                overlap = moveY;
+                break;
+            }
             Tile tile = getTile((int) vertex.x, (int) vertex.y, false);
             if (!tile.solid(0, 0)) continue;
             int collision = (int) CollisionDetection.collision(entityShape, tile.getShape((int) vertex.x, (int) vertex.y)).y;
@@ -209,12 +225,28 @@ public class Level implements Screen {
         return moveY - overlap;
     }
 
+
     @Override
     public void returnResult(Result result) {
-
+        Game.closeMenu();
+        paused = false;
+        if (result.getSelection() == 0) saveAndQuit();
     }
 
-    public void save(GameData gameData) {
-        gameData.saveGame(new LevelData(map, (Player) player));
+    public void onEscapePressed() {
+        paused = true;
+        String[] s = new String[] {"save & quit", "resume"};
+        menu = new StringMenu(20, 10, 16, 16, "corner", "side", "middle");
+        Result result = new Result();
+        result.setStringArray(s);
+        menu.openForResult(result, this, Display.getWidth() / 2 - 160, Display.getHeight() / 2 - 80);
+    }
+
+    public void saveAndQuit() {
+        Game.closeGame();
+    }
+
+    public void save() {
+        Game.getGameData().saveGame(new LevelData(map, (int) player.getX(), (int) player.getY()));
     }
 }

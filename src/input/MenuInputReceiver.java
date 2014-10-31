@@ -1,11 +1,10 @@
 package input;
 
+import game.Game;
 import menu.Menu;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.event.KeyEvent;
-
-public class MenuInput extends Input{
+public class MenuInputReceiver extends InputReceiver {
 
     Menu menu;
 
@@ -30,6 +29,8 @@ public class MenuInput extends Input{
         actions.add(down);
         actions.add(enter);
         actions.add(back);
+
+        allowTyping = true;
     }
 
     @Override

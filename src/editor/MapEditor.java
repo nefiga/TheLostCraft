@@ -5,6 +5,8 @@ import game.Screen;
 import game.graphics.*;
 import game.util.GameData;
 import level.Map;
+import menu.Menu;
+import menu.StringMenu;
 import menu.result.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
@@ -14,6 +16,7 @@ public class MapEditor implements Screen{
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;
     Map map;
+    Menu gameMenu;
 
     public static final String NAME = "Editor";
 
@@ -189,9 +192,11 @@ public class MapEditor implements Screen{
     /**
      * Saves the current map and returns a String of where the map was saved.
      */
-    public void save(GameData gameData) {
-        gameData.saveMap(map);
+    public void save() {
+        Game.getGameData().saveMap(map);
     }
+
+    public void saveAndQuit() {Game.closeMapEditor();}
 
     //-------------------------
     // INPUT
@@ -259,6 +264,14 @@ public class MapEditor implements Screen{
         if (x < screenWidth / 5 * 4) clickScreen(1, x, y);
     }
 
+    public void onEscapePressed() {
+        String[] s = new String[] {"save & quit", "resume"};
+        gameMenu = new StringMenu(20, 10, 16, 16, "corner", "side", "middle");
+        Result result = new Result();
+        result.setStringArray(s);
+        gameMenu.openForResult(result, this, Display.getWidth() / 2 - 160, Display.getHeight() / 2 - 80);
+    }
+
     public void move(int x, int y) {
         this.x += x;
         this.y += y;
@@ -312,6 +325,7 @@ public class MapEditor implements Screen{
 
     @Override
     public void returnResult(Result result) {
-
+        Game.closeMenu();
+        if (result.getSelection() == 0) saveAndQuit();
     }
 }

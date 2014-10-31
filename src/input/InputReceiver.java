@@ -1,22 +1,26 @@
 package input;
 
+import game.Game;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Input {
+public abstract class InputReceiver {
+
+    protected Game game;
 
     protected  List<Action> actions = new ArrayList<Action>();
 
+    protected boolean allowTyping;
     protected boolean[] charPressed = new boolean[250];
     protected int key;
 
     protected Action leftButton = new Action("Left Button", 0);
     protected Action rightButton = new Action("Right Button", 1);
 
-    public Input() {
+    public InputReceiver() {
         initActions();
     }
 
@@ -24,7 +28,7 @@ public abstract class Input {
 
     public void update() {
         while (Keyboard.next()) {
-            if (Keyboard.getEventKeyState()) {
+            if (allowTyping && Keyboard.getEventKeyState()) {
                 key = Keyboard.getEventCharacter();
                 if (!charPressed[key]) {
                     charPressed[key] = true;

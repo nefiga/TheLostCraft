@@ -3,7 +3,6 @@ package menu;
 import game.Game;
 import game.Screen;
 import game.graphics.*;
-import game.util.GameData;
 import menu.result.Result;
 import org.lwjgl.opengl.Display;
 
@@ -11,6 +10,7 @@ public class MainMenu implements Screen {
 
     public TextureAtlas atlas = new TextureAtlas(TextureAtlas.SMALL);
     public SpriteBatch batch;
+    private Game game;
 
     public static final String NAME = "MainMenu";
 
@@ -27,12 +27,17 @@ public class MainMenu implements Screen {
 
     private int[] background;
 
-    public MainMenu(String[] savedGames, String[] savedMaps) {
+    public MainMenu(Game game) {
+        this.game = game;
         background = atlas.addTexture(ImageManager.getImage("/menu/main_background"));
         batch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(atlas), 1000);
         updateScreen(Display.getWidth(), Display.getHeight());
+    }
+
+    public void load(String[] savedGames, String[] savedMaps) {
         this.savedMaps = savedMaps;
         this.savedGames = savedGames;
+        state = MAIN_MENU;
         Menu menu = new StringMenu(25, 15, 16, 16, "corner", "side", "middle");
         menu.setVerticalSpacing(40);
         Result result = new Result();
@@ -104,24 +109,24 @@ public class MainMenu implements Screen {
             case LOAD_GAME:
                 if (result.getString() != null) {
                     Game.closeMenu();
-                    Game.loadGame(result.getString());
+                    game.loadGame(result.getString());
                 }
                 break;
             case NEW_GAME:
                 if (savedMaps.length > 0) {
                     Game.closeMenu();
-                    Game.loadNewGame(result.getString());
+                    game.loadNewGame(result.getString());
                 }
                 break;
             case LOAD_MAP:
                 if (result.getString() != null) {
                     Game.closeMenu();
-                    Game.loadMap(result.getString());
+                    game.loadMapEditor(result.getString());
                 }
                 break;
             case NEW_MAP:
                 Game.closeMenu();
-                Game.loadNewMap(result.getString());
+                game.loadNewMap(result.getString());
                 break;
         }
     }
