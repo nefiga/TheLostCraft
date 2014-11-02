@@ -8,4 +8,7 @@ public class Tool extends Gear{
         super(name);
     }
 
+    public int getStrength() {
+        return 0;
+    }
 }

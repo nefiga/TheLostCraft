@@ -147,11 +147,22 @@ public class Level implements Screen {
             Rectangle rect1 = entities.get(i).getRect();
             if (interactArea.intersects(rect1)) {
                 entities.get(i).interact(this, entity);
-                // NO reason to interact with tile if there is an entity to interact with
-                return;
+            } else {
+                getTile(x, y, false).interact(this, player, tool, x, y);
             }
         }
-        getTile(x, y, false).interact(this, entity, tool, x, y);
+    }
+
+    public void damageTile(int x, int y, int damage) {
+        x = Game.pixelToTile(x);
+        y = Game.pixelToTile(y);
+        map.tileData[x + y * map.width] = Tile.damageTile(damage, getTileData(x, y, true));
+    }
+
+    public void replaceTile(Tile tile, int x, int y) {
+        x = Game.pixelToTile(x);
+        y = Game.pixelToTile(y);
+        map.tiles[x + y * map.width] = tile.getID();
     }
 
     /**

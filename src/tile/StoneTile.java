@@ -2,6 +2,11 @@ package tile;
 
 import collision.shapes.Square;
 import collision.shapes.Triangle;
+import entity.Entity;
+import game.fonts.Font;
+import gear.tool.PickAxe;
+import gear.tool.Tool;
+import level.Level;
 import math.Vector2;
 
 public class StoneTile extends Tile {
@@ -11,10 +16,23 @@ public class StoneTile extends Tile {
         setImage("stone_tile");
         setShape(new Square(new Vector2(0, 0), 64, 64));
         id = addTile(this);
-        setStartDurability(1000);
+        setStartDurability(500);
     }
 
     public boolean solid(int x, int y) {
         return true;
+    }
+
+    @Override
+    public void interact(Level level, Entity entity, Tool tool, int x, int y) {
+        if (tool instanceof PickAxe) {
+            level.damageTile(x, y, tool.getStrength());
+        }
+        if (level.getTileData(x, y, false) <= 0) breakTile(level, x,  y);
+    }
+
+    @Override
+    public void breakTile(Level level, int x, int y) {
+        level.replaceTile(Tile.grass, x, y);
     }
 }

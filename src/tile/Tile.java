@@ -102,7 +102,6 @@ public class Tile {
      * @param y      The y position of the tile
      */
     public void interact(Level level, Entity entity, Tool tool, int x, int y) {
-
     }
 
     /**
@@ -117,6 +116,10 @@ public class Tile {
      */
     public boolean brakeable() {
         return false;
+    }
+
+    public void breakTile(Level level, int x, int y) {
+
     }
 
     /**
@@ -137,7 +140,7 @@ public class Tile {
      * Extracts the durability from the tile data and returns it
      */
     public static int getDurability(int tileData) {
-        return tileData & 0xff;
+        return tileData & 0xffffff;
     }
 
     /**
@@ -145,15 +148,22 @@ public class Tile {
      * Then returns the new tileData.
      */
     public static int setDurability(int durability, int tileData) {
-        int rotation = (tileData & 0xff00) >> 8;
-        return rotation << 8 | durability;
+        int rotation = (tileData & 0xff000000) >> 24;
+        return rotation << 24 | durability;
+    }
+
+    public static int damageTile(int damage, int tileData) {
+        int rotation = (tileData & 0xff000000) >> 24;
+        int pDurability = tileData & 0xffffff;
+        if (pDurability <= 0) return tileData;
+        return rotation << 24 | pDurability - damage;
     }
 
     /**
      * Extracts the rotation from the tileData and returns it
      */
     public static int getRotation(int tileData) {
-        return (tileData & 0xff00) >> 8;
+        return (tileData & 0xff000000) >> 24;
     }
 
     /**
@@ -161,8 +171,8 @@ public class Tile {
      * Then returns the new tileData
      */
     public static int setRotation(int rotation, int tileData) {
-        int durability = tileData & 0xff;
-        return rotation << 8 | durability;
+        int durability = tileData & 0xffffff;
+        return rotation << 24 | durability;
     }
 
     /**
@@ -170,11 +180,11 @@ public class Tile {
      * Returns the new tileData
      */
     public static int rotateTile(int tileData) {
-        int direction = (tileData & 0xff00) >> 8;
-        int durability = tileData & 0xff;
+        int direction = (tileData & 0xff000000) >> 24;
+        int durability = tileData & 0xff0000;
         direction++;
         if (direction > 3) direction = 0;
-        return direction << 8 | durability;
+        return direction << 24 | durability;
     }
 
     /**

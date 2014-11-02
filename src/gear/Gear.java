@@ -18,7 +18,7 @@ public class Gear {
 
     private String name;
 
-    private Stats stats;
+    protected Stats stats;
 
     public Gear(String name) {
         this.name = name;

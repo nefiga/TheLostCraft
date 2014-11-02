@@ -25,4 +25,8 @@ public class PickAxe extends Tool{
         image = ImageManager.combineImages(handle.getImage(), head.getImage(), bracket.getImage());
         setTexture(image);
     }
+    
+    public int getStrength() {
+        return stats.str;
+    }
 }
