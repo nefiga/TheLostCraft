@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: java -Djava.library.path=lib/windows
+Main-Class: game.Game
+

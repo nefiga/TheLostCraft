@@ -10,7 +10,6 @@ import input.MenuInputReceiver;
 import input.PlayerInputReceiver;
 import level.*;
 import level.Level;
-import menu.MainMenu;
 import menu.Menu;
 import org.lwjgl.opengl.Display;
 
@@ -24,7 +23,7 @@ public class Game extends GameLoop {
     private static ScreenManager screenManager;
     private static Level level;
     private static MapEditor mapEditor;
-    private static MainMenu mainMenu;
+    private static MainScreen mainScreen;
     private Player player;
     private PlayerInputReceiver playerInput;
     private EditorInputReceiver editorInput;
@@ -49,11 +48,11 @@ public class Game extends GameLoop {
         menuInput = new MenuInputReceiver();
         gameData = (GameData) FileIO.loadClass(GameData.NAME);
         if (gameData == null) gameData = new GameData();
-        mainMenu = new MainMenu(this);
+        mainScreen = new MainScreen(this);
         screenManager = new ScreenManager();
         screenManager.addScreen(Level.NAME, level);
         screenManager.addScreen(MapEditor.NAME, mapEditor);
-        screenManager.addScreen(MainMenu.NAME, mainMenu);
+        screenManager.addScreen(MainScreen.NAME, mainScreen);
         loadMainMenu();
     }
 
@@ -64,7 +63,7 @@ public class Game extends GameLoop {
         } else {
             switch (state) {
                 case MAIN_MENU:
-                    mainMenu.update(delta);
+                    mainScreen.update(delta);
                     break;
                 case GAME:
                     playerInput.update();
@@ -91,15 +90,15 @@ public class Game extends GameLoop {
     }
 
     public static void loadMainMenu() {
-        mainMenu.load(gameData.getGameKeys(), gameData.getMapKeys());
+        mainScreen.load(gameData.getGameKeys(), gameData.getMapKeys());
         state = MAIN_MENU;
-        screenManager.setCurrentLevel(MainMenu.NAME);
+        screenManager.setCurrentLevel(MainScreen.NAME);
     }
 
     public void loadGame(String name) {
         LevelData data = gameData.getLevelData(name);
         player = data.getPlayer();
-        level.loadLevel(data.getMap(), player);
+        level.loadLevel(data, player);
         PlayerInputReceiver.setPlayer(player);
         screenManager.setCurrentLevel(Level.NAME);
         setState(GAME);
@@ -112,7 +111,7 @@ public class Game extends GameLoop {
 
     public void loadNewGame(String map) {
         Player p = new Player(100, 100);
-        level.loadLevel(gameData.getMap(map), p);
+        level.loadNewLevel(new LevelData(gameData.getMap(map)), p);
         player = p;
         PlayerInputReceiver.setPlayer(player);
         screenManager.setCurrentLevel(Level.NAME);

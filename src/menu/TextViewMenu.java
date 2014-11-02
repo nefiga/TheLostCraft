@@ -3,7 +3,6 @@ package menu;
 import game.Game;
 import game.Screen;
 import game.fonts.Font;
-import menu.result.Result;
 
 public class TextViewMenu extends Menu{
 
@@ -13,8 +12,8 @@ public class TextViewMenu extends Menu{
 
     private StringBuilder string = new StringBuilder("");
 
-    public TextViewMenu(int width, int height, int tileSize, int drawSize, String cornerImage, String sideImage, String middleImage) {
-        super(width, height, tileSize, drawSize, cornerImage, sideImage, middleImage);
+    public TextViewMenu(int width, int height, int drawSize, int tileSet) {
+        super(width, height, drawSize, tileSet);
     }
 
     public void render() {
@@ -22,6 +21,7 @@ public class TextViewMenu extends Menu{
         menuBatch.begin();
         menuBatch.draw(viewX, viewY, viewWidth, viewHeight, textViewImage[0], textViewImage[1], textViewImage[2], textViewImage[3]);
         menuBatch.end();
+
         font.begin();
         font.drawString(string.toString(), viewX + 5, viewY + (viewHeight - font.getTextSize()) / 2);
         font.end();
@@ -82,6 +82,11 @@ public class TextViewMenu extends Menu{
         viewX = x + (width * tileSize - viewWidth) / 2 + 8;
         viewY = y + (height * tileSize - viewHeight);
         Game.openMenu(this);
+    }
+
+    @Override
+    public void open(int x, int y) {
+
     }
 
     @Override

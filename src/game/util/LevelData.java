@@ -5,17 +5,18 @@ import level.Map;
 
 import java.io.Serializable;
 
-public class LevelData implements Serializable{
+public class LevelData implements Serializable {
 
     private int x, y;
     private String name;
     private Map map;
 
-    public LevelData(Map map, int x, int y) {
+    public LevelData(Map map) {
         this.map = map;
-        this.name = map.getName();
-        this.x = x;
-        this.y = y;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -28,5 +29,11 @@ public class LevelData implements Serializable{
 
     public Player getPlayer() {
         return new Player(x, y);
+    }
+
+    public void updateData(Map map, Player player) {
+        this.map = map;
+        this.x = (int) player.getX();
+        this.y = (int) player.getY();
     }
 }

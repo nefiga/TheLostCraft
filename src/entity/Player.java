@@ -1,13 +1,8 @@
 package entity;
 
 import collision.shapes.Square;
-import game.Game;
-import level.Level;
 import math.Vector2;
 import menu.Menu;
-import menu.StringMenu;
-
-import java.io.Serializable;
 
 public class Player extends LivingEntity{
 

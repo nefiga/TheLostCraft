@@ -1,6 +1,5 @@
 package input;
 
-import game.Game;
 import menu.Menu;
 import org.lwjgl.input.Keyboard;
 
@@ -21,7 +20,7 @@ public class MenuInputReceiver extends InputReceiver {
         up = new Action("Up", Keyboard.KEY_UP);
         down = new Action("Down", Keyboard.KEY_DOWN);
         enter = new Action("Enter", Keyboard.KEY_RETURN);
-        back = new Action("Back", Keyboard.KEY_B);
+        back = new Action("Back", Keyboard.KEY_ESCAPE);
 
         actions.add(left);
         actions.add(right);

@@ -3,11 +3,10 @@ package editor;
 import game.Game;
 import game.Screen;
 import game.graphics.*;
-import game.util.GameData;
 import level.Map;
 import menu.Menu;
 import menu.StringMenu;
-import menu.result.Result;
+import menu.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -266,7 +265,7 @@ public class MapEditor implements Screen{
 
     public void onEscapePressed() {
         String[] s = new String[] {"save & quit", "resume"};
-        gameMenu = new StringMenu(20, 10, 16, 16, "corner", "side", "middle");
+        gameMenu = new StringMenu(20, 10, 16, Menu.NORMAL_MENU);
         Result result = new Result();
         result.setStringArray(s);
         gameMenu.openForResult(result, this, Display.getWidth() / 2 - 160, Display.getHeight() / 2 - 80);

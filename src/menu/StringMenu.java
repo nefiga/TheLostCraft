@@ -2,9 +2,6 @@ package menu;
 
 import game.Game;
 import game.Screen;
-import menu.result.Result;
-
-import java.util.List;
 
 public class StringMenu extends Menu{
 
@@ -16,14 +13,10 @@ public class StringMenu extends Menu{
      *
      * @param width       The numbers of tiles wide
      * @param height      The number of tiles tall
-     * @param tileSize    The width and height of the tiles for this menu
      * @param drawSize    The width and height the tiles will be drawn on screen
-     * @param cornerImage The file location for the corner image
-     * @param sideImage   The file location for the top, bottom and side image
-     * @param middleImage The file location for the middle image
      */
-    public StringMenu(int width, int height, int tileSize, int drawSize, String cornerImage, String sideImage, String middleImage) {
-        super(width, height, tileSize, drawSize, cornerImage, sideImage, middleImage);
+    public StringMenu(int width, int height, int drawSize, int tileSet) {
+        super(width, height, drawSize, tileSet);
     }
 
     public void render() {
@@ -92,6 +85,11 @@ public class StringMenu extends Menu{
             insetY[i] = y + i * (font.getTextSize() + verticalSpacing) + 20;
         }
         if (stringList.length < 1) renderCursor = false;
+    }
+
+    @Override
+    public void open(int x, int y) {
+
     }
 
     @Override

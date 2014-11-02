@@ -1,15 +1,15 @@
 package menu;
 
-import game.Game;
 import game.Screen;
 import game.fonts.Font;
 import game.graphics.*;
-import menu.result.Result;
 
 public abstract class Menu {
 
     public static TextureAtlas menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
     protected SpriteBatch menuBatch;
+
+    public static final int NORMAL_MENU = 0;
 
     protected Font font = Font.generalFont;
 
@@ -30,7 +30,7 @@ public abstract class Menu {
     protected int[] insetY, insetX;
 
     // The size of the menu tiles
-    protected final int tileSize;
+    protected final int tileSize = 16;
 
     protected int drawSize;
 
@@ -48,25 +48,27 @@ public abstract class Menu {
      * You can control the width and height of the tiles as well as how many tiles used.
      * @param width       The numbers of tiles wide
      * @param height      The number of tiles tall
-     * @param tileSize    The width and height of the tiles for this menu
      * @param drawSize    The width and height the tiles will be drawn on screen
-     * @param cornerImage The file location for the corner image
-     * @param sideImage   The file location for the top, bottom and side image
-     * @param middleImage The file location for the middle image
      */
-    public Menu(int width, int height, int tileSize, int drawSize, String cornerImage, String sideImage, String middleImage) {
+    public Menu(int width, int height, int drawSize, int tileSet) {
         this.width = width;
         this.height = height;
-        this.tileSize = tileSize;
         this.drawSize = drawSize;
-
-        this.cornerImage = menuAtlas.addTexture(ImageManager.getImage("/menu/" + cornerImage));
-        this.sideImage = menuAtlas.addTexture(ImageManager.getImage("/menu/" + sideImage));
-        this.middleImage = menuAtlas.addTexture(ImageManager.getImage("/menu/" + middleImage));
+        loadMenuImages(tileSet);
         cursorImage = menuAtlas.addTexture(ImageManager.getImage("/menu/cursor"));
         textViewImage = menuAtlas.addTexture(ImageManager.getImage("/menu/text_view"));
 
-        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), 1000);
+        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), width * height + 50);
+    }
+
+    private void loadMenuImages(int tileSet) {
+        switch (tileSet) {
+            case NORMAL_MENU:
+                this.cornerImage = menuAtlas.addTexture(ImageManager.getImage("/menu/corner"));
+                this.sideImage = menuAtlas.addTexture(ImageManager.getImage("/menu/side"));
+                this.middleImage = menuAtlas.addTexture(ImageManager.getImage("/menu/middle"));
+                break;
+        }
     }
 
     public void update(long delta) {
@@ -118,6 +120,8 @@ public abstract class Menu {
     public abstract void back();
 
     public abstract void openForResult(Result result, Screen screen, int x, int y);
+
+    public abstract void open(int x, int y);
 
     public abstract void returnResult();
 

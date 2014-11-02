@@ -1,6 +1,6 @@
 package game;
 
-import menu.result.Result;
+import menu.Result;
 
 /**
  * Every class that implements Screen needs to have a public static final String called "NAME".

@@ -11,10 +11,11 @@ public abstract class InputReceiver {
 
     protected Game game;
 
-    protected  List<Action> actions = new ArrayList<Action>();
+    protected List<Action> actions = new ArrayList<Action>();
 
     protected boolean allowTyping;
     protected boolean[] charPressed = new boolean[250];
+    protected boolean[] charHolding = new boolean[250];
     protected int key;
 
     protected Action leftButton = new Action("Left Button", 0);
@@ -28,22 +29,21 @@ public abstract class InputReceiver {
 
     public void update() {
         while (Keyboard.next()) {
-            if (allowTyping && Keyboard.getEventKeyState()) {
-                key = Keyboard.getEventCharacter();
-                if (!charPressed[key]) {
-                    charPressed[key] = true;
-                    getPressedChar(Keyboard.getEventCharacter());
+            if (allowTyping) {
+                if (Keyboard.getEventKeyState()) {
+                    key = Keyboard.getEventCharacter();
+                    press(key);
+                } else {
+                    release(key);
                 }
+                if (isPressed(key)) getPressedChar(Keyboard.getEventCharacter());
             }
-            else {
-                charPressed[key] = false;
-            }
+
             for (Action action : actions) {
                 if (Keyboard.getEventKey() == action.getKey()) {
                     if (Keyboard.getEventKeyState()) {
                         action.press();
-                    }
-                    else {
+                    } else {
                         action.release();
                     }
                 }
@@ -55,6 +55,30 @@ public abstract class InputReceiver {
         else leftButton.release();
         if (Mouse.isButtonDown(1)) rightButton.press();
         else rightButton.release();
+    }
+
+    public void press(int key) {
+        if (!charHolding[key]) {
+            charPressed[key] = true;
+            charHolding[key] = true;
+        } else charPressed[key] = false;
+    }
+
+    public void release(int key) {
+        charHolding[key] = false;
+        charPressed[key] = false;
+    }
+
+    public boolean isHolding(int key) {
+        return charHolding[key];
+    }
+
+    public boolean isPressed(int key) {
+        if (charPressed[key]) {
+            charPressed[key] = false;
+            return true;
+        }
+        return false;
     }
 
     public abstract void checkInput();
