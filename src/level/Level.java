@@ -202,6 +202,14 @@ public class Level implements Screen {
         return map.tileData[x + y * map.width];
     }
 
+    public int getTileDurability(int x, int y, boolean tilePrecision) {
+        return Tile.getDurability(getTileData(x, y, tilePrecision));
+    }
+
+    public int getTileRotation(int x, int y, boolean tilePrecision) {
+        return Tile.getRotation(getTileData(x, y, tilePrecision));
+    }
+
     /**
      * Renders all the visible tiles
      */

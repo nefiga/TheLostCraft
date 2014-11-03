@@ -28,7 +28,7 @@ public class StoneTile extends Tile {
         if (tool instanceof PickAxe) {
             level.damageTile(x, y, tool.getStrength());
         }
-        if (level.getTileData(x, y, false) <= 0) breakTile(level, x,  y);
+        if (level.getTileDurability(x, y, false) <= 0) breakTile(level, x,  y);
     }
 
     @Override
