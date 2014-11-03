@@ -1,5 +1,7 @@
 package entity;
 
+import game.Game;
+import game.graphics.SpriteBatch;
 import item.Item;
 
 public class ItemEntity extends Entity{
@@ -26,5 +28,9 @@ public class ItemEntity extends Entity{
     public Item getItem() {
         remove();
         return item;
+    }
+
+    public void render(SpriteBatch batch) {
+        item.render(batch, (int) x - Game.getXOffset(), (int) y - Game.getYOffset());
     }
 }

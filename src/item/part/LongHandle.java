@@ -1,11 +1,11 @@
 package item.part;
 
-import gear.Stats;
+import item.resource.Resource;
 
 public class LongHandle extends Part{
 
-    public LongHandle(String image, Stats stats) {
-        super(image, stats);
-        setTexture("handle");
+    public LongHandle(String image, Resource resource) {
+        super(image, resource);
+        setTexture(resource.getImageString() + "_handle");
     }
 }

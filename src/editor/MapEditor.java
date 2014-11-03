@@ -208,9 +208,7 @@ public class MapEditor implements Screen{
             y = (y + Game.getYOffset()) / zoom;
             if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
                 tiles[x + y * chunkSize] = inHand.getID();
-                tileData[x + y * chunkSize] = Tile.stone.getStartDurability();
-                int dur = Tile.getDurability(tileData[x + y * chunkSize]);
-                System.out.println("Durability " + dur + "  tileData" + tileData[x + y * chunkSize]);
+                tileData[x + y * chunkSize] = inHand.getStartDurability();
             }
         }
         // Right click
@@ -219,7 +217,7 @@ public class MapEditor implements Screen{
             y = (y + Game.getYOffset()) / zoom;
             if (x + y * chunkSize >= 0 && x + y * chunkSize < tiles.length) {
                 tiles[x + y * chunkSize] = Tile.emptyTile.getID();
-                tileData[x + y * chunkSize] = -1;
+                tileData[x + y * chunkSize] = 0;
             }
         }
     }

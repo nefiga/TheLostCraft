@@ -1,7 +1,9 @@
 package item;
 
 import game.graphics.ImageManager;
+import game.graphics.SpriteBatch;
 import game.graphics.TextureAtlas;
+import item.resource.StoneResource;
 
 import java.awt.image.BufferedImage;
 
@@ -12,6 +14,8 @@ public class Item {
     protected int[]  imagePosition;
 
     protected BufferedImage image;
+
+    protected String imageString;
 
     int itemSize = 32;
 
@@ -47,6 +51,7 @@ public class Item {
 
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/items/" + image);
+        this.imageString = image;
         imagePosition = itemAtlas.addTexture(this.image);
     }
 
@@ -63,6 +68,10 @@ public class Item {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public String getImageString() {
+        return imageString;
     }
 
     /**
@@ -82,5 +91,21 @@ public class Item {
 
     public String getName() {
         return name;
+    }
+
+    public void render(SpriteBatch batch, int x, int y) {
+        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+    }
+
+    public void render(SpriteBatch batch, int x, int y, int rotation) {
+        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
+    }
+
+    public void render(SpriteBatch batch, int x, int y, int width, int height) {
+        batch.draw(x, y, width, height, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+    }
+
+    public void render(SpriteBatch batch, int x, int y, int width, int height, int rotation) {
+        batch.draw(x, y, width, height, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
     }
 }

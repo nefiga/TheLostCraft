@@ -1,11 +1,11 @@
 package item.part;
 
-import gear.Stats;
+import item.resource.Resource;
 
 public class Bracket extends Part{
 
-    public Bracket(String image, Stats stats) {
-        super(image, stats);
-        setTexture("bracket");
+    public Bracket(String image, Resource resource) {
+        super(image, resource);
+        setTexture(resource.getImageString() + "_bracket");
     }
 }

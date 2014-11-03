@@ -3,9 +3,12 @@ package tile;
 import collision.shapes.Square;
 import collision.shapes.Triangle;
 import entity.Entity;
+import entity.ItemEntity;
 import game.fonts.Font;
 import gear.tool.PickAxe;
 import gear.tool.Tool;
+import item.Item;
+import item.resource.Resource;
 import level.Level;
 import math.Vector2;
 
@@ -28,11 +31,12 @@ public class StoneTile extends Tile {
         if (tool instanceof PickAxe) {
             level.damageTile(x, y, tool.getStrength());
         }
-        if (level.getTileDurability(x, y, false) <= 0) breakTile(level, x,  y);
+        if (level.getTileDurability(x, y, false) <= 0) breakTile(level, x, y);
     }
 
     @Override
     public void breakTile(Level level, int x, int y) {
         level.replaceTile(Tile.grass, x, y);
+        level.addItemEntity(new ItemEntity(Resource.stone, x, y));
     }
 }

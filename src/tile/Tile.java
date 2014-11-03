@@ -155,7 +155,7 @@ public class Tile {
     public static int damageTile(int damage, int tileData) {
         int rotation = (tileData & 0xff000000) >> 24;
         int pDurability = tileData & 0xffffff;
-        if (pDurability <= 0) return tileData;
+        if (pDurability - damage <= 0) return rotation << 24;
         return rotation << 24 | pDurability - damage;
     }
 
@@ -181,7 +181,7 @@ public class Tile {
      */
     public static int rotateTile(int tileData) {
         int direction = (tileData & 0xff000000) >> 24;
-        int durability = tileData & 0xff0000;
+        int durability = tileData & 0xffffff;
         direction++;
         if (direction > 3) direction = 0;
         return direction << 24 | durability;

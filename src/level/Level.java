@@ -10,8 +10,7 @@ import game.Screen;
 import game.graphics.*;
 import game.util.LevelData;
 import gear.tool.Tool;
-import level.Map;
-import level.MiniMap;
+import item.Item;
 import math.Vector2;
 import menu.Menu;
 import menu.StringMenu;
@@ -28,6 +27,7 @@ public class Level implements Screen {
 
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
+    private SpriteBatch itemBatch;
 
 
     Map map;
@@ -52,6 +52,7 @@ public class Level implements Screen {
      * A list of all the entities
      */
     private List<Entity> entities = new ArrayList<Entity>();
+    private List<Entity> itemEntities = new ArrayList<Entity>();
 
     /**
      * Every Level should be created with a public static final String "name" variable for a quick and easy way
@@ -69,6 +70,7 @@ public class Level implements Screen {
         this.player.setLevel(this);
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
+        itemBatch =  new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
     }
 
     public void loadNewLevel(LevelData levelData, Player player) {
@@ -79,6 +81,7 @@ public class Level implements Screen {
         this.player.setLevel(this);
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
+        itemBatch =  new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
         menu = new TextViewMenu(25, 10, 16, Menu.NORMAL_MENU);
         Result r = new Result();
         r.setState(NAME_LEVEL);
@@ -100,6 +103,10 @@ public class Level implements Screen {
         renderTiles();
         tileBatch.end();
 
+        itemBatch.begin();
+        renderItems();
+        itemBatch.end();
+
         entityBatch.begin();
         renderEntities();
         entityBatch.end();
@@ -111,6 +118,12 @@ public class Level implements Screen {
         player.render(entityBatch);
     }
 
+    protected void renderItems() {
+        for (int i = 0; i < itemEntities.size(); i++) {
+            itemEntities.get(i).render(itemBatch);
+        }
+    }
+
     /**
      * Adds the entity to this level.
      *
@@ -118,6 +131,10 @@ public class Level implements Screen {
      */
     public void addEntity(Entity entity) {
         entities.add(entity);
+    }
+
+    public void addItemEntity(Entity entity) {
+        itemEntities.add(entity);
     }
 
     /**
@@ -147,10 +164,10 @@ public class Level implements Screen {
             Rectangle rect1 = entities.get(i).getRect();
             if (interactArea.intersects(rect1)) {
                 entities.get(i).interact(this, entity);
-            } else {
-                getTile(x, y, false).interact(this, player, tool, x, y);
+                return;
             }
         }
+        getTile(x, y, false).interact(this, player, tool, x, y);
     }
 
     public void damageTile(int x, int y, int damage) {
@@ -163,6 +180,7 @@ public class Level implements Screen {
         x = Game.pixelToTile(x);
         y = Game.pixelToTile(y);
         map.tiles[x + y * map.width] = tile.getID();
+        map.tileData[x + y * map.width] = tile.getStartDurability();
     }
 
     /**
@@ -203,7 +221,11 @@ public class Level implements Screen {
     }
 
     public int getTileDurability(int x, int y, boolean tilePrecision) {
-        return Tile.getDurability(getTileData(x, y, tilePrecision));
+        if (!tilePrecision) {
+            x = Game.pixelToTile(x);
+            y = Game.pixelToTile(y);
+        }
+        return Tile.getDurability(getTileData(x, y, true));
     }
 
     public int getTileRotation(int x, int y, boolean tilePrecision) {

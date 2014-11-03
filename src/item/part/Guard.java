@@ -1,10 +1,10 @@
 package item.part;
 
-import gear.Stats;
+import item.resource.Resource;
 
 public class Guard extends Part{
-    public Guard(String image, Stats stats) {
-        super(image, stats);
-        setTexture("guard");
+    public Guard(String image, Resource resource) {
+        super(image, resource);
+        setTexture(resource.getImageString() + "_guard");
     }
 }

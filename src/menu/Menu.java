@@ -6,7 +6,7 @@ import game.graphics.*;
 
 public abstract class Menu {
 
-    public static TextureAtlas menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
+    public TextureAtlas menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
     protected SpriteBatch menuBatch;
 
     public static final int NORMAL_MENU = 0;
@@ -46,9 +46,10 @@ public abstract class Menu {
     /**
      * Creates a new menu. The size of the menu can be controlled in two ways.
      * You can control the width and height of the tiles as well as how many tiles used.
-     * @param width       The numbers of tiles wide
-     * @param height      The number of tiles tall
-     * @param drawSize    The width and height the tiles will be drawn on screen
+     *
+     * @param width    The numbers of tiles wide
+     * @param height   The number of tiles tall
+     * @param drawSize The width and height the tiles will be drawn on screen
      */
     public Menu(int width, int height, int drawSize, int tileSet) {
         this.width = width;
@@ -58,7 +59,7 @@ public abstract class Menu {
         cursorImage = menuAtlas.addTexture(ImageManager.getImage("/menu/cursor"));
         textViewImage = menuAtlas.addTexture(ImageManager.getImage("/menu/text_view"));
 
-        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Menu.menuAtlas), width * height + 50);
+        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
     }
 
     private void loadMenuImages(int tileSet) {
@@ -101,7 +102,9 @@ public abstract class Menu {
                 menuBatch.draw(x + xp * drawSize, y + yp * drawSize, drawSize, drawSize, middleImage[0], middleImage[1], tileSize, tileSize);
             }
         }
-        if (renderCursor) menuBatch.draw(insetX[currentSelection] - 30, insetY[currentSelection] + 5, cursorImage[0], cursorImage[1], cursorImage[2], cursorImage[3]);
+        if (renderCursor)
+            menuBatch.draw(insetX[currentSelection] - 30, insetY[currentSelection] + 5, cursorImage[0], cursorImage[1], cursorImage[2], cursorImage[3]);
+
         menuBatch.end();
     }
 

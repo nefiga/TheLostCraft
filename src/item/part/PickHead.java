@@ -1,11 +1,11 @@
 package item.part;
 
-import gear.Stats;
+import item.resource.Resource;
 
 public class PickHead extends Part{
 
-    public PickHead(String image, Stats stats) {
-        super(image, stats);
-        setTexture("pick_head");
+    public PickHead(String image, Resource resource) {
+        super(image, resource);
+        setTexture(resource.getImageString() + "_pick_head");
     }
 }

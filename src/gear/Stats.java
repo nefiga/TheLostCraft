@@ -4,10 +4,10 @@ public class Stats {
 
     public final int str, agi, itl;
 
-    public Stats(int str, int agi, int itl) {
+    public Stats(int str, int agi, int intl) {
         this.str = str;
         this.agi = agi;
-        this.itl = itl;
+        this.itl = intl;
     }
 
     public static Stats combinedStats(Stats s1, Stats s2) {
