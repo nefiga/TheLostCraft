@@ -27,6 +27,16 @@ public class TextViewMenu extends Menu{
         font.end();
     }
 
+    @Override
+    public void click(int button, int x, int y) {
+
+    }
+
+    @Override
+    public void release(int button, int x, int y) {
+
+    }
+
     public void setTextViewSize(int width, int height) {
         viewWidth = width;
         viewHeight = height;
@@ -56,7 +66,15 @@ public class TextViewMenu extends Menu{
 
     @Override
     public void charPressed(char c) {
-        if (font.getStringWidth(string.toString()) + Font.CHAR_SIZE < viewWidth)
+        if (c == 8 && string.length() > 0) string.setLength(string.length() - 1);
+        else if (font.getStringWidth(string.toString()) + Font.CHAR_SIZE < viewWidth)
+            string.append(c);
+    }
+
+    @Override
+    public void charHolding(char c) {
+        if (c == 8 && string.length() > 0) string.setLength(string.length() - 1);
+        else if (font.getStringWidth(string.toString()) + Font.CHAR_SIZE < viewWidth)
             string.append(c);
     }
 
@@ -67,6 +85,11 @@ public class TextViewMenu extends Menu{
 
     @Override
     public void back() {
+
+    }
+
+    @Override
+    public void screenResized(int width, int height) {
 
     }
 

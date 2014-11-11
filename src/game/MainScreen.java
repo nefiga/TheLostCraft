@@ -32,7 +32,7 @@ public class MainScreen implements Screen {
     public void load(String[] savedGames, String[] savedMaps) {
         this.savedMaps = savedMaps;
         this.savedGames = savedGames;
-        MainMenu menu = new MainMenu(25, 15, 16, Menu.NORMAL_MENU, savedGames, savedMaps, game);
+        MainMenu menu = new MainMenu(25, 15, 16, Menu.NORMAL_TILE_SET, savedGames, savedMaps, game);
         menu.open(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300);
     }
 
@@ -49,6 +49,11 @@ public class MainScreen implements Screen {
 
     @Override
     public void returnResult(Result result) {
+
+    }
+
+    @Override
+    public void screenResized(int width, int height) {
 
     }
 }

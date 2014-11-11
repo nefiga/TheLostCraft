@@ -31,6 +31,16 @@ public class StringMenu extends Menu{
     }
 
     @Override
+    public void click(int button, int x, int y) {
+
+    }
+
+    @Override
+    public void release(int button, int x, int y) {
+
+    }
+
+    @Override
     public void moveCursorUp() {
         currentSelection--;
         if (currentSelection < 0) currentSelection = stringList.length - 1;
@@ -58,6 +68,11 @@ public class StringMenu extends Menu{
     }
 
     @Override
+    public void charHolding(char c) {
+
+    }
+
+    @Override
     public void select() {
         result.setReturnString(stringList[currentSelection]);
         result.setSelection(currentSelection);
@@ -66,6 +81,11 @@ public class StringMenu extends Menu{
 
     @Override
     public void back() {
+
+    }
+
+    @Override
+    public void screenResized(int width, int height) {
 
     }
 

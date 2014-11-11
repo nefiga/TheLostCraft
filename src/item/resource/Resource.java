@@ -8,11 +8,10 @@ public class Resource extends Item{
 
     public static final Resource stone = new StoneResource("Stone");
 
-    private Stats stats;
+    protected Stats stats = new Stats();
 
     public Resource(String name) {
         super(name);
-        setStats(new Stats(1, 1, 1));
     }
 
     public void setTexture(String image) {
@@ -21,8 +20,8 @@ public class Resource extends Item{
         imagePosition = itemAtlas.addTexture(this.image);
     }
 
-    protected void setStats(Stats stats) {
-        this.stats = stats;
+    protected void setStat(int position, int stat) {
+        this.stats.setStat(position, stat);
     }
 
     public Stats getStats() {

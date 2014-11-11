@@ -17,6 +17,7 @@ public abstract class InputReceiver {
     protected boolean[] charPressed = new boolean[250];
     protected boolean[] charHolding = new boolean[250];
     protected int key;
+    protected int[] holdingTimer = new int[250];
 
     protected Action leftButton = new Action("Left Button", 0);
     protected Action rightButton = new Action("Right Button", 1);
@@ -30,11 +31,13 @@ public abstract class InputReceiver {
     public void update() {
         while (Keyboard.next()) {
             if (allowTyping) {
+                key = Keyboard.getEventKey();
                 if (Keyboard.getEventKeyState()) {
-                    key = Keyboard.getEventCharacter();
                     press(key);
+                    holdingTimer[key] = 0;
                 } else {
                     release(key);
+                    holdingTimer[key] = 0;
                 }
                 if (isPressed(key)) getPressedChar(Keyboard.getEventCharacter());
             }
@@ -49,7 +52,15 @@ public abstract class InputReceiver {
                 }
             }
         }
+
         checkInput();
+        if (allowTyping && isHolding(key)) {
+            holdingTimer[key]++;
+            if (holdingTimer[key] >= 10) {
+                getHoldingChar(Keyboard.getEventCharacter());
+                holdingTimer[key] = 0;
+            }
+        }
 
         if (Mouse.isButtonDown(0)) leftButton.press();
         else leftButton.release();
@@ -85,4 +96,5 @@ public abstract class InputReceiver {
 
     public abstract void getPressedChar(char c);
 
+    public abstract void getHoldingChar(char c);
 }

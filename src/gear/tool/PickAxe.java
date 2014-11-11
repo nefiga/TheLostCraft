@@ -27,6 +27,6 @@ public class PickAxe extends Tool{
     }
     
     public int getStrength() {
-        return stats.str;
+        return stats.getStr();
     }
 }

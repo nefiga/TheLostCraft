@@ -2,15 +2,57 @@ package gear;
 
 public class Stats {
 
-    public final int str, agi, itl;
+    public static final int STR = 0, AGI = 1, INT = 2, HARVEST_RANGE = 3;
 
-    public Stats(int str, int agi, int intl) {
-        this.str = str;
-        this.agi = agi;
-        this.itl = intl;
+    private static int statCount = 4;
+
+    private int[] statsList = new int[statCount];
+
+    public int getStr() {
+        return statsList[STR];
+    }
+
+    public int getAgi() {
+        return statsList[AGI];
+    }
+
+    public int getIntl() {
+        return statsList[INT];
+    }
+
+    public int getHarvestRange() {
+        return statsList[HARVEST_RANGE];
+    }
+
+    public int getStat(int position) {
+        return statsList[position];
+    }
+
+    public void setStr(int str) {
+        statsList[STR] = str;
+    }
+
+    public void setAgi(int agi) {
+        statsList[AGI] = agi;
+    }
+
+    public void setIntl(int intl) {
+        statsList[INT] = intl;
+    }
+
+    public void setHarvestRange(int harvestRange) {
+        statsList[HARVEST_RANGE] = harvestRange;
+    }
+
+    public void setStat(int position, int stat) {
+        statsList[position] = stat;
     }
 
     public static Stats combinedStats(Stats s1, Stats s2) {
-        return new Stats(s1.str + s2.str, s1.agi + s2.agi, s1.itl + s2.itl);
+        Stats stat = new Stats();
+        for (int i = 0; i < statCount; i++) {
+            stat.setStat(i, s1.getStat(i) + s2.getStat(i));
+        }
+        return stat;
     }
 }

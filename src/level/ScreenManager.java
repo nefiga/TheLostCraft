@@ -53,7 +53,11 @@ public class ScreenManager {
      * Sets the current Level to be updated and rendered
      * @param name The name of the level to be set as the current Level
      */
-    public void setCurrentLevel(String name) {
+    public void setCurrentScreen(String name) {
         currentScreen = levels.get(name);
+    }
+
+    public void screenResize(int width, int height) {
+        currentScreen.screenResized(width, height);
     }
 }

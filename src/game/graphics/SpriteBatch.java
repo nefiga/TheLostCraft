@@ -65,6 +65,11 @@ public class SpriteBatch {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    public void updateTexture(Texture texture) {
+        this.texture = texture;
+        this.texture.setActiveTexture(0);
+    }
+
     /**
      * Binds the vertex array object and resets buffers and vertex point data
      */

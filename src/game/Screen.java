@@ -13,4 +13,6 @@ public interface Screen {
     public void render();
 
     public void returnResult(Result result);
+
+    public void screenResized(int width, int height);
 }

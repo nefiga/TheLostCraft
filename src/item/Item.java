@@ -1,5 +1,6 @@
 package item;
 
+import collision.shapes.Shape;
 import game.graphics.ImageManager;
 import game.graphics.SpriteBatch;
 import game.graphics.TextureAtlas;
@@ -10,6 +11,8 @@ import java.awt.image.BufferedImage;
 public class Item {
 
     public static TextureAtlas itemAtlas;
+
+    protected Shape shape;
 
     protected int[]  imagePosition;
 
@@ -36,6 +39,8 @@ public class Item {
      */
     protected int id;
 
+    protected int maxStackSize = 64;
+
     public Item(String name) {
         this.name = name;
 
@@ -53,6 +58,18 @@ public class Item {
         this.image = ImageManager.getImage("/items/" + image);
         this.imageString = image;
         imagePosition = itemAtlas.addTexture(this.image);
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
+    }
+
+    public void setMaxStackSize(int maxStackSize) {
+        this.maxStackSize = maxStackSize;
+    }
+
+    public Shape getShape() {
+        return shape;
     }
 
     /**
@@ -91,6 +108,10 @@ public class Item {
 
     public String getName() {
         return name;
+    }
+
+    public int getMaxStackSize() {
+        return maxStackSize;
     }
 
     public void render(SpriteBatch batch, int x, int y) {

@@ -1,47 +1,36 @@
 package game.util;
 
-import level.Map;
-
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameData implements Serializable {
 
     public static final String NAME = "game data";
 
-    private java.util.Map<String, level.Map> savedMaps = new HashMap<String, level.Map>();
-    private java.util.Map<String, LevelData> savedGames = new HashMap<String, LevelData>();
+    private List<String> savedMaps = new ArrayList<String>();
+    private List<String> savedGames = new ArrayList<String>();
 
-    public void saveMap(Map map) {
-        savedMaps.put(map.getName(), map);
+    public void saveMap(String map) {
+        if (!savedMaps.contains(map)) savedMaps.add(map);
     }
 
-    public void saveGame(LevelData data) {
-        savedGames.put(data.getName(), data);
+    public void saveGame(String game) {
+        if (!savedGames.contains(game)) savedGames.add(game);
     }
 
-    public Map getMap(String name) {
-        return savedMaps.get(name);
-    }
-
-    public LevelData getLevelData(String name) {
-        return savedGames.get(name);
-    }
-
-    public String[] getMapKeys() {
-        Object[]  objects = savedMaps.keySet().toArray();
-        String[] strings = new String[objects.length];
-        for (int i =0; i < strings.length; i++) {
-            strings[i] = (String) objects[i];
+    public String[] getMapNames() {
+        String[] strings = new  String[savedMaps.size()];
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = savedMaps.get(i);
         }
         return strings;
     }
 
-    public String[] getGameKeys() {
-        Object[]  objects = savedGames.keySet().toArray();
-        String[] strings = new String[objects.length];
-        for (int i =0; i < strings.length; i++) {
-            strings[i] = (String) objects[i];
+    public String[] getGameNames() {
+        String[] strings = new  String[savedGames.size()];
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = savedGames.get(i);
         }
         return strings;
     }

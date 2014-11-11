@@ -5,6 +5,7 @@ import entity.Player;
 import game.util.FileIO;
 import game.util.GameData;
 import game.util.LevelData;
+import game.util.MapData;
 import input.EditorInputReceiver;
 import input.MenuInputReceiver;
 import input.PlayerInputReceiver;
@@ -12,6 +13,8 @@ import level.*;
 import level.Level;
 import menu.Menu;
 import org.lwjgl.opengl.Display;
+
+import java.io.File;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -67,13 +70,14 @@ public class Game extends GameLoop {
                     break;
                 case GAME:
                     playerInput.update();
+                    player.update(delta);
                     xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
                     yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
                     break;
                 case MAP_EDITOR:
                     editorInput.update();
-                    xOffset = mapEditor.getX() - (Display.getWidth() / 2 - 32);
-                    yOffset = mapEditor.getY() - (Display.getHeight() / 2 - 32);
+                    xOffset = mapEditor.getMapX() - (Display.getWidth() / 2 - 32);
+                    yOffset = mapEditor.getMapY() - (Display.getHeight() / 2 - 32);
                     mapEditor.update(delta);
                     break;
             }
@@ -90,18 +94,33 @@ public class Game extends GameLoop {
     }
 
     public static void loadMainMenu() {
-        mainScreen.load(gameData.getGameKeys(), gameData.getMapKeys());
+        mainScreen.load(gameData.getGameNames(), gameData.getMapNames());
         state = MAIN_MENU;
-        screenManager.setCurrentLevel(MainScreen.NAME);
+        screenManager.setCurrentScreen(MainScreen.NAME);
     }
 
     public void loadGame(String name) {
-        LevelData data = gameData.getLevelData(name);
+        LevelData data = (LevelData) FileIO.loadClass("games" + File.separator + name);
         player = data.getPlayer();
-        level.loadLevel(data, player);
         PlayerInputReceiver.setPlayer(player);
-        screenManager.setCurrentLevel(Level.NAME);
+        screenManager.setCurrentScreen(Level.NAME);
         setState(GAME);
+        level.loadLevel(data, player);
+    }
+
+    public void loadNewGame(String name, String mapName) {
+        MapData mapData = (MapData) FileIO.loadClass("maps" + File.separator + mapName);
+        Player p = new Player(100, 100);
+        player = p;
+        PlayerInputReceiver.setPlayer(player);
+        screenManager.setCurrentScreen(Level.NAME);
+        setState(GAME);
+        level.loadNewLevel(name, new LevelData(mapData, p), p);
+    }
+
+    public static void saveGame(LevelData levelData) {
+        gameData.saveGame(levelData.getName());
+        FileIO.saveClass("games" + File.separator + levelData.getName(), levelData);
     }
 
     public static void closeGame() {
@@ -109,20 +128,24 @@ public class Game extends GameLoop {
         loadMainMenu();
     }
 
-    public void loadNewGame(String map) {
-        Player p = new Player(100, 100);
-        level.loadNewLevel(new LevelData(gameData.getMap(map)), p);
-        player = p;
-        PlayerInputReceiver.setPlayer(player);
-        screenManager.setCurrentLevel(Level.NAME);
-        setState(GAME);
+    public void loadMapEditor(String name) {
+        MapData mapData = (MapData) FileIO.loadClass("maps" + File.separator + name);
+        Map map = new Map(mapData.getName(), mapData.getTiles(), mapData.getTileData(), mapData.getWidth(), mapData.getHeight());
+        mapEditor.loadEditor(map);
+        screenManager.setCurrentScreen(MapEditor.NAME);
+        setState(MAP_EDITOR);
     }
 
-    public void loadMapEditor(String name) {
-        Map map = gameData.getMap(name);
+    public void loadNewMap(String name) {
+        Map map = new Map(name);
         mapEditor.loadEditor(map);
-        screenManager.setCurrentLevel(MapEditor.NAME);
+        screenManager.setCurrentScreen(MapEditor.NAME);
         setState(MAP_EDITOR);
+    }
+
+    public static void saveMap(MapData mapData) {
+        gameData.saveMap(mapData.getName());
+        FileIO.saveClass("maps" + File.separator + mapData.getName(), mapData);
     }
 
     public static void closeMapEditor() {
@@ -130,11 +153,15 @@ public class Game extends GameLoop {
         loadMainMenu();
     }
 
-    public void loadNewMap(String name) {
-        Map map = new Map(name);
-        mapEditor.loadEditor(map);
-        screenManager.setCurrentLevel(MapEditor.NAME);
-        setState(MAP_EDITOR);
+    public static void openMenu(Menu m) {
+        menu = m;
+        menuInput.setMenu(menu);
+        menu.screenResized(Display.getWidth(), Display.getHeight());
+        menuOpen = true;
+    }
+
+    public static void closeMenu() {
+        menuOpen = false;
     }
 
     public void updateTime(long delta) {
@@ -147,7 +174,8 @@ public class Game extends GameLoop {
     }
 
     public void resized() {
-        mapEditor.updateScreenSize(Display.getWidth(), Display.getHeight());
+        screenManager.screenResize(Display.getWidth(), Display.getHeight());
+        if (menuOpen) menu.screenResized(Display.getWidth(), Display.getHeight());
     }
 
     public void dispose() {
@@ -159,21 +187,13 @@ public class Game extends GameLoop {
         save();
     }
 
-    public static void openMenu(Menu m) {
-        menu = m;
-        menuInput.setMenu(menu);
-        menuOpen = true;
-    }
-
-    public static void closeMenu() {
-        menuOpen = false;
-    }
-
     public static void setState(int state) {
         Game.state = state;
     }
 
-    public static GameData getGameData() {return gameData;}
+    public static GameData getGameData() {
+        return gameData;
+    }
 
     public static int getXOffset() {
         return xOffset;

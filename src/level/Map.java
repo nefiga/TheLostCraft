@@ -6,8 +6,6 @@ import java.io.Serializable;
 
 public class Map implements Serializable{
 
-    public static Map tempMap = new Map("TestMap", new int[500 * 500], new int [500 * 500], 500, 500);
-
     private String name;
 
     // An array of all the tiles on the map
@@ -26,7 +24,7 @@ public class Map implements Serializable{
         this.width = 500;
         this.height = 500;
         for (int i = 0; i < this.tiles.length; i++) {
-            this.tiles[i] = Tile.emptyTile.getID();
+            this.tiles[i] = Tile.grass.getID();
         }
     }
 
@@ -41,4 +39,6 @@ public class Map implements Serializable{
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {this.name = name;}
 }

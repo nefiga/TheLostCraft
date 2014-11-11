@@ -2,6 +2,8 @@ package input;
 
 import menu.Menu;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 public class MenuInputReceiver extends InputReceiver {
 
@@ -40,10 +42,19 @@ public class MenuInputReceiver extends InputReceiver {
         if (down.isPressed()) menu.moveCursorDown();
         if (enter.isPressed()) menu.select();
         if (back.isPressed()) menu.back();
+        if (leftButton.isPressed() || leftButton.isHolding()) menu.click(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        else menu.release(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (rightButton.isPressed() || leftButton.isHolding()) menu.click(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        else menu.release(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
     }
 
     @Override
     public void getPressedChar(char c) {
         menu.charPressed(c);
+    }
+
+    @Override
+    public void getHoldingChar(char c) {
+        menu.charHolding(c);
     }
 }

@@ -9,7 +9,7 @@ public abstract class Menu {
     public TextureAtlas menuAtlas = new TextureAtlas(TextureAtlas.SMALL);
     protected SpriteBatch menuBatch;
 
-    public static final int NORMAL_MENU = 0;
+    public static final int NORMAL_TILE_SET = 0;
 
     protected Font font = Font.generalFont;
 
@@ -62,9 +62,16 @@ public abstract class Menu {
         menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
     }
 
+    public Menu(int tileSet) {
+        loadMenuImages(tileSet);
+        cursorImage = menuAtlas.addTexture(ImageManager.getImage("/menu/cursor"));
+        textViewImage = menuAtlas.addTexture(ImageManager.getImage("/menu/text_view"));
+        menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
+    }
+
     private void loadMenuImages(int tileSet) {
         switch (tileSet) {
-            case NORMAL_MENU:
+            case NORMAL_TILE_SET:
                 this.cornerImage = menuAtlas.addTexture(ImageManager.getImage("/menu/corner"));
                 this.sideImage = menuAtlas.addTexture(ImageManager.getImage("/menu/side"));
                 this.middleImage = menuAtlas.addTexture(ImageManager.getImage("/menu/middle"));
@@ -108,6 +115,10 @@ public abstract class Menu {
         menuBatch.end();
     }
 
+    public abstract void click(int button, int x,  int y);
+
+    public abstract void release(int button, int x, int y);
+
     public abstract void moveCursorUp();
 
     public abstract void moveCursorRight();
@@ -118,9 +129,13 @@ public abstract class Menu {
 
     public abstract void charPressed(char c);
 
+    public abstract void charHolding(char c);
+
     public abstract void select();
 
     public abstract void back();
+
+    public abstract void screenResized(int width, int height);
 
     public abstract void openForResult(Result result, Screen screen, int x, int y);
 

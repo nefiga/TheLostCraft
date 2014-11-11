@@ -8,7 +8,6 @@ import java.awt.Rectangle;
 
 
 public class Entity {
-
     /**
      * Rectangle used to track collisions with other entities
      */
@@ -37,7 +36,7 @@ public class Entity {
     /**
      * The rotation to be put on the entity image when drawn
      */
-    protected int rotation = SpriteBatch.NO_ROTATE;
+    protected int rotation = 0;
 
     /**
      * The directions the entity can face
@@ -60,7 +59,6 @@ public class Entity {
     public Entity(int positionX, int positionY) {
         this.x = positionX;
         this.y = positionY;
-        rect = new Rectangle(positionX, positionY, width, height);
     }
 
     public void update(long delta) {
@@ -125,36 +123,6 @@ public class Entity {
     public Shape getShape() {
         return shape;
     }
-
-    /**
-     * @param pushingEntity The entity pushing this entity
-     * @param moveX         The amount to be pushed
-     * @return The amount this entity can be pushed
-     */
-    /*public int pushX(Level level, Entity pushingEntity, int moveX) {
-        if (moveable && moveX != 0) {
-            int moveDistance = level.getMaxMoveX(this, moveX, pushingEntity);
-            x += moveDistance;
-            shape.move(moveDistance, 0);
-            return moveDistance;
-        }
-        return 0;
-    }*/
-
-    /**
-     * @param pushingEntity The entity pushing this entity
-     * @param moveY         The amount to be pushed
-     * @return The amount this entity can be pushed
-     */
-    /*public int pushY(Level level, Entity pushingEntity, int moveY) {
-        if (moveable && moveY != 0) {
-            int moveDistance = level.getMaxMoveY(this, moveY, pushingEntity);
-            y += moveDistance;
-            shape.move(0, moveDistance);
-            return moveDistance;
-        }
-        return 0;
-    }*/
 
     public Rectangle getRect() {
         return rect;

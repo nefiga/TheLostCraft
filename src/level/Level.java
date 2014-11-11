@@ -3,6 +3,7 @@ package level;
 import collision.CollisionDetection;
 import collision.shapes.Shape;
 import entity.Entity;
+import entity.ItemEntity;
 import entity.LivingEntity;
 import entity.Player;
 import game.Game;
@@ -14,7 +15,6 @@ import item.Item;
 import math.Vector2;
 import menu.Menu;
 import menu.StringMenu;
-import menu.TextViewMenu;
 import menu.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
@@ -29,15 +29,16 @@ public class Level implements Screen {
     private SpriteBatch entityBatch;
     private SpriteBatch itemBatch;
 
-
-    Map map;
     Menu menu;
     LevelData levelData;
-    MiniMap miniMap;
 
     public static final String NAME = "Level";
 
     private final int ESCAPE = 0, NAME_LEVEL = 1;
+
+    private int[] tiles, tileData;
+
+    private int mapWidth, mapHeight;
 
     private boolean paused;
 
@@ -52,7 +53,7 @@ public class Level implements Screen {
      * A list of all the entities
      */
     private List<Entity> entities = new ArrayList<Entity>();
-    private List<Entity> itemEntities = new ArrayList<Entity>();
+    private List<ItemEntity> itemEntities = new ArrayList<ItemEntity>();
 
     /**
      * Every Level should be created with a public static final String "name" variable for a quick and easy way
@@ -64,35 +65,40 @@ public class Level implements Screen {
 
     public void loadLevel(LevelData levelData, Player player) {
         this.levelData = levelData;
-        this.map = levelData.getMap();
+        tiles = levelData.getTiles();
+        tileData = levelData.getTileData();
+        mapWidth = levelData.getMapWidth();
+        mapHeight = levelData.getMapHeight();
         this.player = player;
-        miniMap = new MiniMap(this.map);
         this.player.setLevel(this);
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
-        itemBatch =  new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
+        itemBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
     }
 
-    public void loadNewLevel(LevelData levelData, Player player) {
+    public void loadNewLevel(String name, LevelData levelData, Player player) {
         this.levelData = levelData;
-        this.map = levelData.getMap();
+        levelData.setName(name);
+        tiles = levelData.getTiles();
+        tileData = levelData.getTileData();
+        mapWidth = levelData.getMapWidth();
+        mapHeight = levelData.getMapHeight();
         this.player = player;
-        miniMap = new MiniMap(this.map);
         this.player.setLevel(this);
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
-        itemBatch =  new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
-        menu = new TextViewMenu(25, 10, 16, Menu.NORMAL_MENU);
-        Result r = new Result();
-        r.setState(NAME_LEVEL);
-        menu.openForResult(r, this, Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300);
+        itemBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
     }
 
     public void update(long delta) {
         if (!paused) {
             for (int i = 0; i < entities.size(); i++) {
                 entities.get(i).update(delta);
-                if (entities.get(i).isRemoved()) removeEntity(entities.get(i));
+                if (entities.get(i).isRemoved()) removeEntity(i);
+            }
+            for (int i = 0; i < itemEntities.size(); i++) {
+                itemEntities.get(i).update(delta);
+                if (itemEntities.get(i).isRemoved()) removeItemEntity(i);
             }
         }
         player.update(delta);
@@ -110,8 +116,6 @@ public class Level implements Screen {
         entityBatch.begin();
         renderEntities();
         entityBatch.end();
-
-        miniMap.renderMiniMap(Game.pixelToTile((int) player.getX()) - MiniMap.MINI_WIDTH / 2, Game.pixelToTile((int) player.getY()) - MiniMap.MINI_HEIGHT / 2);
     }
 
     protected void renderEntities() {
@@ -133,17 +137,19 @@ public class Level implements Screen {
         entities.add(entity);
     }
 
-    public void addItemEntity(Entity entity) {
+    public void addItemEntity(ItemEntity entity) {
         itemEntities.add(entity);
     }
 
     /**
      * Removes the entity from this level
-     *
-     * @param entity The entity to be removed from this level
      */
-    public void removeEntity(Entity entity) {
-        entities.remove(entity);
+    public void removeEntity(int position) {
+        entities.remove(position);
+    }
+
+    public void removeItemEntity(int position) {
+        itemEntities.remove(position);
     }
 
     /**
@@ -157,9 +163,7 @@ public class Level implements Screen {
      * @return True if there was an entity to interact with else return false
      */
     public void interact(Entity entity, Tool tool, int x, int y, int width, int height) {
-        int centerX = x - width / 2;
-        int centerY = y - height / 2;
-        interactArea.setBounds(centerX, centerY, width, height);
+        interactArea.setBounds(x, y, width, height);
         for (int i = 0; i < entities.size(); i++) {
             Rectangle rect1 = entities.get(i).getRect();
             if (interactArea.intersects(rect1)) {
@@ -173,14 +177,14 @@ public class Level implements Screen {
     public void damageTile(int x, int y, int damage) {
         x = Game.pixelToTile(x);
         y = Game.pixelToTile(y);
-        map.tileData[x + y * map.width] = Tile.damageTile(damage, getTileData(x, y, true));
+        tileData[x + y * mapWidth] = Tile.damageTile(damage, getTileData(x, y, true));
     }
 
     public void replaceTile(Tile tile, int x, int y) {
         x = Game.pixelToTile(x);
         y = Game.pixelToTile(y);
-        map.tiles[x + y * map.width] = tile.getID();
-        map.tileData[x + y * map.width] = tile.getStartDurability();
+        tiles[x + y * mapWidth] = tile.getID();
+        tileData[x + y * mapWidth] = tile.getStartDurability();
     }
 
     /**
@@ -196,10 +200,10 @@ public class Level implements Screen {
             x = Game.pixelToTile(x);
             y = Game.pixelToTile(y);
         }
-        if (x < 0 || y < 0 || x >= map.width || y >= map.height)
+        if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
             return Tile.voidTile;
 
-        return Tile.getTile(map.tiles[x + y * map.width]);
+        return Tile.getTile(tiles[x + y * mapWidth]);
     }
 
     /**
@@ -214,10 +218,10 @@ public class Level implements Screen {
             y = Game.pixelToTile(y);
         }
         //Player should not be able to access tiles outside of the map
-        if (x < 0 || y < 0 || x >= map.width || y >= map.height)
+        if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight)
             return 0;
 
-        return map.tileData[x + y * map.width];
+        return tileData[x + y * mapWidth];
     }
 
     public int getTileDurability(int x, int y, boolean tilePrecision) {
@@ -254,7 +258,7 @@ public class Level implements Screen {
         for (int i = 0; i < entityShape.getVertices().length; i++) {
             Vector2 vertex = entityShape.getVertices()[i];
             // Break out early if player is out of the map bounds
-            if (vertex.x < 0 || vertex.y < 0 || vertex.x >= map.width * Tile.TILE_SIZE || vertex.y >= map.height * Tile.TILE_SIZE) {
+            if (vertex.x < 0 || vertex.y < 0 || vertex.x >= mapWidth * Tile.TILE_SIZE || vertex.y >= mapHeight * Tile.TILE_SIZE) {
                 overlap = moveX;
                 break;
             }
@@ -274,7 +278,7 @@ public class Level implements Screen {
         for (int i = 0; i < entityShape.getVertices().length; i++) {
             Vector2 vertex = entityShape.getVertices()[i];
             // Break out early if player is out of the map bounds
-            if (vertex.x < 0 || vertex.y < 0 || vertex.x >= map.width * Tile.TILE_SIZE || vertex.y >= map.height * Tile.TILE_SIZE) {
+            if (vertex.x < 0 || vertex.y < 0 || vertex.x >= mapWidth * Tile.TILE_SIZE || vertex.y >= mapHeight * Tile.TILE_SIZE) {
                 overlap = moveY;
                 break;
             }
@@ -287,6 +291,16 @@ public class Level implements Screen {
         return moveY - overlap;
     }
 
+    public void collectItems() {
+        Rectangle rect1 = player.getRect();
+        for (int i = 0; i < itemEntities.size(); i++) {
+            ItemEntity itemEntity = itemEntities.get(i);
+            if (rect1.intersects(itemEntity.getRect())) {
+                if (player.canCollectItem(itemEntity.getItem()))
+                    itemEntities.remove(i);
+            }
+        }
+    }
 
     @Override
     public void returnResult(Result result) {
@@ -294,31 +308,29 @@ public class Level implements Screen {
             case ESCAPE:
                 Game.closeMenu();
                 paused = false;
-                if (result.getSelection() == 0) saveAndQuit();
-                break;
-            case NAME_LEVEL:
-                levelData.setName(result.getString());
-                Game.closeMenu();
+                if (result.getSelection() == 0) Game.closeGame();
                 break;
         }
+
+    }
+
+    @Override
+    public void screenResized(int width, int height) {
 
     }
 
     public void onEscapePressed() {
         paused = true;
         String[] s = new String[]{"save & quit", "resume"};
-        menu = new StringMenu(20, 10, 16, Menu.NORMAL_MENU);
+        menu = new StringMenu(20, 10, 16, Menu.NORMAL_TILE_SET);
         Result result = new Result();
         result.setStringArray(s);
         menu.openForResult(result, this, Display.getWidth() / 2 - 160, Display.getHeight() / 2 - 80);
     }
 
-    public void saveAndQuit() {
-        Game.closeGame();
-    }
-
     public void save() {
-        levelData.updateData(map, player);
-        Game.getGameData().saveGame(levelData);
+        levelData.updateMap(tiles, tileData, mapWidth, mapHeight);
+        levelData.updatePlayer((int) player.getX(), (int) player.getY());
+        Game.saveGame(levelData);
     }
 }

@@ -1,9 +1,9 @@
 package input;
 
 import editor.MapEditor;
-import game.Game;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 public class EditorInputReceiver extends InputReceiver {
 
@@ -59,36 +59,32 @@ public class EditorInputReceiver extends InputReceiver {
         if (down.isHolding() || s.isHolding()) {
             velocityY = 3;
         }
-        mapEditor.move(velocityX, velocityY);
+        mapEditor.moveMap(velocityX, velocityY);
 
-        if (escape.isPressed()) escape();
+        if (escape.isPressed()) mapEditor.onEscapePressed();
         if (zoomIn.isPressed()) mapEditor.zoomIn();
         if (zoomOut.isPressed()) mapEditor.zoomOut();
 
         if (shift.isHolding()) {
             if (leftButton.isPressed()) {
-                mapEditor.shiftClick(Mouse.getX(), Mouse.getY());
-            }
-        }
-        else if(control.isHolding()) {
-            if (leftButton.isPressed()) {
-                mapEditor.controlClick(Mouse.getX(), Mouse.getY());
+                mapEditor.shiftClick(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
             }
         }
         else if (leftButton.isHolding()) {
-            mapEditor.leftClick(Mouse.getX(), Mouse.getY());
+            mapEditor.leftClick(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
         }
-        else if (rightButton.isHolding()) {
-            mapEditor.rightClick(Mouse.getX(), Mouse.getY());
+        else if (rightButton.isPressed()) {
+            mapEditor.rightClick(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
         }
-    }
-
-    public void escape() {
-        mapEditor.onEscapePressed();
     }
 
     @Override
     public void getPressedChar(char c) {
+
+    }
+
+    @Override
+    public void getHoldingChar(char c) {
 
     }
 }

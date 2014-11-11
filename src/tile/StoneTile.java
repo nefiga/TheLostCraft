@@ -1,13 +1,10 @@
 package tile;
 
-import collision.shapes.Square;
-import collision.shapes.Triangle;
+import collision.shapes.Rectangle;
 import entity.Entity;
 import entity.ItemEntity;
-import game.fonts.Font;
 import gear.tool.PickAxe;
 import gear.tool.Tool;
-import item.Item;
 import item.resource.Resource;
 import level.Level;
 import math.Vector2;
@@ -17,7 +14,7 @@ public class StoneTile extends Tile {
     public StoneTile(String name) {
         super(name);
         setImage("stone_tile");
-        setShape(new Square(new Vector2(0, 0), 64, 64));
+        setShape(new Rectangle(new Vector2(0, 0), 64, 64));
         id = addTile(this);
         setStartDurability(500);
     }

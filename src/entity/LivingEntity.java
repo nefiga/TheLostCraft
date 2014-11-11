@@ -69,8 +69,8 @@ public class LivingEntity extends Entity {
      *
      * @param item The item to be added to the inventory
      */
-    public void collectItem(Item item) {
-        // Still need to setup inventory
+    public boolean canCollectItem(Item item) {
+        return false;
     }
 
     public void interactWith() {
@@ -96,6 +96,7 @@ public class LivingEntity extends Entity {
         int moveY = level.getMaxMoveY(this, velocityY);
         y += moveY;
         shape.move(0, moveY);
+        rect.translate(moveX, moveY);
     }
 
     public void render(SpriteBatch batch) {

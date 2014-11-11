@@ -4,6 +4,8 @@ import game.Game;
 import game.graphics.SpriteBatch;
 import item.Item;
 
+import java.awt.*;
+
 public class ItemEntity extends Entity{
 
     Item item;
@@ -11,6 +13,8 @@ public class ItemEntity extends Entity{
     public ItemEntity(Item item, int positionX, int positionY) {
         super(positionX, positionY);
         this.item = item;
+        rect = new Rectangle(32, 32);
+        rect.setLocation(positionX, positionY);
     }
 
     /**

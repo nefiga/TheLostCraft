@@ -2,11 +2,11 @@ package collision.shapes;
 
 import math.Vector2;
 
-public class Square extends Shape {
+public class Rectangle extends Shape {
 
     protected Vector2 V2, V3, V4;
 
-    public Square(Vector2 V1, int width, int height) {
+    public Rectangle(Vector2 V1, int width, int height) {
         super(V1, width, height);
         V2 = new Vector2(V1.x + width, V1.y);
         V3 = new Vector2(V2.x, V1.y + height);

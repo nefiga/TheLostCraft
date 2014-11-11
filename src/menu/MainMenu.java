@@ -1,19 +1,22 @@
 package menu;
 
 import game.Game;
+import game.GameLoop;
 import game.Screen;
 import game.fonts.Font;
+import menu.MenuComponent.OnClickListener;
 
-public class MainMenu extends Menu {
+public class MainMenu extends Menu implements OnClickListener{
 
     private Game game;
+    private Button bTest;
 
-    private StringBuilder string = new StringBuilder();
+    private String string = "";
 
     private String[] currentList;
     private String[] savedGames;
     private String[] savedMaps;
-    private String[] options = new String[]{"load game", "new game", "load map", "new map"};
+    private String[] options = new String[]{"load game", "new game", "load map", "new map", "exit game"};
 
     private int viewWidth, viewHeight, viewX, viewY;
 
@@ -25,6 +28,12 @@ public class MainMenu extends Menu {
         this.savedMaps = savedMaps;
         this.game = game;
         currentList = options;
+        bTest = new Button(1, 100 , 100, 100, 25);
+        bTest.setOnClickListener(this);
+    }
+
+    public void update(long delta) {
+        bTest.update(delta);
     }
 
     public void render() {
@@ -33,8 +42,8 @@ public class MainMenu extends Menu {
             // Options
             case 0:
                 font.begin();
-                for (int i = 0; i < options.length; i++) {
-                    String string = options[i];
+                for (int i = 0; i < currentList.length; i++) {
+                    String string = currentList[i];
                     font.drawString(string, insetX[i], insetY[i]);
                 }
                 font.end();
@@ -42,8 +51,8 @@ public class MainMenu extends Menu {
             // Load Game
             case 1:
                 font.begin();
-                for (int i = 0; i < savedGames.length; i++) {
-                    String string = savedGames[i];
+                for (int i = 0; i < currentList.length; i++) {
+                    String string = currentList[i];
                     font.drawString(string, insetX[i], insetY[i]);
                 }
                 font.end();
@@ -51,8 +60,8 @@ public class MainMenu extends Menu {
             // New Game
             case 2:
                 font.begin();
-                for (int i = 0; i < savedMaps.length; i++) {
-                    String string = savedMaps[i];
+                for (int i = 0; i < currentList.length; i++) {
+                    String string = currentList[i];
                     font.drawString(string, insetX[i], insetY[i]);
                 }
                 font.end();
@@ -60,8 +69,8 @@ public class MainMenu extends Menu {
             // Load Map
             case 3:
                 font.begin();
-                for (int i = 0; i < savedMaps.length; i++) {
-                    String string = savedMaps[i];
+                for (int i = 0; i < currentList.length; i++) {
+                    String string = currentList[i];
                     font.drawString(string, insetX[i], insetY[i]);
                 }
                 font.end();
@@ -73,9 +82,39 @@ public class MainMenu extends Menu {
                 menuBatch.end();
 
                 font.begin();
-                font.drawString(string.toString(), viewX + 5, viewY + (viewHeight - font.getTextSize()) / 2);
+                font.drawString(string, viewX + 5, viewY + (viewHeight - font.getTextSize()) / 2);
                 font.end();
                 break;
+            // Name New Game
+            case 5:
+                menuBatch.begin();
+                menuBatch.draw(viewX, viewY, viewWidth, viewHeight, textViewImage[0], textViewImage[1], textViewImage[2], textViewImage[3]);
+                menuBatch.end();
+
+                font.begin();
+                font.drawString(string, viewX + 5, viewY + (viewHeight - font.getTextSize()) / 2);
+                font.end();
+                break;
+        }
+
+        bTest.render();
+    }
+
+    @Override
+    public void click(int button, int x, int y) {
+        if (button == 0) {
+            if (bTest.inBounds(x, y)) {
+                bTest.press();
+            }
+        }
+    }
+
+    @Override
+    public void release(int button, int x, int y) {
+        if (button == 0) {
+            if (bTest.inBounds(x, y)) {
+                bTest.release();
+            }
         }
     }
 
@@ -103,11 +142,21 @@ public class MainMenu extends Menu {
 
     @Override
     public void charPressed(char c) {
-        if (state == 4) {
+        if (state == 4 || state == 5) {
             // BackSpace
-            if (c == 8) string.setLength(string.length() - 1);
-            else if (font.getStringWidth(string.toString()) + Font.CHAR_SIZE < viewWidth)
-                string.append(c);
+            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() -1 );
+            else if (font.getStringWidth(string) + Font.CHAR_SIZE < viewWidth)
+                string += c;
+        }
+    }
+
+    @Override
+    public void charHolding(char c) {
+        if (state == 4 || state == 5) {
+            // BackSpace
+            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() -1 );
+            else if (font.getStringWidth(string) + Font.CHAR_SIZE < viewWidth)
+                string += c;
         }
     }
 
@@ -136,35 +185,51 @@ public class MainMenu extends Menu {
                         break;
                     // New Map
                     case 3:
-                        string.setLength(0);
+                        string = "";
                         state = 4;
                         renderCursor = false;
                         break;
+                    // Exit Game
+                    case 4:
+                        GameLoop.end();
+                        break;
                 }
                 break;
+            //Load Game
             case 1:
                 if (currentList.length > 0) {
                     Game.closeMenu();
                     game.loadGame(currentList[currentSelection]);
                 }
                 break;
+            //New Game
             case 2:
                 if (currentList.length > 0) {
-                    Game.closeMenu();
-                    game.loadNewGame(currentList[currentSelection]);
+                    string = "";
+                    renderCursor = false;
+                    state = 5;
                 }
                 break;
+            // Load Map
             case 3:
                 if (currentList.length > 0) {
                     Game.closeMenu();
                     game.loadMapEditor(currentList[currentSelection]);
                 }
                 break;
+            // New Map
             case 4:
                 if (string.length() > 0) {
                     Game.closeMenu();
-                    game.loadNewMap(string.toString());
+                    string = string.substring(0, string.length() -1);
+                    game.loadNewMap(string);
                 }
+                break;
+            // Name New Game
+            case 5:
+                Game.closeMenu();
+                string = string.substring(0, string.length() -1);
+                game.loadNewGame(string, currentList[currentSelection]);
                 break;
         }
     }
@@ -187,7 +252,18 @@ public class MainMenu extends Menu {
                 setInsets();
                 renderCursor = true;
                 break;
+            case 5:
+                state = 2;
+                currentList = savedMaps;
+                setInsets();
+                renderCursor = true;
+                break;
         }
+    }
+
+    @Override
+    public void screenResized(int width, int height) {
+
     }
 
     @Override
@@ -221,5 +297,12 @@ public class MainMenu extends Menu {
     @Override
     public void returnResult() {
         screen.returnResult(result);
+    }
+
+    @Override
+    public void onClick(MenuComponent c) {
+        if (c.getId() == bTest.getId()) {
+            System.out.println("Clicking Button! You are awesome!");
+        }
     }
 }

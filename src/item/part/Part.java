@@ -5,15 +5,14 @@ import item.Item;
 import gear.Stats;
 import item.resource.Resource;
 
-public class Part extends Item{
+public class Part extends Item {
 
     protected Resource resource;
-    public Stats stats;
+    public Stats stats = new Stats();
 
     public Part(String image, Resource resource) {
         super(image);
         this.resource = resource;
-        createStats(100, 1, 1);
     }
 
     public void setTexture(String image) {
@@ -22,9 +21,17 @@ public class Part extends Item{
         imagePosition = itemAtlas.addTexture(this.image);
     }
 
-    protected void createStats(float str, float agi, float intl) {
-        Stats s = resource.getStats();
-        stats = new Stats((int) (s.str * str), (int) (s.agi * agi), (int) (s.itl * intl));
+    /**
+     * Sets the stat of this part to the stat of this Parts Resource times the multiplier
+     *
+     * @param position   Position of the stat to be set
+     * @param multiplier The amount to multiply the stat by
+     */
+    protected void setStat(int position, float multiplier) {
+        int stat = resource.getStats().getStat(position);
+        System.out.println("Before " + stat);
+        stats.setStat(position, (int) (stat * multiplier));
+        System.out.println("After " + stats.getStat(position));
     }
 
     public Stats getStats() {
