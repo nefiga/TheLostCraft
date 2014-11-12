@@ -36,16 +36,16 @@ public class MenuInputReceiver extends InputReceiver {
 
     @Override
     public void checkInput() {
-        if (left.isPressed())menu.moveCursorLeft();
+        if (left.isPressed()) menu.moveCursorLeft();
         if (right.isPressed()) menu.moveCursorRight();
         if (up.isPressed()) menu.moveCursorUp();
         if (down.isPressed()) menu.moveCursorDown();
         if (enter.isPressed()) menu.select();
         if (back.isPressed()) menu.back();
-        if (leftButton.isPressed() || leftButton.isHolding()) menu.click(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        else menu.release(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        if (rightButton.isPressed() || leftButton.isHolding()) menu.click(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        else menu.release(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (leftButton.isPressed()) menu.click(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        else if (!leftButton.isHolding()) menu.release(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (rightButton.isPressed()) menu.click(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        else if (!leftButton.isHolding()) menu.release(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
     }
 
     @Override

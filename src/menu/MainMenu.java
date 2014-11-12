@@ -11,7 +11,7 @@ import menu.component.Button;
 public class MainMenu extends Menu implements OnClickListener {
 
     private Game game;
-    private Button[] bTest = new Button[100];
+    private Button[] bTest = new Button[1];
 
     private String string = "";
 

@@ -85,7 +85,7 @@ public class Font {
     }
 
     /**
-     * Returns and array of pixels for the matching character
+     * Returns a image stored in an array, of the matching character
      */
     protected int[] getChar(int character) {
         // Space - /

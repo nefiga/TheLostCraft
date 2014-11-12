@@ -20,6 +20,10 @@ public class Button extends MenuComponent {
 
     private boolean hasFocus, pressed, holding;
 
+    public Button(int id, int width, int height) {
+        super(id, width, height);
+    }
+
     public Button(int id, int x, int y, int width, int height) {
         super(id, x, y, width, height);
         image = MenuComponent.addImage("button");
@@ -30,7 +34,8 @@ public class Button extends MenuComponent {
     public void update(long delta) {
         if (inBounds(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()))) {
             focus();
-        } else unFocus();
+        }
+        else unFocus();
     }
 
     public void press() {
@@ -39,7 +44,7 @@ public class Button extends MenuComponent {
     }
 
     public void release() {
-        if (pressed) listener.onClick(this);
+        if (pressed && hasFocus) listener.onClick(this);
         pressed = false;
         holding = false;
     }

@@ -55,6 +55,13 @@ public class TextureAtlas {
         return textures.size();
     }
 
+    /**
+     * Adds the image to the texture atlas at the first open position.
+     * If the atlas already contains the image the position of the image will be returned.
+     *
+     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
+     * and position 2 and 3 are the width and height of the image.
+     */
     public int[] addTexture(String name, BufferedImage image) {
         if (textures.containsKey(name)) {
             return textures.get(name);
@@ -95,7 +102,8 @@ public class TextureAtlas {
     }
 
     /**
-     * Adds the image to the texture atlas at the first open position
+     * Adds the image to the texture atlas at the first open position.
+     * If the atlas already contains the image the position of the image will be returned.
      *
      * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
      * and position 2 and 3 are the width and height of the image.
@@ -171,7 +179,7 @@ public class TextureAtlas {
             }
         }
 
-        System.out.println("Atlas out off space textureRows: " + textureRows + " textureColumns: " + textureColumns + " rows " + rows + " columns " + columns);
+        System.err.println("Atlas out off space textureRows: " + textureRows + " textureColumns: " + textureColumns + " rows " + rows + " columns " + columns);
         return null;
     }
 
@@ -226,13 +234,6 @@ public class TextureAtlas {
 
     public int getHeight() {
         return height;
-    }
-
-    /**
-     * @return The size of the textures in this TextureAtlas
-     */
-    public int getTileSize() {
-        return TILE_SIZE;
     }
 
     public int getTextureCapacity() {
