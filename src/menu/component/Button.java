@@ -1,40 +1,36 @@
-package menu;
+package menu.component;
 
+import game.fonts.Font;
 import game.graphics.*;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 public class Button extends MenuComponent {
 
-    private TextureAtlas atlas;
-    private SpriteBatch batch;
     private OnClickListener listener;
+    Font font = Font.generalFont;
 
-    private int[] image = new int[4];
-    private int[] imagePressed = new int[4];
-    private int[] imageFocused = new int[4];
+    private int[] image;
+    private int[] imagePressed;
+    private int[] imageFocused;
 
     private String text;
+
+    private int textX, textY;
 
     private boolean hasFocus, pressed, holding;
 
     public Button(int id, int x, int y, int width, int height) {
         super(id, x, y, width, height);
-
-        if (atlas == null) {
-            atlas = new TextureAtlas(TextureAtlas.SMALL);
-            image = atlas.addTexture(ImageManager.getImage("/menu/button"));
-            imagePressed = atlas.addTexture(ImageManager.getImage("/menu/button_pressed"));
-            imageFocused = atlas.addTexture(ImageManager.getImage("/menu/button_focused"));
-        }
-        batch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(atlas), 10);
+        image = MenuComponent.addImage("button");
+        imagePressed = MenuComponent.addImage("button_pressed");
+        imageFocused = MenuComponent.addImage("button_focused");
     }
 
     public void update(long delta) {
         if (inBounds(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()))) {
             focus();
-        }
-        else unFocus();
+        } else unFocus();
     }
 
     public void press() {
@@ -64,6 +60,8 @@ public class Button extends MenuComponent {
 
     public void setText(String text) {
         this.text = text;
+        textX = x + ((width - font.getStringWidth(text)) / 2);
+        textY = y + ((height - font.getTextSize()) / 2);
     }
 
     public void setOnClickListener(OnClickListener listener) {
@@ -73,8 +71,8 @@ public class Button extends MenuComponent {
     /**
      * Returns true if the x and y coordinates are in the bounds of this button
      */
-    public boolean inBounds(int xPosition, int yPostion) {
-        if (xPosition > x && xPosition < horizontalBounds && yPostion > y && yPostion < verticalBounds) {
+    public boolean inBounds(int xPosition, int yPosition) {
+        if (xPosition > x && xPosition < horizontalBounds && yPosition > y && yPosition < verticalBounds) {
             return true;
         }
         return false;
@@ -100,11 +98,17 @@ public class Button extends MenuComponent {
         return text;
     }
 
-    public void render() {
-        batch.begin();
-        if (pressed) batch.draw(x, y, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
-        else if (hasFocus) batch.draw(x, y, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
-        else batch.draw(x, y, image[0], image[1], image[2], image[3]);
-        batch.end();
+    public void render(SpriteBatch batch) {
+        if (pressed)
+            batch.draw(x, y, width, height, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
+        else if (hasFocus)
+            batch.draw(x, y, width, height, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
+        else batch.draw(x, y, width, height, image[0], image[1], image[2], image[3]);
+    }
+
+    public void renderString(Font font) {
+        if (text != null) {
+            font.drawString(text, textX, textY);
+        }
     }
 }

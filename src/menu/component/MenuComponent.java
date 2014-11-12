@@ -1,9 +1,14 @@
-package menu;
+package menu.component;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import game.graphics.ShaderManager;
+import game.graphics.SpriteBatch;
+import game.graphics.Texture;
+import game.graphics.TextureAtlas;
 
 public class MenuComponent {
+
+    protected static TextureAtlas atlas = new TextureAtlas(TextureAtlas.MEDIUM);
+    public static SpriteBatch batch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(atlas), 1000);
 
     private int id;
 
@@ -21,6 +26,18 @@ public class MenuComponent {
 
     public void update(long delta) {
 
+    }
+
+    public static int[] addImage(String name) {
+        int beforeAtlasSize = atlas.getSize();
+
+        int[] imagePosition;
+        imagePosition = atlas.addTexture("/menu/" + name);
+
+        int afterAtlasSize = atlas.getSize();
+        if (beforeAtlasSize < afterAtlasSize) batch.updateTexture();
+
+        return imagePosition;
     }
 
     public int getId() {

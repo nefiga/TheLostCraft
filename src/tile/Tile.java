@@ -74,7 +74,7 @@ public class Tile {
 
             // The default tile image
             image = ImageManager.getImage("/tiles/void_tile");
-            imagePosition = tileAtlas.addTexture(image);
+            imagePosition = tileAtlas.addTexture("/tiles/void_tile");
         }
     }
 
@@ -85,7 +85,7 @@ public class Tile {
      */
     public void setImage(String image) {
         this.image = ImageManager.getImage("/tiles/" + image);
-        imagePosition = tileAtlas.addTexture(this.image);
+        imagePosition = tileAtlas.addTexture("/tiles/" + image);
     }
 
     public void setShape(Shape shape) {

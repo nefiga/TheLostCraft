@@ -1,10 +1,14 @@
 package game.graphics;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TextureAtlas {
 
     public static final int FONT_NORMAL = 0, SUPER_SMALL = 320, SMALL = 640, MEDIUM = 960, LARGE = 1024;
+
+    private Map<String, int[]> textures = new HashMap<String, int[]>();
 
     private int[] atlas;
 
@@ -47,14 +51,15 @@ public class TextureAtlas {
         tiles = new int[rows * columns];
     }
 
-    /**
-     * Adds the image to the texture atlas at the first open position
-     *
-     * @param image The image to be added
-     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
-     * and position 2 and 3 are the width and height of the image.
-     */
-    public int[] addTexture(BufferedImage image) {
+    public int getSize() {
+        return textures.size();
+    }
+
+    public int[] addTexture(String name, BufferedImage image) {
+        if (textures.containsKey(name)) {
+            return textures.get(name);
+        }
+
         int[] position = new int[4];
         int w = image.getWidth();
         int h = image.getHeight();
@@ -79,6 +84,54 @@ public class TextureAtlas {
                         }
                     }
                     fillTile(c, r, textureColumns, textureRows);
+                    textures.put(name, position);
+                    return position;
+                }
+            }
+        }
+
+        System.err.print("Atlas out off space " + this.toString());
+        return null;
+    }
+
+    /**
+     * Adds the image to the texture atlas at the first open position
+     *
+     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
+     * and position 2 and 3 are the width and height of the image.
+     */
+    public int[] addTexture(String name) {
+        if (textures.containsKey(name)) {
+            return textures.get(name);
+        }
+
+        BufferedImage image = ImageManager.getImage(name);
+
+        int[] position = new int[4];
+        int w = image.getWidth();
+        int h = image.getHeight();
+        int textureColumns = w / TILE_SIZE;
+        int textureRows = h / TILE_SIZE;
+        int[] imagePixels = new int[w * h];
+        image.getRGB(0, 0, w, h, imagePixels, 0, image.getWidth());
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                if (checkSpace(c, r, textureColumns, textureRows)) {
+                    position[0] = c;
+                    position[1] = r;
+                    position[2] = image.getWidth();
+                    position[3] = image.getHeight();
+
+                    int pixelRow = r * TILE_SIZE;
+                    int pixelCol = c * TILE_SIZE;
+                    for (int y = 0; y < h; y++) {
+                        for (int x = 0; x < w; x++) {
+                            atlas[pixelCol + x + (y + pixelRow) * width] = imagePixels[x + y * w];
+                        }
+                    }
+                    fillTile(c, r, textureColumns, textureRows);
+                    textures.put(name, position);
                     return position;
                 }
             }

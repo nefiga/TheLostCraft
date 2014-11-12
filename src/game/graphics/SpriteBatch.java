@@ -65,9 +65,8 @@ public class SpriteBatch {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    public void updateTexture(Texture texture) {
-        this.texture = texture;
-        this.texture.setActiveTexture(0);
+    public void updateTexture() {
+        texture.updateTexture();
     }
 
     /**
@@ -234,5 +233,9 @@ public class SpriteBatch {
 
     public void subTexture(int[] pixels, int offsetX, int offsetY, int width, int height) {
         texture.subTexture(pixels, offsetX, offsetY, width, height);
+    }
+
+    public int getTexureAtlasSize() {
+        return texture.getAtlasSize();
     }
 }

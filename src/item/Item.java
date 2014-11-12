@@ -48,7 +48,7 @@ public class Item {
             items = new Item[1000];
             itemAtlas = new TextureAtlas(TextureAtlas.SMALL);
             image = ImageManager.getImage("/items/void_item");
-            imagePosition = itemAtlas.addTexture(image);
+            imagePosition = itemAtlas.addTexture("/items/void_item");
         }
 
         this.name = name;
@@ -57,7 +57,7 @@ public class Item {
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/items/" + image);
         this.imageString = image;
-        imagePosition = itemAtlas.addTexture(this.image);
+        imagePosition = itemAtlas.addTexture("/items/" + image);
     }
 
     public void setShape(Shape shape) {

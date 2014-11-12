@@ -44,13 +44,13 @@ public class LivingEntity extends Entity {
             livingEntityAtlas = new TextureAtlas(TextureAtlas.LARGE);
         }
         image = ImageManager.getImage("/sprites/void_entity");
-        imagePosition = livingEntityAtlas.addTexture(image);
+        imagePosition = livingEntityAtlas.addTexture("/sprites/void_entity");
         this.width = this.height = entitySize;
     }
 
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/sprites/" + image);
-        imagePosition = livingEntityAtlas.addTexture(this.image);
+        imagePosition = livingEntityAtlas.addTexture("/sprites/" + image);
     }
 
     public void setLevel(Level level) {

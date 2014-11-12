@@ -4,12 +4,14 @@ import game.Game;
 import game.GameLoop;
 import game.Screen;
 import game.fonts.Font;
-import menu.MenuComponent.OnClickListener;
+import menu.component.MenuComponent;
+import menu.component.MenuComponent.OnClickListener;
+import menu.component.Button;
 
-public class MainMenu extends Menu implements OnClickListener{
+public class MainMenu extends Menu implements OnClickListener {
 
     private Game game;
-    private Button bTest;
+    private Button[] bTest = new Button[100];
 
     private String string = "";
 
@@ -28,16 +30,23 @@ public class MainMenu extends Menu implements OnClickListener{
         this.savedMaps = savedMaps;
         this.game = game;
         currentList = options;
-        bTest = new Button(1, 100 , 100, 100, 25);
-        bTest.setOnClickListener(this);
+        for (int i = 0; i < bTest.length; i++) {
+            bTest[i] = new Button(i, 100, 100, 200, 25);
+            bTest[i].setOnClickListener(this);
+            bTest[i].setText("testing");
+        }
+
     }
 
     public void update(long delta) {
-        bTest.update(delta);
+        for (int i = 0; i < bTest.length; i++) {
+            bTest[i].update(delta);
+        }
     }
 
     public void render() {
         super.render();
+        font.setTextSize(25);
         switch (state) {
             // Options
             case 0:
@@ -97,23 +106,37 @@ public class MainMenu extends Menu implements OnClickListener{
                 break;
         }
 
-        bTest.render();
+        MenuComponent.batch.begin();
+        for (int i = 0; i < bTest.length; i++) {
+            bTest[i].render(MenuComponent.batch);
+        }
+        MenuComponent.batch.end();
+        Font.generalFont.begin();
+        for (int i = 0; i < bTest.length; i++) {
+            bTest[i].renderString(Font.generalFont);
+        }
+        Font.generalFont.end();
     }
 
     @Override
     public void click(int button, int x, int y) {
         if (button == 0) {
-            if (bTest.inBounds(x, y)) {
-                bTest.press();
+            for (int i = 0; i < bTest.length; i++) {
+                if (bTest[i].inBounds(x, y)) {
+                    bTest[i].press();
+                }
             }
+
         }
     }
 
     @Override
     public void release(int button, int x, int y) {
         if (button == 0) {
-            if (bTest.inBounds(x, y)) {
-                bTest.release();
+            for (int i = 0; i < bTest.length; i++) {
+                if (bTest[i].inBounds(x, y)) {
+                    bTest[i].release();
+                }
             }
         }
     }
@@ -144,7 +167,7 @@ public class MainMenu extends Menu implements OnClickListener{
     public void charPressed(char c) {
         if (state == 4 || state == 5) {
             // BackSpace
-            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() -1 );
+            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() - 1);
             else if (font.getStringWidth(string) + Font.CHAR_SIZE < viewWidth)
                 string += c;
         }
@@ -154,7 +177,7 @@ public class MainMenu extends Menu implements OnClickListener{
     public void charHolding(char c) {
         if (state == 4 || state == 5) {
             // BackSpace
-            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() -1 );
+            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() - 1);
             else if (font.getStringWidth(string) + Font.CHAR_SIZE < viewWidth)
                 string += c;
         }
@@ -221,14 +244,14 @@ public class MainMenu extends Menu implements OnClickListener{
             case 4:
                 if (string.length() > 0) {
                     Game.closeMenu();
-                    string = string.substring(0, string.length() -1);
+                    string = string.substring(0, string.length() - 1);
                     game.loadNewMap(string);
                 }
                 break;
             // Name New Game
             case 5:
                 Game.closeMenu();
-                string = string.substring(0, string.length() -1);
+                string = string.substring(0, string.length() - 1);
                 game.loadNewGame(string, currentList[currentSelection]);
                 break;
         }
@@ -301,8 +324,9 @@ public class MainMenu extends Menu implements OnClickListener{
 
     @Override
     public void onClick(MenuComponent c) {
-        if (c.getId() == bTest.getId()) {
-            System.out.println("Clicking Button! You are awesome!");
+        for (int i = 0; i < bTest.length; i++) {
+            if (c.getId() == bTest[i].getId()) {
+            }
         }
     }
 }

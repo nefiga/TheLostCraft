@@ -17,7 +17,7 @@ public class Resource extends Item{
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/items/resource/" + image);
         this.imageString = image;
-        imagePosition = itemAtlas.addTexture(this.image);
+        imagePosition = itemAtlas.addTexture("/items/resource/" + image);
     }
 
     protected void setStat(int position, int stat) {

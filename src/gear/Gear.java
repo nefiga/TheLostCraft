@@ -27,13 +27,13 @@ public class Gear {
             gearAtlas = new TextureAtlas(TextureAtlas.LARGE);
             // Create default texture
             image = ImageManager.getImage("/items/void_item");
-            imagePosition = gearAtlas.addTexture(image);
+            imagePosition = gearAtlas.addTexture("/items/void_item");
         }
     }
 
-    public void setTexture(BufferedImage image) {
+    public void setTexture(String name, BufferedImage image) {
         this.image = image;
-        imagePosition = gearAtlas.addTexture(image);
+        imagePosition = gearAtlas.addTexture(name, image);
     }
 
     /**

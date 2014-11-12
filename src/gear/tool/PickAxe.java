@@ -23,7 +23,7 @@ public class PickAxe extends Tool{
 
         // Combining the texture of the items  that make this pick axe and setting the image
         image = ImageManager.combineImages(handle.getImage(), head.getImage(), bracket.getImage());
-        setTexture(image);
+        setTexture(handle.getName() + head.getName() + bracket.getName(), image);
     }
     
     public int getStrength() {

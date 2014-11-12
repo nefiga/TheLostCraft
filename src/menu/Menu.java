@@ -56,25 +56,25 @@ public abstract class Menu {
         this.height = height;
         this.drawSize = drawSize;
         loadMenuImages(tileSet);
-        cursorImage = menuAtlas.addTexture(ImageManager.getImage("/menu/cursor"));
-        textViewImage = menuAtlas.addTexture(ImageManager.getImage("/menu/text_view"));
+        cursorImage = menuAtlas.addTexture("/menu/cursor");
+        textViewImage = menuAtlas.addTexture("/menu/text_view");
 
         menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
     }
 
     public Menu(int tileSet) {
         loadMenuImages(tileSet);
-        cursorImage = menuAtlas.addTexture(ImageManager.getImage("/menu/cursor"));
-        textViewImage = menuAtlas.addTexture(ImageManager.getImage("/menu/text_view"));
+        cursorImage = menuAtlas.addTexture("/menu/cursor");
+        textViewImage = menuAtlas.addTexture("/menu/text_view");
         menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
     }
 
     private void loadMenuImages(int tileSet) {
         switch (tileSet) {
             case NORMAL_TILE_SET:
-                this.cornerImage = menuAtlas.addTexture(ImageManager.getImage("/menu/corner"));
-                this.sideImage = menuAtlas.addTexture(ImageManager.getImage("/menu/side"));
-                this.middleImage = menuAtlas.addTexture(ImageManager.getImage("/menu/middle"));
+                this.cornerImage = menuAtlas.addTexture("/menu/corner");
+                this.sideImage = menuAtlas.addTexture("/menu/side");
+                this.middleImage = menuAtlas.addTexture("/menu/middle");
                 break;
         }
     }

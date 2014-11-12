@@ -18,7 +18,7 @@ public class Part extends Item {
     public void setTexture(String image) {
         this.image = ImageManager.getImage("/items/part/" + image);
         this.imageString = image;
-        imagePosition = itemAtlas.addTexture(this.image);
+        imagePosition = itemAtlas.addTexture("/items/part/" + image);
     }
 
     /**

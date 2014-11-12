@@ -161,8 +161,8 @@ public class MapEditor implements Screen{
     }
 
     private void createTextureAtlas() {
-        menu = editorAtlas.addTexture(ImageManager.getImage("/editor/menu_top"));
-        options = editorAtlas.addTexture(ImageManager.getImage("/editor/options"));
+        menu = editorAtlas.addTexture("/editor/menu_top");
+        options = editorAtlas.addTexture("/editor/options");
     }
 
     public void updateScreenSize(int width, int height) {

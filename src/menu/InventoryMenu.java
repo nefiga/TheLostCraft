@@ -33,8 +33,8 @@ public class InventoryMenu extends Menu {
         lowerX = Display.getWidth() / 2 - 311;
         lowerY = Display.getHeight() / 2 - 316;
         this.lowerInventory = lowerInventory;
-        lowerImage = menuAtlas.addTexture(ImageManager.getImage("/menu/inventory"));
-        menuBatch.updateTexture(new Texture(menuAtlas));
+        lowerImage = menuAtlas.addTexture("/menu/inventory");
+        menuBatch.updateTexture();
 
         Game.openMenu(this);
     }
@@ -46,9 +46,9 @@ public class InventoryMenu extends Menu {
         lowerY = upperY - 316;
         this.upperInventory = upperInventory;
         this.lowerInventory = lowerInventory;
-        lowerImage = menuAtlas.addTexture(ImageManager.getImage("/menu/inventory"));
-        upperImage = menuAtlas.addTexture(ImageManager.getImage("/menu/inventory"));
-        menuBatch.updateTexture(new Texture(menuAtlas));
+        lowerImage = menuAtlas.addTexture("/menu/inventory");
+        upperImage = menuAtlas.addTexture("/menu/inventory");
+        menuBatch.updateTexture();
         dualInventories = true;
         Game.openMenu(this);
     }

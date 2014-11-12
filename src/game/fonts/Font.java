@@ -72,6 +72,10 @@ public class Font {
         textSize = size;
     }
 
+    public SpriteBatch getSpriteBatch() {
+        return fontBatch;
+    }
+
     public int getTextSize() {
         return textSize;
     }

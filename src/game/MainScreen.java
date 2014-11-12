@@ -12,8 +12,6 @@ public class MainScreen implements Screen {
 
     public static final String NAME = "MainMenu";
 
-    private final int MAIN_MENU = 0, LOAD_GAME = 1, NEW_GAME = 2, LOAD_MAP = 3, NEW_MAP = 4;
-
     private String[] savedMaps;
 
     private String[] savedGames;
@@ -25,7 +23,7 @@ public class MainScreen implements Screen {
 
     public MainScreen(Game game) {
         this.game = game;
-        background = atlas.addTexture(ImageManager.getImage("/menu/main_background"));
+        background = atlas.addTexture("/menu/main_background");
         batch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(atlas), 1000);
     }
 

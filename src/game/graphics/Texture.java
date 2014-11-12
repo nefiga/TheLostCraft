@@ -79,6 +79,36 @@ public class Texture {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 
+    public void updateTexture() {
+        int[] texture = atlas.getAtlas();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = texture[x + y * width];
+                //Add red component
+                buffer.put((byte) ((pixel >> 16) & 0xff));
+                //Add green component
+                buffer.put((byte) ((pixel >> 8) & 0xff));
+                //Add blue component
+                buffer.put((byte) (pixel & 0xff));
+                //Add alpha component
+                buffer.put((byte) ((pixel >> 24) & 0xff));
+            }
+        }
+        buffer.rewind();
+
+        bind();
+
+        // Set texture scaling and filtering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        // Send texture data to the gpu
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+
     public void subTexture(int[] texture, int offsetX, int offsetY, int width, int height) {
         ByteBuffer tempBuffer = BufferUtils.createByteBuffer(texture.length * 4);
 
@@ -100,6 +130,10 @@ public class Texture {
         bind();
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, offsetX, offsetY, width, height, GL_RGBA, GL_UNSIGNED_BYTE, tempBuffer);
+    }
+
+    public int getAtlasSize() {
+        return atlas.getSize();
     }
 
     public int getWidth() {
