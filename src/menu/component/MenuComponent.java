@@ -70,7 +70,7 @@ public class MenuComponent {
 
     public void release(int x, int y) {
         if (inBounds(x, y)){
-            if (pressed && hasFocus) listener.onClick(this);
+            if (pressed && hasFocus && listener != null) listener.onClick(this);
             pressed = false;
             holding = false;;
         }

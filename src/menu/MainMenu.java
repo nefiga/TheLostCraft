@@ -13,7 +13,7 @@ public class MainMenu extends Menu implements OnClickListener {
 
     private Game game;
     private Button[] bTest = new Button[1];
-    private ListView listView = new ListView(101, 300, 300, 300, 200, new Button("test", 0, 150, 50), new Button("longnesss", 0, 250, 50), new Button("strings", 0, 200, 50));
+    private ListView listView = new ListView(10, 300, 300, 300, 400, new Button("one", 2, 150, 50), new Button("two", 3, 250, 50), new Button("three", 4, 200, 50), new Button("four", 5, 150, 50), new Button("five", 6, 150, 50));
 
     private String string = "";
 
@@ -32,9 +32,10 @@ public class MainMenu extends Menu implements OnClickListener {
         this.savedMaps = savedMaps;
         this.game = game;
         currentList = options;
-        listView.setTopPadding(10);
+        listView.setTopPadding(17);
         listView.setSpacing(5);
         listView.setCenter(true);
+        listView.setRenderBackground(false);
         for (int i = 0; i < bTest.length; i++) {
             bTest[i] = new Button(i, 100, 100, 150, 30);
             bTest[i].setOnClickListener(this);

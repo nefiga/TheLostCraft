@@ -20,11 +20,13 @@ public class ListView extends MenuComponent {
 
     private int spacing = 5;
 
+    private int currentComponent;
+
     private boolean center;
 
     private boolean renderBackground = true;
 
-    private boolean outOfUpperBounds = true, outOfLowerBounds = true;
+    private boolean outOfUpperBounds, outOfLowerBounds;
 
     private boolean upperPressed, upperHolding, lowerPressed, lowerHolding, upperHasFocus, lowerHasFocus;
 
@@ -62,8 +64,13 @@ public class ListView extends MenuComponent {
     }
 
     public void update(long delta) {
+        outOfUpperBounds = components.size() > 0 && this.y > components.get(0).y;
+        outOfLowerBounds = components.size() > 0 && this.verticalBounds < components.get(components.size() - 1).verticalBounds;
+
+        // Updating visible MenuComponents
         for (int i = 0; i < components.size(); i++) {
-            components.get(i).update(delta);
+            if (isVisible(components.get(i)))
+                components.get(i).update(delta);
         }
 
         int mX = Mouse.getX();
@@ -82,24 +89,19 @@ public class ListView extends MenuComponent {
         // upper scrollButton
         if (x > this.x && x < horizontalBounds && y > this.y - sbHeight && y < this.y) {
             upperPressed = upperHolding = true;
-            System.out.println("Pressed upper");
         }
         // Lower scrollButton
-        if (x > this.x && x < horizontalBounds && y > verticalBounds && y < verticalBounds + sbHeight) {
+        else if (x > this.x && x < horizontalBounds && y > verticalBounds && y < verticalBounds + sbHeight) {
             lowerPressed = lowerHolding = true;
-            System.out.println("Pressed lower");
+        } else {
+            for (int i = 0; i < components.size(); i++) {
+                if (isVisible(components.get(i)))
+                    components.get(i).press(x, y);
+            }
         }
     }
 
     public void release(int x, int y) {
-        if (inBounds(x, y)) {
-            if (pressed && hasFocus)
-                listener.onClick(this);
-
-            pressed = false;
-            holding = false;
-        }
-
         // upper scrollButton
         if (x > this.x && x < horizontalBounds && y > this.y - sbHeight && y < this.y) {
             if (upperPressed && upperHasFocus) {
@@ -109,25 +111,54 @@ public class ListView extends MenuComponent {
             upperHolding = false;
         }
         // Lower scrollButton
-        if (x > this.x && x < horizontalBounds && y > verticalBounds && y < verticalBounds + sbHeight) {
+        else if (x > this.x && x < horizontalBounds && y > verticalBounds && y < verticalBounds + sbHeight) {
             if (lowerPressed && lowerHasFocus) {
                 moveDown();
             }
             lowerPressed = false;
             lowerHolding = false;
+        } else {
+            for (int i = 0; i < components.size(); i++) {
+                if (isVisible(components.get(i)))
+                    components.get(i).release(x, y);
+            }
         }
     }
 
     private void moveUp() {
+        if (outOfLowerBounds) {
+            int moveY = 0;
+            for (int i = 0; i < components.size(); i++) {
+                MenuComponent component = components.get(i);
+                if (i == 0)
+                    moveY = (components.get(currentComponent).height + spacing);
 
+                component.setPosition(this.x + (this.width - component.width) / 2, component.y - moveY);
+            }
+            currentComponent++;
+        }
     }
 
     private void moveDown() {
+        if (outOfUpperBounds) {
+            int moveY = 0;
+            for (int i = 0; i < components.size(); i++) {
+                MenuComponent component = components.get(i);
+                if (i == 0)
+                    moveY = (components.get(currentComponent).height + spacing);
 
+                component.setPosition(this.x + (this.width - component.width) / 2, component.y + moveY);
+            }
+            currentComponent--;
+        }
     }
 
     public int getSpacing() {
         return spacing;
+    }
+
+    public boolean isVisible(MenuComponent component) {
+        return component.y > this.y && component.verticalBounds < this.verticalBounds;
     }
 
     /**
@@ -137,6 +168,7 @@ public class ListView extends MenuComponent {
         if (center) {
             for (int i = 0; i < components.size(); i++) {
                 MenuComponent component = components.get(i);
+
                 if (i == 0) component.setPosition(this.x + (this.width - component.width) / 2, this.y + topPadding);
                 else
                     component.setPosition(this.x + (this.width - component.width) / 2, components.get(i - 1).getVerticalBounds() + spacing);
@@ -153,6 +185,12 @@ public class ListView extends MenuComponent {
     public void addComponent(MenuComponent component) {
         adjustComponents();
         components.add(component);
+    }
+
+    public void setOnClickListener(OnClickListener listener) {
+        for (int i = 0; i < components.size(); i++) {
+            components.get(i).setOnClickListener(listener);
+        }
     }
 
     public void setPosition(int x, int y) {
@@ -174,8 +212,8 @@ public class ListView extends MenuComponent {
     }
 
     public void setTopPadding(int padding) {
-        topPadding = padding;
-        adjustComponents();
+            topPadding = padding;
+            adjustComponents();
     }
 
     public void setRightPadding(int padding) {
@@ -205,7 +243,7 @@ public class ListView extends MenuComponent {
             batch.draw(x, y, width, height, listView[0], listView[1], listView[2], listView[3]);
 
         // Upper scrollButton
-        if (outOfUpperBounds) {
+        if (outOfLowerBounds) {
             if (upperHasFocus)
                 batch.draw(x + (width / 2) - (sbWidth / 2), y - sbHeight, sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3]);
             else
@@ -213,7 +251,7 @@ public class ListView extends MenuComponent {
         }
 
         // Lower scrollButton
-        if (outOfLowerBounds) {
+        if (outOfUpperBounds) {
             if (lowerHasFocus)
                 batch.draw(x + (width / 2) - (sbWidth / 2), verticalBounds, sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3], SpriteBatch.ROTATE_180);
             else
@@ -221,7 +259,8 @@ public class ListView extends MenuComponent {
         }
 
         for (int i = 0; i < components.size(); i++) {
-            components.get(i).render(batch);
+            if (isVisible(components.get(i)))
+                components.get(i).render(batch);
         }
     }
 
@@ -229,8 +268,9 @@ public class ListView extends MenuComponent {
      * Renders all the Strings from the ListView and it's Components
      */
     public void renderString(Font font) {
-        for (int i = 0; i < components.size(); i++) {
-            components.get(i).renderString(font);
+        for (int i = currentComponent; i < components.size(); i++) {
+            if (isVisible(components.get(i)))
+                components.get(i).renderString(font);
         }
     }
 }
