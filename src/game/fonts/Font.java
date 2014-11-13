@@ -68,6 +68,16 @@ public class Font {
         }
     }
 
+    public void drawString(String string, int textSize, int x, int y) {
+        int index = 0;
+        for (int i = 0; i < string.length(); i++) {
+            int[] position = getChar(string.charAt(i));
+            if (position == null) continue;
+            fontBatch.draw(x + index * textSize, y, textSize, textSize, position[0], position[1], CHAR_SIZE, CHAR_SIZE);
+            index++;
+        }
+    }
+
     public void setTextSize(int size) {
         textSize = size;
     }
@@ -82,6 +92,10 @@ public class Font {
 
     public int getStringWidth(String string) {
         return string.length() * textSize;
+    }
+
+    public int getStringWidth(String string, int size) {
+        return string.length() * size;
     }
 
     /**

@@ -4,6 +4,7 @@ import game.Game;
 import game.GameLoop;
 import game.Screen;
 import game.fonts.Font;
+import menu.component.ListView;
 import menu.component.MenuComponent;
 import menu.component.MenuComponent.OnClickListener;
 import menu.component.Button;
@@ -12,6 +13,7 @@ public class MainMenu extends Menu implements OnClickListener {
 
     private Game game;
     private Button[] bTest = new Button[1];
+    private ListView listView = new ListView(101, 300, 300, 300, 200, new Button("test", 0, 150, 50), new Button("longnesss", 0, 250, 50), new Button("strings", 0, 200, 50));
 
     private String string = "";
 
@@ -30,10 +32,15 @@ public class MainMenu extends Menu implements OnClickListener {
         this.savedMaps = savedMaps;
         this.game = game;
         currentList = options;
+        listView.setTopPadding(10);
+        listView.setSpacing(5);
+        listView.setCenter(true);
         for (int i = 0; i < bTest.length; i++) {
-            bTest[i] = new Button(i, 100, 100, 200, 25);
+            bTest[i] = new Button(i, 100, 100, 150, 30);
             bTest[i].setOnClickListener(this);
             bTest[i].setText("testing");
+            bTest[i].setPadding(10);
+            bTest[i].setTextSize(20);
         }
 
     }
@@ -42,6 +49,7 @@ public class MainMenu extends Menu implements OnClickListener {
         for (int i = 0; i < bTest.length; i++) {
             bTest[i].update(delta);
         }
+        listView.update(delta);
     }
 
     public void render() {
@@ -110,11 +118,13 @@ public class MainMenu extends Menu implements OnClickListener {
         for (int i = 0; i < bTest.length; i++) {
             bTest[i].render(MenuComponent.batch);
         }
+        listView.render(MenuComponent.batch);
         MenuComponent.batch.end();
         Font.generalFont.begin();
         for (int i = 0; i < bTest.length; i++) {
             bTest[i].renderString(Font.generalFont);
         }
+        listView.renderString(font);
         Font.generalFont.end();
     }
 
@@ -122,11 +132,9 @@ public class MainMenu extends Menu implements OnClickListener {
     public void click(int button, int x, int y) {
         if (button == 0) {
             for (int i = 0; i < bTest.length; i++) {
-                if (bTest[i].inBounds(x, y)) {
-                    bTest[i].press();
-                }
+                    bTest[i].press(x, y);
             }
-
+            listView.press(x, y);
         }
     }
 
@@ -134,10 +142,9 @@ public class MainMenu extends Menu implements OnClickListener {
     public void release(int button, int x, int y) {
         if (button == 0) {
             for (int i = 0; i < bTest.length; i++) {
-                if (bTest[i].inBounds(x, y)) {
-                    bTest[i].release();
-                }
+                    bTest[i].release(x, y);
             }
+            listView.release(x, y);
         }
     }
 

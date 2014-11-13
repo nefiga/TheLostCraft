@@ -7,23 +7,36 @@ import org.lwjgl.opengl.Display;
 
 public class Button extends MenuComponent {
 
-    private OnClickListener listener;
-    Font font = Font.generalFont;
-
     private int[] image;
     private int[] imagePressed;
     private int[] imageFocused;
 
     private String text;
 
-    private int textX, textY;
+    private int textSize = 25;
 
-    private boolean hasFocus, pressed, holding;
-
+    /**
+     * Creates a new Button at position 0, 0
+     */
     public Button(int id, int width, int height) {
         super(id, width, height);
+        image = MenuComponent.addImage("button");
+        imagePressed = MenuComponent.addImage("button_pressed");
+        imageFocused = MenuComponent.addImage("button_focused");
     }
 
+    public Button(String text, int id, int width, int height) {
+        super(id, width, height);
+        setText(text);
+        image = MenuComponent.addImage("button");
+        imagePressed = MenuComponent.addImage("button_pressed");
+        imageFocused = MenuComponent.addImage("button_focused");
+    }
+
+
+    /**
+     * Creates a new Button at position x, y
+     */
     public Button(int id, int x, int y, int width, int height) {
         super(id, x, y, width, height);
         image = MenuComponent.addImage("button");
@@ -34,69 +47,35 @@ public class Button extends MenuComponent {
     public void update(long delta) {
         if (inBounds(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()))) {
             focus();
-        }
-        else unFocus();
-    }
-
-    public void press() {
-        pressed = true;
-        holding = true;
-    }
-
-    public void release() {
-        if (pressed && hasFocus) listener.onClick(this);
-        pressed = false;
-        holding = false;
-    }
-
-    /**
-     * Sets hasFocus to true
-     */
-    public void focus() {
-        hasFocus = true;
-    }
-
-    /**
-     * Sets hasFocus to false
-     */
-    public void unFocus() {
-        hasFocus = false;
+        } else unFocus();
     }
 
     public void setText(String text) {
         this.text = text;
-        textX = x + ((width - font.getStringWidth(text)) / 2);
-        textY = y + ((height - font.getTextSize()) / 2);
-    }
-
-    public void setOnClickListener(OnClickListener listener) {
-        this.listener = listener;
     }
 
     /**
-     * Returns true if the x and y coordinates are in the bounds of this button
+     * The Button will be scaled to fit the textSize
      */
-    public boolean inBounds(int xPosition, int yPosition) {
-        if (xPosition > x && xPosition < horizontalBounds && yPosition > y && yPosition < verticalBounds) {
-            return true;
-        }
-        return false;
+    public void setTextSize(int size) {
+        textSize = size;
     }
 
-    public boolean isHolding() {
-        return holding;
+    // Override padding methods to do nothing.
+    // Text will aways be centered in button
+    public void setPadding(int padding) {
     }
 
-    public boolean isPressed() {
-        if (pressed) {
-            pressed = false;
-            return true;
-        }
-        return false;
+    public void setTopPadding(int padding) {
     }
 
-    public boolean hasFocus() {
-        return hasFocus;
+    public void setRightPadding(int padding) {
+    }
+
+    public void setBottomPadding(int padding) {
+    }
+
+    public void setLeftPadding(int padding) {
     }
 
     public String getText() {
@@ -113,7 +92,7 @@ public class Button extends MenuComponent {
 
     public void renderString(Font font) {
         if (text != null) {
-            font.drawString(text, textX, textY);
+            font.drawString(text, textSize,  x + (width - text.length() * textSize) / 2, y + (height - textSize) / 2);
         }
     }
 }
