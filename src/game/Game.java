@@ -61,7 +61,7 @@ public class Game extends GameLoop {
 
     public void update(long delta) {
         if (menuOpen) {
-            menuInput.update();
+            menuInput.update(delta);
             menu.update(delta);
         } else {
             switch (state) {
@@ -69,13 +69,13 @@ public class Game extends GameLoop {
                     mainScreen.update(delta);
                     break;
                 case GAME:
-                    playerInput.update();
+                    playerInput.update(delta);
                     player.update(delta);
                     xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
                     yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
                     break;
                 case MAP_EDITOR:
-                    editorInput.update();
+                    editorInput.update(delta);
                     xOffset = mapEditor.getMapX() - (Display.getWidth() / 2 - 32);
                     yOffset = mapEditor.getMapY() - (Display.getHeight() / 2 - 32);
                     mapEditor.update(delta);

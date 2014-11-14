@@ -22,6 +22,8 @@ public class MenuComponent {
 
     protected int x, y, width, height, verticalBounds, horizontalBounds;
 
+    protected int textSize = 25;
+
     protected boolean hasFocus, pressed, holding;
 
     /**
@@ -63,6 +65,7 @@ public class MenuComponent {
 
     public void press(int x, int y) {
         if (inBounds(x, y)){
+            System.out.println("Press");
             pressed = true;
             holding = true;
         }
@@ -128,6 +131,10 @@ public class MenuComponent {
     public void setHeight(int height) {
         this.height = height;
         verticalBounds = y + this.height;
+    }
+
+    public void setTextSize(int size) {
+        textSize = size;
     }
 
     public void setOnClickListener(OnClickListener listener) {

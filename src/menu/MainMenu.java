@@ -1,158 +1,93 @@
 package menu;
 
 import game.Game;
-import game.GameLoop;
 import game.Screen;
 import game.fonts.Font;
-import menu.component.ListView;
-import menu.component.MenuComponent;
+import menu.component.*;
 import menu.component.MenuComponent.OnClickListener;
-import menu.component.Button;
+import org.lwjgl.opengl.Display;
 
 public class MainMenu extends Menu implements OnClickListener {
 
     private Game game;
-    private Button[] bTest = new Button[1];
-    private ListView listView = new ListView(10, 300, 300, 300, 400, new Button("one", 2, 150, 50), new Button("two", 3, 250, 50), new Button("three", 4, 200, 50), new Button("four", 5, 150, 50), new Button("five", 6, 150, 50));
+
+    private final int LOAD_GAME = 0, NEW_GAME = 1, LOAD_MAP = 2, NEW_MAP = 3, EXIT_GAME = 4, CANCEL = 5, OK_NEW_GAME = 6, OK_NEW_MAP = 7;
+
+    private boolean loadNewGame, loadMap, loadGame;
+
+    private TextView textView;
+    private Button[] options;
+    private VerticalListView verticalListView;
+    private HorizontalListView horizontalListView;
 
     private String string = "";
 
-    private String[] currentList;
-    private String[] savedGames;
-    private String[] savedMaps;
-    private String[] options = new String[]{"load game", "new game", "load map", "new map", "exit game"};
-
-    private int viewWidth, viewHeight, viewX, viewY;
-
-    private int state;
+    private StringComponent[] savedGames;
+    private StringComponent[] savedMaps;
 
     public MainMenu(int width, int height, int drawSize, int tileSet, String[] savedGames, String[] savedMaps, Game game) {
         super(width, height, drawSize, tileSet);
-        this.savedGames = savedGames;
-        this.savedMaps = savedMaps;
-        this.game = game;
-        currentList = options;
-        listView.setTopPadding(17);
-        listView.setSpacing(5);
-        listView.setCenter(true);
-        listView.setRenderBackground(false);
-        for (int i = 0; i < bTest.length; i++) {
-            bTest[i] = new Button(i, 100, 100, 150, 30);
-            bTest[i].setOnClickListener(this);
-            bTest[i].setText("testing");
-            bTest[i].setPadding(10);
-            bTest[i].setTextSize(20);
+        this.savedGames = new StringComponent[savedGames.length];
+        this.savedMaps = new StringComponent[savedMaps.length];
+        for (int i = 0; i < savedGames.length; i++) {
+            this.savedGames[i] = new StringComponent(savedGames[i], i, 0, 0);
         }
+        for (int i = 0; i < savedMaps.length; i++) {
+            this.savedMaps[i] = new StringComponent(savedMaps[i], i, 0, 0);
+        }
+        this.game = game;
+        loadMenuComponents();
+    }
 
+    public void loadMenuComponents() {
+        textView = new TextView(5, 225, 30);
+
+        options = new Button[]{new Button("load game", LOAD_GAME, 250, 40), new Button("new game", NEW_GAME, 250, 40),
+                new Button("load map", LOAD_MAP, 250, 40), new Button("new map", NEW_MAP, 250, 40), new Button("exit game", EXIT_GAME, 250, 40)};
+
+        verticalListView = new VerticalListView(-1, Display.getWidth() / 2 - 150, Display.getHeight() / 2 - 300, 300, 295);
+        verticalListView.setTopPadding(15);
+        verticalListView.setSpacing(15);
+        verticalListView.reloadComponents(options);
+        verticalListView.setOnClickListener(this);
+
+        horizontalListView = new HorizontalListView(-1, 300, 30, new Button("ok", OK_NEW_GAME, 75, 30), new Button("cancel", CANCEL, 175, 30));
+        horizontalListView.setLeftPadding(16);
+        horizontalListView.setSpacing(15);
+        horizontalListView.setRenderBackground(false);
+        horizontalListView.setOnClickListener(this);
     }
 
     public void update(long delta) {
-        for (int i = 0; i < bTest.length; i++) {
-            bTest[i].update(delta);
-        }
-        listView.update(delta);
+        verticalListView.update(delta);
     }
 
     public void render() {
-        super.render();
-        font.setTextSize(25);
-        switch (state) {
-            // Options
-            case 0:
-                font.begin();
-                for (int i = 0; i < currentList.length; i++) {
-                    String string = currentList[i];
-                    font.drawString(string, insetX[i], insetY[i]);
-                }
-                font.end();
-                break;
-            // Load Game
-            case 1:
-                font.begin();
-                for (int i = 0; i < currentList.length; i++) {
-                    String string = currentList[i];
-                    font.drawString(string, insetX[i], insetY[i]);
-                }
-                font.end();
-                break;
-            // New Game
-            case 2:
-                font.begin();
-                for (int i = 0; i < currentList.length; i++) {
-                    String string = currentList[i];
-                    font.drawString(string, insetX[i], insetY[i]);
-                }
-                font.end();
-                break;
-            // Load Map
-            case 3:
-                font.begin();
-                for (int i = 0; i < currentList.length; i++) {
-                    String string = currentList[i];
-                    font.drawString(string, insetX[i], insetY[i]);
-                }
-                font.end();
-                break;
-            // New Map
-            case 4:
-                menuBatch.begin();
-                menuBatch.draw(viewX, viewY, viewWidth, viewHeight, textViewImage[0], textViewImage[1], textViewImage[2], textViewImage[3]);
-                menuBatch.end();
-
-                font.begin();
-                font.drawString(string, viewX + 5, viewY + (viewHeight - font.getTextSize()) / 2);
-                font.end();
-                break;
-            // Name New Game
-            case 5:
-                menuBatch.begin();
-                menuBatch.draw(viewX, viewY, viewWidth, viewHeight, textViewImage[0], textViewImage[1], textViewImage[2], textViewImage[3]);
-                menuBatch.end();
-
-                font.begin();
-                font.drawString(string, viewX + 5, viewY + (viewHeight - font.getTextSize()) / 2);
-                font.end();
-                break;
-        }
-
         MenuComponent.batch.begin();
-        for (int i = 0; i < bTest.length; i++) {
-            bTest[i].render(MenuComponent.batch);
-        }
-        listView.render(MenuComponent.batch);
+        verticalListView.render(MenuComponent.batch);
         MenuComponent.batch.end();
+
         Font.generalFont.begin();
-        for (int i = 0; i < bTest.length; i++) {
-            bTest[i].renderString(Font.generalFont);
-        }
-        listView.renderString(font);
+        verticalListView.renderString(font);
         Font.generalFont.end();
     }
 
     @Override
-    public void click(int button, int x, int y) {
+    public void onMouseButtonPressed(int button, int x, int y) {
         if (button == 0) {
-            for (int i = 0; i < bTest.length; i++) {
-                    bTest[i].press(x, y);
-            }
-            listView.press(x, y);
+            verticalListView.press(x, y);
         }
     }
 
     @Override
     public void release(int button, int x, int y) {
         if (button == 0) {
-            for (int i = 0; i < bTest.length; i++) {
-                    bTest[i].release(x, y);
-            }
-            listView.release(x, y);
+            verticalListView.release(x, y);
         }
     }
 
     @Override
     public void moveCursorUp() {
-        currentSelection--;
-        if (currentSelection < 0) currentSelection = currentList.length - 1;
     }
 
     @Override
@@ -162,8 +97,6 @@ public class MainMenu extends Menu implements OnClickListener {
 
     @Override
     public void moveCursorDown() {
-        currentSelection++;
-        if (currentSelection > currentList.length - 1) currentSelection = 0;
     }
 
     @Override
@@ -173,123 +106,20 @@ public class MainMenu extends Menu implements OnClickListener {
 
     @Override
     public void charPressed(char c) {
-        if (state == 4 || state == 5) {
-            // BackSpace
-            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() - 1);
-            else if (font.getStringWidth(string) + Font.CHAR_SIZE < viewWidth)
-                string += c;
-        }
+        textView.onCharPressed(c);
     }
 
     @Override
     public void charHolding(char c) {
-        if (state == 4 || state == 5) {
-            // BackSpace
-            if (c == 8 && string.length() > 0) string = string.substring(0, string.length() - 1);
-            else if (font.getStringWidth(string) + Font.CHAR_SIZE < viewWidth)
-                string += c;
-        }
+        textView.onCharHolding(c);
     }
 
     @Override
     public void select() {
-        switch (state) {
-            case 0:
-                switch (currentSelection) {
-                    // Load game
-                    case 0:
-                        state = 1;
-                        currentList = savedGames;
-                        setInsets();
-                        break;
-                    // New game
-                    case 1:
-                        state = 2;
-                        currentList = savedMaps;
-                        setInsets();
-                        break;
-                    // Load Map
-                    case 2:
-                        state = 3;
-                        currentList = savedMaps;
-                        setInsets();
-                        break;
-                    // New Map
-                    case 3:
-                        string = "";
-                        state = 4;
-                        renderCursor = false;
-                        break;
-                    // Exit Game
-                    case 4:
-                        GameLoop.end();
-                        break;
-                }
-                break;
-            //Load Game
-            case 1:
-                if (currentList.length > 0) {
-                    Game.closeMenu();
-                    game.loadGame(currentList[currentSelection]);
-                }
-                break;
-            //New Game
-            case 2:
-                if (currentList.length > 0) {
-                    string = "";
-                    renderCursor = false;
-                    state = 5;
-                }
-                break;
-            // Load Map
-            case 3:
-                if (currentList.length > 0) {
-                    Game.closeMenu();
-                    game.loadMapEditor(currentList[currentSelection]);
-                }
-                break;
-            // New Map
-            case 4:
-                if (string.length() > 0) {
-                    Game.closeMenu();
-                    string = string.substring(0, string.length() - 1);
-                    game.loadNewMap(string);
-                }
-                break;
-            // Name New Game
-            case 5:
-                Game.closeMenu();
-                string = string.substring(0, string.length() - 1);
-                game.loadNewGame(string, currentList[currentSelection]);
-                break;
-        }
     }
 
     @Override
     public void back() {
-        switch (state) {
-            case 0:
-                // Do nothing
-                break;
-            case 1:
-            case 2:
-            case 3:
-                state = 0;
-                currentList = options;
-                setInsets();
-            case 4:
-                state = 0;
-                currentList = options;
-                setInsets();
-                renderCursor = true;
-                break;
-            case 5:
-                state = 2;
-                currentList = savedMaps;
-                setInsets();
-                renderCursor = true;
-                break;
-        }
     }
 
     @Override
@@ -306,23 +136,6 @@ public class MainMenu extends Menu implements OnClickListener {
         this.x = x;
         this.y = y;
         Game.openMenu(this);
-        setInsets();
-        viewWidth = width * tileSize - 40;
-        viewHeight = height * tileSize / 3;
-        viewX = x + (width * tileSize - viewWidth) / 2 + 8;
-        viewY = y + (height * tileSize - viewHeight);
-    }
-
-    private void setInsets() {
-        currentSelection = 0;
-        insetX = new int[currentList.length];
-        insetY = new int[currentList.length];
-
-        for (int i = 0; i < currentList.length; i++) {
-            insetX[i] = x + (width * drawSize - font.getStringWidth(currentList[i])) / 2 + 10;
-            insetY[i] = y + i * (font.getTextSize() + verticalSpacing) + 20;
-        }
-        if (currentList.length < 1) renderCursor = false;
     }
 
     @Override
@@ -332,9 +145,54 @@ public class MainMenu extends Menu implements OnClickListener {
 
     @Override
     public void onClick(MenuComponent c) {
-        for (int i = 0; i < bTest.length; i++) {
-            if (c.getId() == bTest[i].getId()) {
-            }
+        if (loadGame) loadGame();
+        if (loadMap) loadMap();
+        if (loadNewGame) loadNewGame();
+        switch (c.getId()) {
+            case LOAD_GAME:
+                verticalListView.reloadComponents(savedGames);
+                break;
+            case NEW_GAME:
+                verticalListView.reloadComponents(textView);
+                verticalListView.addComponent(horizontalListView);
+                verticalListView.setOnClickListener(this);
+                break;
+            case LOAD_MAP:
+                verticalListView.reloadComponents(savedMaps);
+                verticalListView.setOnClickListener(this);
+                break;
+            case NEW_MAP:
+                verticalListView.reloadComponents(textView);
+                verticalListView.addComponent(horizontalListView);
+                verticalListView.setOnClickListener(this);
+                break;
+            case EXIT_GAME:
+
+                break;
+            case CANCEL:
+                verticalListView.reloadComponents(options);
+                verticalListView.setOnClickListener(this);
+                break;
+            case OK_NEW_GAME:
+                string = textView.getString();
+                verticalListView.reloadComponents(savedMaps);
+                verticalListView.setOnClickListener(this);
+                break;
+            case OK_NEW_MAP:
+                string = textView.getString();
+                break;
         }
+    }
+
+    private void loadNewGame() {
+
+    }
+
+    private void loadMap() {
+
+    }
+
+    public void loadGame() {
+
     }
 }

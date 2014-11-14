@@ -8,30 +8,58 @@ public class GameData implements Serializable {
 
     public static final String NAME = "game data";
 
-    private List<String> savedMaps = new ArrayList<String>();
-    private List<String> savedGames = new ArrayList<String>();
+    public static final int MAX_SAVES = 5;
+
+    private String[] savedMaps = new String[]{"empty", "empty", "empty", "empty", "empty"};
+    private String[] savedGames = new String[]{"empty", "empty", "empty", "empty", "empty"};
+
+    public GameData() {
+
+    }
 
     public void saveMap(String map) {
-        if (!savedMaps.contains(map)) savedMaps.add(map);
+        int position = hasSpace(savedMaps, map);
+        if (position > -1)
+            savedMaps[position] = map;
+        else {
+            for (int i = 0; i < savedMaps.length; i++) {
+                if (i < 3) savedMaps[i] = savedMaps[i + 1];
+                else savedMaps[i] = map;
+            }
+        }
     }
 
     public void saveGame(String game) {
-        if (!savedGames.contains(game)) savedGames.add(game);
+        int position = hasSpace(savedGames, game);
+        if (position > -1)
+            savedGames[position] = game;
+        else {
+            for (int i = 0; i < savedGames.length; i++) {
+                if (i < 3) savedGames[i] = savedGames[i + 1];
+                else savedGames[i] = game;
+            }
+        }
     }
 
     public String[] getMapNames() {
-        String[] strings = new  String[savedMaps.size()];
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = savedMaps.get(i);
-        }
-        return strings;
+        return savedMaps;
     }
 
     public String[] getGameNames() {
-        String[] strings = new  String[savedGames.size()];
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = savedGames.get(i);
-        }
-        return strings;
+        return savedGames;
     }
+
+    private int hasSpace(String[] strings, String string) {
+        int place = -1;
+        for (int i = 0; i < strings.length; i++) {
+            if (strings[i].equals("empty"))
+                place = i;
+        }
+        for (int i = 0; i < strings.length; i++) {
+            if (strings[i].equals(string))
+                place = i;
+        }
+        return place;
+    }
+
 }

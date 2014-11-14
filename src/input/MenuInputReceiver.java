@@ -42,9 +42,9 @@ public class MenuInputReceiver extends InputReceiver {
         if (down.isPressed()) menu.moveCursorDown();
         if (enter.isPressed()) menu.select();
         if (back.isPressed()) menu.back();
-        if (leftButton.isPressed()) menu.click(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (leftButton.isPressed()) menu.onMouseButtonPressed(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
         else if (!leftButton.isHolding()) menu.release(0, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        if (rightButton.isPressed()) menu.click(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (rightButton.isPressed()) menu.onMouseButtonPressed(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
         else if (!leftButton.isHolding()) menu.release(1, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
     }
 

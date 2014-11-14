@@ -13,8 +13,6 @@ public class Button extends MenuComponent {
 
     private String text;
 
-    private int textSize = 25;
-
     /**
      * Creates a new Button at position 0, 0
      */
@@ -52,13 +50,6 @@ public class Button extends MenuComponent {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    /**
-     * The Button will be scaled to fit the textSize
-     */
-    public void setTextSize(int size) {
-        textSize = size;
     }
 
     // Override padding methods to do nothing.

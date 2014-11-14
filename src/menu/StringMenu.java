@@ -31,7 +31,7 @@ public class StringMenu extends Menu{
     }
 
     @Override
-    public void click(int button, int x, int y) {
+    public void onMouseButtonPressed(int button, int x, int y) {
 
     }
 

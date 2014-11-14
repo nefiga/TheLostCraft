@@ -8,9 +8,7 @@ import org.lwjgl.opengl.Display;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListView extends MenuComponent {
-
-    private OnClickListener listener;
+public class VerticalListView extends MenuComponent {
 
     private List<MenuComponent> components = new ArrayList<MenuComponent>();
 
@@ -22,7 +20,7 @@ public class ListView extends MenuComponent {
 
     private int currentComponent;
 
-    private boolean center;
+    private boolean center = true;
 
     private boolean renderBackground = true;
 
@@ -35,7 +33,7 @@ public class ListView extends MenuComponent {
      *
      * @param components The MenuComponents to be added to this ListView
      */
-    public ListView(int id, int width, int height, MenuComponent... components) {
+    public VerticalListView(int id, int width, int height, MenuComponent... components) {
         super(id, width, height);
 
         for (int i = 0; i < components.length; i++) {
@@ -48,7 +46,7 @@ public class ListView extends MenuComponent {
      *
      * @param components The MenuComponents to be added to this ListView
      */
-    public ListView(int id, int x, int y, int width, int height, MenuComponent... components) {
+    public VerticalListView(int id, int x, int y, int width, int height, MenuComponent... components) {
         super(id, x, y, width, height);
 
         listView = MenuComponent.addImage("list_view");
@@ -56,11 +54,9 @@ public class ListView extends MenuComponent {
         focusedSB = MenuComponent.addImage("focused_scroll_button");
 
         for (int i = 0; i < components.length; i++) {
-            MenuComponent component = components[i];
-            if (i == 0) component.setPosition(this.x + leftPadding, this.y + topPadding);
-            else component.setPosition(this.x + leftPadding, components[i - 1].getVerticalBounds() + spacing);
             this.components.add(components[i]);
         }
+        adjustComponents();
     }
 
     public void update(long delta) {
@@ -183,8 +179,16 @@ public class ListView extends MenuComponent {
     }
 
     public void addComponent(MenuComponent component) {
-        adjustComponents();
         components.add(component);
+        adjustComponents();
+    }
+
+    public void reloadComponents(MenuComponent... components) {
+        this.components.clear();
+        for (int i = 0; i < components.length; i++) {
+            this.components.add(components[i]);
+        }
+        adjustComponents();
     }
 
     public void setOnClickListener(OnClickListener listener) {
@@ -212,8 +216,8 @@ public class ListView extends MenuComponent {
     }
 
     public void setTopPadding(int padding) {
-            topPadding = padding;
-            adjustComponents();
+        topPadding = padding;
+        adjustComponents();
     }
 
     public void setRightPadding(int padding) {

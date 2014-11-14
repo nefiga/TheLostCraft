@@ -115,7 +115,7 @@ public abstract class Menu {
         menuBatch.end();
     }
 
-    public abstract void click(int button, int x,  int y);
+    public abstract void onMouseButtonPressed(int button, int x, int y);
 
     public abstract void release(int button, int x, int y);
 
