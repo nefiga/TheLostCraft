@@ -38,8 +38,8 @@ public class MiniMap {
     /**
      * Renders the miniMap. Image is stored in the misBatch in the Game class. Each tile is 8 pixels on the mini map.
      *
-     * @param startX The x position in the map that the miniMap will start rendering at
-     * @param startY The y position in the map that the miniMap will start rendering at
+     * @param startX The screenX position in the map that the miniMap will start rendering at
+     * @param startY The screenY position in the map that the miniMap will start rendering at
      */
 
     public void renderMiniMap(int startX, int startY) {

@@ -27,7 +27,7 @@ public class Tile {
 
     public static final int TILE_SIZE = 64;
 
-    //Stores the images position in TextureAtlas in this order x, y, width, height
+    //Stores the images position in TextureAtlas in this order screenX, screenY, width, height
     protected int[] imagePosition;
 
     protected BufferedImage image;
@@ -98,8 +98,8 @@ public class Tile {
      * @param level  The level the tile is in
      * @param entity The entity interacting with the tile
      * @param tool   The tool being used
-     * @param x      The x position of the tile
-     * @param y      The y position of the tile
+     * @param x      The screenX position of the tile
+     * @param y      The screenY position of the tile
      */
     public void interact(Level level, Entity entity, Tool tool, int x, int y) {
     }
@@ -236,11 +236,11 @@ public class Tile {
     }
 
     /**
-     * Renders the tiles image at x, y
+     * Renders the tiles image at screenX, screenY
      *
      * @param batch The SpriteBatch used to rendered
-     * @param x     The x position on the screen this tile will be rendered at
-     * @param y     The y position on the screen this tile will be rendered at
+     * @param x     The screenX position on the screen this tile will be rendered at
+     * @param y     The screenY position on the screen this tile will be rendered at
      */
     public void render(SpriteBatch batch, int x, int y) {
         batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
@@ -252,8 +252,8 @@ public class Tile {
 
     /**
      * @param batch The The SpriteBatch used to rendered
-     * @param x     The x position of the tile
-     * @param y     The y position of the tile
+     * @param x     The screenX position of the tile
+     * @param y     The screenY position of the tile
      * @param w     The width the tile will be rendered at
      * @param h     The height the tile will be rendered at
      */

@@ -34,10 +34,10 @@ public class ShaderManager {
 
         // Check for errors
         if (glGetShaderi(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
-            System.err.println("Unable to create vertex shader");
+             System.err.println("Error in ShaderManager. Unable to create vertex shader");
             System.err.println(glGetShaderInfoLog(vertexShader, glGetShaderi(vertexShader, GL_INFO_LOG_LENGTH)));
             dispose();
-            GameLoop.end();
+            GameLoop.exit();
         }
 
         // Attach the shader
@@ -60,10 +60,10 @@ public class ShaderManager {
 
         // Check for errors
         if (glGetShaderi(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
-            System.err.println("Unable to create fragment shader");
+            System.err.println("Error in ShaderManager. Unable to create fragment shader");
             System.err.println(glGetShaderInfoLog(fragmentShader, glGetShaderi(fragmentShader, GL_INFO_LOG_LENGTH)));
             dispose();
-            GameLoop.end();
+            GameLoop.exit();
         }
 
         // Attach the shader
@@ -72,8 +72,8 @@ public class ShaderManager {
 
     public void setUniforms(String name, float... values) {
         if (values.length > 4) {
-            System.err.println("Uniforms cannot have more than 4 values");
-            GameLoop.end();
+            System.err.println("Error in ShaderManager. Uniforms cannot have more than 4 values");
+            GameLoop.exit();
         }
 
         // Get the location of the uniforms
@@ -108,9 +108,9 @@ public class ShaderManager {
 
         // Check for errors
         if (glGetProgrami(program, GL_LINK_STATUS) == GL_FALSE) {
-            System.err.println("Unable to link program: ");
+            System.err.println("Error in ShaderManager. Unable to link program: ");
             dispose();
-            GameLoop.end();
+            GameLoop.exit();
         }
     }
 

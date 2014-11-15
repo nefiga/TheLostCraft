@@ -8,7 +8,7 @@ import game.graphics.TextureAtlas;
 
 public class MenuComponent {
 
-    protected static TextureAtlas atlas = new TextureAtlas(TextureAtlas.MEDIUM);
+    protected static TextureAtlas atlas = new TextureAtlas(TextureAtlas.LARGE);
     public static SpriteBatch batch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(atlas), 1000);
 
     private OnClickListener listener;
@@ -20,7 +20,7 @@ public class MenuComponent {
 
     private int id;
 
-    protected int x, y, width, height, verticalBounds, horizontalBounds;
+    protected int screenX, screenY, menuX, menuY, width, height, verticalBounds, horizontalBounds;
 
     protected int textSize = 25;
 
@@ -36,16 +36,16 @@ public class MenuComponent {
     }
 
     /**
-     * Creates a new MenuComponent at the location of x, y
+     * Creates a new MenuComponent at the location of screenX, screenY
      */
-    public MenuComponent(int id, int x, int y, int width, int height) {
+    public MenuComponent(int id, int menuX, int menuY, int width, int height) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.menuX = menuX;
+        this.menuY = menuY;
         this.width = width;
         this.height = height;
-        horizontalBounds = x + width;
-        verticalBounds = y + height;
+        horizontalBounds = menuX + width;
+        verticalBounds = menuY + height;
     }
 
     public void update(long delta) {
@@ -79,6 +79,14 @@ public class MenuComponent {
         }
     }
 
+    public void onCharPressed(char c) {
+
+    }
+
+    public void onCharHolding(char c) {
+
+    }
+
     /**
      * Sets hasFocus to true
      */
@@ -93,11 +101,23 @@ public class MenuComponent {
         hasFocus = false;
     }
 
+    public void setPositionInMenu(int menuX, int menuY) {
+        this.screenX = this.menuX + menuX;
+        this.screenY = this.menuY + menuY;
+        horizontalBounds = screenX + width;
+        verticalBounds = screenY + height;
+        adjustComponents();
+    }
+
     public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.screenX = x;
+        this.screenY = y;
         horizontalBounds = x + width;
         verticalBounds = y + height;
+    }
+
+    protected void adjustComponents() {
+
     }
 
     /**
@@ -125,12 +145,12 @@ public class MenuComponent {
 
     public void setWidth(int width) {
         this.width = width;
-        horizontalBounds = x + this.width;
+        horizontalBounds = screenX + this.width;
     }
 
     public void setHeight(int height) {
         this.height = height;
-        verticalBounds = y + this.height;
+        verticalBounds = screenY + this.height;
     }
 
     public void setTextSize(int size) {
@@ -162,12 +182,12 @@ public class MenuComponent {
         return id;
     }
 
-    public int getX() {
-        return x;
+    public int getScreenX() {
+        return screenX;
     }
 
-    public int getY() {
-        return y;
+    public int getScreenY() {
+        return screenY;
     }
 
     public int getWidth() {
@@ -183,10 +203,10 @@ public class MenuComponent {
     }
 
     /**
-     * Returns true if the x and y coordinates are in the bounds of this button
+     * Returns true if the screenX and screenY coordinates are in the bounds of this button
      */
     public boolean inBounds(int xPosition, int yPosition) {
-        if (xPosition > x && xPosition < horizontalBounds && yPosition > y && yPosition < verticalBounds) {
+        if (xPosition > screenX && xPosition < horizontalBounds && yPosition > screenY && yPosition < verticalBounds) {
             return true;
         }
         return false;
@@ -205,14 +225,14 @@ public class MenuComponent {
     }
 
     /**
-     * Returns the farthest positive x position of this component
+     * Returns the farthest positive screenX position of this component
      */
     public int getVerticalBounds() {
         return verticalBounds;
     }
 
     /**
-     * Returns the farthest positive y position of this component
+     * Returns the farthest positive screenY position of this component
      */
     public int getHorizontalBounds() {
         return horizontalBounds;

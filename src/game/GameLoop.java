@@ -99,7 +99,7 @@ public class GameLoop {
 
     }
 
-    public static void end() {
+    public static void exit() {
         gameLoop.dispose();
         Display.destroy();
         System.exit(0);
@@ -158,7 +158,7 @@ public class GameLoop {
             }
 
             if (targetDisplayMode == null) {
-                System.out.println("Failed to find value mode: " + width + "x" + height + " fs=" + fullscreen);
+                System.out.println("Failed to find value mode: " + width + "screenX" + height + " fs=" + fullscreen);
                 return false;
             }
 
@@ -173,7 +173,7 @@ public class GameLoop {
 
             return true;
         } catch (LWJGLException e) {
-            System.out.println("Unable to setup mode " + width + "x" + height + " fullscreen=" + fullscreen + e);
+            System.out.println("Unable to setup mode " + width + "screenX" + height + " fullscreen=" + fullscreen + e);
         }
 
         return false;

@@ -32,7 +32,7 @@ public class LivingEntity extends Entity {
     protected Tool currentTool;
 
     /**
-     * How much to add to the entities x, y position when the entities interactWith method is called.
+     * How much to add to the entities screenX, screenY position when the entities interactWith method is called.
      * The amounts correspond with the entities direction, they are in this order NORTH, EAST, SOUTH, WEST.
      */
     protected int[] interactX = new int[]{32, 96, 32, -32};
@@ -80,8 +80,8 @@ public class LivingEntity extends Entity {
     /**
      * Attempts to move the entity
      *
-     * @param velocityX The amount to be moved on the x axis
-     * @param velocityY The amount to be moved on the y axis
+     * @param velocityX The amount to be moved on the screenX axis
+     * @param velocityY The amount to be moved on the screenY axis
      */
     public void move(int velocityX, int velocityY) {
         if (velocityX > 0) direction = EAST;

@@ -37,6 +37,6 @@ public class StringComponent extends MenuComponent{
     }
 
     public void renderString(Font font) {
-        font.drawString(string, x, y);
+        font.drawString(string, screenX, screenY);
     }
 }

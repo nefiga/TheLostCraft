@@ -6,7 +6,6 @@ import game.graphics.*;
 import game.util.MapData;
 import level.Map;
 import menu.Menu;
-import menu.StringMenu;
 import menu.Result;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
@@ -227,10 +226,7 @@ public class MapEditor implements Screen{
     }
 
     public void onEscapePressed() {
-        gameMenu = new StringMenu(20, 10, 16, Menu.NORMAL_TILE_SET);
-        Result result = new Result();
-        result.setStringArray(menuOptions);
-        gameMenu.openForResult(result, this, Display.getWidth() / 2 - 160, Display.getHeight() / 2 - 80);
+
     }
 
     public void moveMap(int x, int y) {

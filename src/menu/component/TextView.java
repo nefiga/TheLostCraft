@@ -25,12 +25,16 @@ public class TextView extends MenuComponent {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(x, y, width, height, textView[0], textView[1], textView[2], textView[3]);
+        batch.draw(screenX, screenY, width, height, textView[0], textView[1], textView[2], textView[3]);
     }
 
     public void renderString(Font font) {
         if (text != null)
-            font.drawString(text.toString(), x + (width - text.length() * textSize) / 2, y + (height - textSize) / 2);
+            font.drawString(text.toString(), screenX + (width - text.length() * textSize) / 2, screenY + (height - textSize) / 2);
+    }
+
+    public void clear() {
+        text.setLength(0);
     }
 
     @Override

@@ -3,6 +3,7 @@ package menu;
 import game.Screen;
 import game.fonts.Font;
 import game.graphics.*;
+import menu.component.MenuComponent;
 
 public abstract class Menu {
 
@@ -17,31 +18,20 @@ public abstract class Menu {
 
     protected Result result;
 
-    protected boolean renderCursor = true;
-
-    protected int verticalSpacing = 10;
+    protected MenuComponent component;
 
     // The amount of tiles wide and high the menu is
     protected int width, height;
 
     protected int x, y;
 
-    // Insets for items put in the menu so they do not touch the edges
-    protected int[] insetY, insetX;
-
     // The size of the menu tiles
     protected final int tileSize = 16;
 
     protected int drawSize;
 
-    // The first array is the cursors current selection, the second array is the cursors x, y position on the screen.
-    protected int[][] cursorPosition;
-
-    // The current index in the cursorPosition array
-    protected int currentSelection;
-
     // The location of the three images in the texture atlas used to create the menu
-    protected int[] cornerImage, sideImage, middleImage, cursorImage, textViewImage;
+    protected int[] cornerImage, sideImage, middleImage;
 
     /**
      * Creates a new menu. The size of the menu can be controlled in two ways.
@@ -51,21 +41,21 @@ public abstract class Menu {
      * @param height   The number of tiles tall
      * @param drawSize The width and height the tiles will be drawn on screen
      */
-    public Menu(int width, int height, int drawSize, int tileSet) {
+    public Menu(int x, int y, int width, int height, int drawSize, int tileSet, MenuComponent component) {
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.height = height;
         this.drawSize = drawSize;
+        this.component = component;
+        this.component.setPositionInMenu(x, y);
         loadMenuImages(tileSet);
-        cursorImage = menuAtlas.addTexture("/menu/cursor");
-        textViewImage = menuAtlas.addTexture("/menu/text_view");
 
         menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
     }
 
     public Menu(int tileSet) {
         loadMenuImages(tileSet);
-        cursorImage = menuAtlas.addTexture("/menu/cursor");
-        textViewImage = menuAtlas.addTexture("/menu/text_view");
         menuBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(menuAtlas), width * height + 50);
     }
 
@@ -109,8 +99,6 @@ public abstract class Menu {
                 menuBatch.draw(x + xp * drawSize, y + yp * drawSize, drawSize, drawSize, middleImage[0], middleImage[1], tileSize, tileSize);
             }
         }
-        if (renderCursor)
-            menuBatch.draw(insetX[currentSelection] - 30, insetY[currentSelection] + 5, cursorImage[0], cursorImage[1], cursorImage[2], cursorImage[3]);
 
         menuBatch.end();
     }
@@ -137,15 +125,11 @@ public abstract class Menu {
 
     public abstract void screenResized(int width, int height);
 
-    public abstract void openForResult(Result result, Screen screen, int x, int y);
+    public abstract void openForResult(Result result, Screen screen);
 
-    public abstract void open(int x, int y);
+    public abstract void open();
 
     public abstract void returnResult();
-
-    public void setVerticalSpacing(int spacing) {
-        this.verticalSpacing = spacing;
-    }
 
     public void setFont(Font font) {
         this.font = font;

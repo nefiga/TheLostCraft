@@ -14,8 +14,9 @@ import gear.tool.Tool;
 import item.Item;
 import math.Vector2;
 import menu.Menu;
-import menu.StringMenu;
 import menu.Result;
+import menu.component.MenuComponent;
+import menu.component.MenuComponent.OnClickListener;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -23,7 +24,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level implements Screen {
+public class Level implements Screen, OnClickListener {
 
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
@@ -153,11 +154,11 @@ public class Level implements Screen {
     }
 
     /**
-     * Tries to interact with an entity at x, y. If there is no entity it will interact with the tile at x, y
+     * Tries to interact with an entity at screenX, screenY. If there is no entity it will interact with the tile at screenX, screenY
      *
      * @param entity The interacting entity
-     * @param x      The x position of the action
-     * @param y      The y position of the action
+     * @param x      The screenX position of the action
+     * @param y      The screenY position of the action
      * @param width  The width of the action
      * @param height The height of the action
      * @return True if there was an entity to interact with else return false
@@ -188,12 +189,12 @@ public class Level implements Screen {
     }
 
     /**
-     * Returns the tile at x, y
+     * Returns the tile at screenX, screenY
      *
-     * @param x             The x position of the tile
-     * @param y             The y position of the tile
-     * @param tilePrecision True if the x, y params are in tile precision
-     * @return The tile at x + y * map width in the {@code tiles} array.
+     * @param x             The screenX position of the tile
+     * @param y             The screenY position of the tile
+     * @param tilePrecision True if the screenX, screenY params are in tile precision
+     * @return The tile at screenX + screenY * map width in the {@code tiles} array.
      */
     public Tile getTile(int x, int y, boolean tilePrecision) {
         if (!tilePrecision) {
@@ -207,10 +208,10 @@ public class Level implements Screen {
     }
 
     /**
-     * @param x             The x position of the Tile
-     * @param y             The y position of the Tile
-     * @param tilePrecision True if the x, y params are in tile precision
-     * @return Data for the Tile at x + y * map width in the {@code tiles}  array
+     * @param x             The screenX position of the Tile
+     * @param y             The screenY position of the Tile
+     * @param tilePrecision True if the screenX, screenY params are in tile precision
+     * @return Data for the Tile at screenX + screenY * map width in the {@code tiles}  array
      */
     public int getTileData(int x, int y, boolean tilePrecision) {
         if (!tilePrecision) {
@@ -321,16 +322,26 @@ public class Level implements Screen {
 
     public void onEscapePressed() {
         paused = true;
-        String[] s = new String[]{"save & quit", "resume"};
-        menu = new StringMenu(20, 10, 16, Menu.NORMAL_TILE_SET);
-        Result result = new Result();
-        result.setStringArray(s);
-        menu.openForResult(result, this, Display.getWidth() / 2 - 160, Display.getHeight() / 2 - 80);
     }
 
     public void save() {
         levelData.updateMap(tiles, tileData, mapWidth, mapHeight);
         levelData.updatePlayer((int) player.getX(), (int) player.getY());
         Game.saveGame(levelData);
+    }
+
+    @Override
+    public void onClick(MenuComponent c) {
+        switch (c.getId()) {
+            case 0:
+                Game.closeMenu();
+                paused = false;
+                Game.closeMenu();
+                break;
+            case 1:
+                Game.closeMenu();
+                paused = false;
+                break;
+        }
     }
 }

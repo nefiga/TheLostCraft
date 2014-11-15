@@ -148,10 +148,10 @@ public class SpriteBatch {
      *
      * @param drawWidth     The width to draw the texture
      * @param drawHeight    The height to draw the texture
-     * @param x             The starting x point of the screen
-     * @param y             The starting y point on the screen
-     * @param textureX      The starting x point of the texture in the texture atlas
-     * @param textureY      The starting y point of the texture in the texture atlas
+     * @param x             The starting screenX point of the screen
+     * @param y             The starting screenY point on the screen
+     * @param textureX      The starting screenX point of the texture in the texture atlas
+     * @param textureY      The starting screenY point of the texture in the texture atlas
      * @param textureWidth  The width of the texture in the texture atlas
      * @param textureHeight The height of the texture in the texture atlas
      * @param rotate       If the image should be rotate and in what direction it should be rotate

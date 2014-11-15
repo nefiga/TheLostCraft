@@ -1,5 +1,5 @@
 /**
-     * @return True if there is a solid tile at x, y else return false
+     * @return True if there is a solid tile at screenX, screenY else return false
      */
     public boolean tileCollision(int xa, int ya) {
         if (getTile(xa, ya, false).solid(xa, ya)) return true;
@@ -14,7 +14,7 @@
      * Calculates the max distance that can be moved without colliding with any solid entities or tiles
      *
      * @param entity        The entity attempting to move
-     * @param moveX         The desired amount to be moved in the x axis
+     * @param moveX         The desired amount to be moved in the screenX axis
      * @param excludeEntity An entity to be excluded from collision detection
      * @return The amount the entity can move with out colliding with a solid entity or tile
      */

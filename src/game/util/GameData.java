@@ -22,10 +22,10 @@ public class GameData implements Serializable {
         if (position > -1)
             savedMaps[position] = map;
         else {
-            for (int i = 0; i < savedMaps.length; i++) {
-                if (i < 3) savedMaps[i] = savedMaps[i + 1];
-                else savedMaps[i] = map;
+            for (int i = savedMaps.length - 1; i > 0; i--) {
+                savedMaps[i] = savedMaps[i - 1];
             }
+            savedMaps[0] = map;
         }
     }
 
@@ -34,10 +34,10 @@ public class GameData implements Serializable {
         if (position > -1)
             savedGames[position] = game;
         else {
-            for (int i = 0; i < savedGames.length; i++) {
-                if (i < 3) savedGames[i] = savedGames[i + 1];
-                else savedGames[i] = game;
+            for (int i = savedGames.length - 1; i > 0; i--) {
+                savedGames[i] = savedGames[i - 1];
             }
+            savedGames[0] = game;
         }
     }
 

@@ -55,7 +55,7 @@ public class HorizontalListView extends MenuComponent{
     }
 
     public void update(long delta) {
-        outOffBoundsLeft = components.size() > 0 && this.x > components.get(0).x;
+        outOffBoundsLeft = components.size() > 0 && this.screenX > components.get(0).screenX;
         outofBoundsRight = components.size() > 0 && this.horizontalBounds < components.get(components.size() - 1).horizontalBounds;
 
         // Updating visible MenuComponents
@@ -67,22 +67,22 @@ public class HorizontalListView extends MenuComponent{
         int mX = Mouse.getX();
         int mY = Math.abs(Mouse.getY() - Display.getHeight());
         // Left scrollButton mouseOver
-        if (mY > this.y && mY < this.verticalBounds && mX < this.x && mX > this.x - sbWidth) {
+        if (mY > this.screenY && mY < this.verticalBounds && mX < this.screenX && mX > this.screenX - sbWidth) {
             leftHasFocus= true;
         } else leftHasFocus = false;
         // Right scrollButton mouseOver
-        if (mY > this.y && mY < this.verticalBounds && mX > this.horizontalBounds && mX < this.horizontalBounds + sbWidth) {
+        if (mY > this.screenY && mY < this.verticalBounds && mX > this.horizontalBounds && mX < this.horizontalBounds + sbWidth) {
             rightHasFocus = true;
         } else rightHasFocus = false;
     }
 
     public void press(int x, int y) {
         // Left scrollButton
-        if (x > this.x - sbWidth && x < this.x && y > this.y && y < this.verticalBounds) {
+        if (x > this.screenX - sbWidth && x < this.screenX && y > this.screenY && y < this.verticalBounds) {
             leftPressed = leftHolding = true;
         }
         // Right scrollButton
-        else if (x > this.horizontalBounds && x < this.horizontalBounds + sbWidth && y > this.y && y < this.verticalBounds) {
+        else if (x > this.horizontalBounds && x < this.horizontalBounds + sbWidth && y > this.screenY && y < this.verticalBounds) {
             rightPressed = rightHolding = true;
         } else {
             for (int i = 0; i < components.size(); i++) {
@@ -94,7 +94,7 @@ public class HorizontalListView extends MenuComponent{
 
     public void release(int x, int y) {
         // Left scrollButton
-        if (x > this.x - sbWidth && x < this.x && y > this.y && y < this.verticalBounds) {
+        if (x > this.screenX - sbWidth && x < this.screenX && y > this.screenY && y < this.verticalBounds) {
             if (leftPressed && leftHasFocus) {
                 moveLeft();
             }
@@ -102,7 +102,7 @@ public class HorizontalListView extends MenuComponent{
             leftHolding = false;
         }
         // Right scrollButton
-        else if (x > this.horizontalBounds && x < this.horizontalBounds + sbWidth && y > this.y && y < this.verticalBounds) {
+        else if (x > this.horizontalBounds && x < this.horizontalBounds + sbWidth && y > this.screenY && y < this.verticalBounds) {
             if (rightPressed && rightHasFocus) {
                 moveRight();
             }
@@ -116,6 +116,20 @@ public class HorizontalListView extends MenuComponent{
         }
     }
 
+    public void onCharPressed(char c) {
+        for (int i = 0; i < components.size(); i++) {
+            if (components.get(i) instanceof TextView)
+                components.get(i).onCharPressed(c);
+        }
+    }
+
+    public void onCharHolding(char c) {
+        for (int i = 0; i < components.size(); i++) {
+            if (components.get(i) instanceof TextView)
+                components.get(i).onCharHolding(c);
+        }
+    }
+
     private void moveLeft() {
         if (outofBoundsRight) {
             int moveX = 0;
@@ -124,7 +138,7 @@ public class HorizontalListView extends MenuComponent{
                 if (i == 0)
                     moveX = (components.get(currentComponent).width + spacing);
 
-                component.setPosition(component.x - moveX,  y + (this.height - component.getHeight()) / 2);
+                component.setPosition(component.screenX - moveX,  screenY + (this.height - component.getHeight()) / 2);
             }
             currentComponent++;
         }
@@ -138,7 +152,7 @@ public class HorizontalListView extends MenuComponent{
                 if (i == 0)
                     moveX = (components.get(currentComponent).width + spacing);
 
-                component.setPosition(component.x + moveX,  y + (this.height - component.getHeight()) / 2);
+                component.setPosition(component.screenX + moveX,  screenY + (this.height - component.getHeight()) / 2);
             }
             currentComponent--;
         }
@@ -149,26 +163,26 @@ public class HorizontalListView extends MenuComponent{
     }
 
     public boolean isVisible(MenuComponent component) {
-        return component.x > this.x && component.horizontalBounds < this.horizontalBounds;
+        return component.screenX > this.screenX && component.horizontalBounds < this.horizontalBounds;
     }
 
     /**
      * Adjusts all the components in this list according too topPadding, leftPadding and center.
      */
-    private void adjustComponents() {
+    protected void adjustComponents() {
         if (center) {
             for (int i = 0; i < components.size(); i++) {
                 MenuComponent component = components.get(i);
 
-                if (i == 0) component.setPosition(this.x + leftPadding, y + (this.height - component.getHeight()) / 2);
+                if (i == 0) component.setPosition(this.screenX + leftPadding, screenY + (this.height - component.getHeight()) / 2);
                 else
-                    component.setPosition(components.get(i - 1).getHorizontalBounds() + spacing, y + (this.height - component.getHeight()) / 2);
+                    component.setPosition(components.get(i - 1).getHorizontalBounds() + spacing, screenY + (this.height - component.getHeight()) / 2);
             }
         } else {
             for (int i = 0; i < components.size(); i++) {
                 MenuComponent component = components.get(i);
-                if (i == 0) component.setPosition(this.x + leftPadding, this.y + topPadding);
-                else component.setPosition(components.get(i - 1).getHorizontalBounds() + spacing, this.y + topPadding);
+                if (i == 0) component.setPosition(this.screenX + leftPadding, this.screenY + topPadding);
+                else component.setPosition(components.get(i - 1).getHorizontalBounds() + spacing, this.screenY + topPadding);
             }
         }
     }
@@ -235,22 +249,22 @@ public class HorizontalListView extends MenuComponent{
      */
     public void render(SpriteBatch batch) {
         if (renderBackground)
-            batch.draw(x, y, width, height, listView[0], listView[1], listView[2], listView[3]);
+            batch.draw(screenX, screenY, width, height, listView[0], listView[1], listView[2], listView[3]);
 
         // Left scrollButton
         if (outOffBoundsLeft) {
             if (rightHasFocus)
-                batch.draw(horizontalBounds, y + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3], SpriteBatch.ROTATE_90);
+                batch.draw(horizontalBounds, screenY + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3], SpriteBatch.ROTATE_90);
             else
-                batch.draw(horizontalBounds, y + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, scrollButton[0], scrollButton[1], scrollButton[2], scrollButton[3], SpriteBatch.ROTATE_90);
+                batch.draw(horizontalBounds, screenY + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, scrollButton[0], scrollButton[1], scrollButton[2], scrollButton[3], SpriteBatch.ROTATE_90);
         }
 
         // Right scrollButton
         if (outofBoundsRight) {
             if (leftHasFocus)
-                batch.draw(x - sbWidth, y + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3], SpriteBatch.ROTATE_270);
+                batch.draw(screenX - sbWidth, screenY + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3], SpriteBatch.ROTATE_270);
             else
-                batch.draw(x - sbWidth, y + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, scrollButton[0], scrollButton[1], scrollButton[2], scrollButton[3], SpriteBatch.ROTATE_270);
+                batch.draw(screenX - sbWidth, screenY + (height / 2) - (sbHeight / 2), sbWidth, sbHeight, scrollButton[0], scrollButton[1], scrollButton[2], scrollButton[3], SpriteBatch.ROTATE_270);
         }
 
         for (int i = 0; i < components.size(); i++) {

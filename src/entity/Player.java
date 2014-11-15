@@ -11,12 +11,9 @@ import item.part.LongHandle;
 import item.part.PickHead;
 import item.resource.Resource;
 import math.Vector2;
-import menu.InventoryMenu;
-import menu.Menu;
 
 public class Player extends LivingEntity {
 
-    InventoryMenu menu;
     PlayerInventoryLower inventory;
 
     private long globalCD;
@@ -39,7 +36,7 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * Tries to interact with an entity or tile at x, y position
+     * Tries to interact with an entity or tile at screenX, screenY position
      */
     public void interactWith(int x, int y) {
         if (globalCD >= 1000) {
@@ -60,8 +57,6 @@ public class Player extends LivingEntity {
     }
 
     public void openInventory() {
-        menu = new InventoryMenu(Menu.NORMAL_TILE_SET);
-        menu.openInventory(inventory);
     }
 
     public void openInventory(Inventory upperInventory) {

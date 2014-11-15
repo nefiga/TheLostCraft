@@ -27,7 +27,7 @@ public class FileUtil {
         catch (Exception e) {
             System.err.println("Error loading source code: " + name);
             e.printStackTrace();
-            GameLoop.end();
+            GameLoop.exit();
         }
 
         return source.toString();

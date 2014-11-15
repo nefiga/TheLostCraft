@@ -24,7 +24,7 @@ public class Entity {
     protected boolean moveable;
 
     /**
-     * x, y position on the map
+     * screenX, screenY position on the map
      */
     protected float x, y;
 
@@ -53,8 +53,8 @@ public class Entity {
     /**
      * Creates a new entity
      *
-     * @param positionX The x position on the map
-     * @param positionY The y position on the map
+     * @param positionX The screenX position on the map
+     * @param positionY The screenY position on the map
      */
     public Entity(int positionX, int positionY) {
         this.x = positionX;
@@ -73,7 +73,7 @@ public class Entity {
     }
 
     /**
-     * Renders the entity with the SpriteBatch at x, y
+     * Renders the entity with the SpriteBatch at screenX, screenY
      */
     public void render(SpriteBatch batch, int x, int y) {
 

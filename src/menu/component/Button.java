@@ -33,7 +33,7 @@ public class Button extends MenuComponent {
 
 
     /**
-     * Creates a new Button at position x, y
+     * Creates a new Button at position screenX, screenY
      */
     public Button(int id, int x, int y, int width, int height) {
         super(id, x, y, width, height);
@@ -75,15 +75,15 @@ public class Button extends MenuComponent {
 
     public void render(SpriteBatch batch) {
         if (pressed)
-            batch.draw(x, y, width, height, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
+            batch.draw(screenX, screenY, width, height, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
         else if (hasFocus)
-            batch.draw(x, y, width, height, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
-        else batch.draw(x, y, width, height, image[0], image[1], image[2], image[3]);
+            batch.draw(screenX, screenY, width, height, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
+        else batch.draw(screenX, screenY, width, height, image[0], image[1], image[2], image[3]);
     }
 
     public void renderString(Font font) {
         if (text != null) {
-            font.drawString(text, textSize,  x + (width - text.length() * textSize) / 2, y + (height - textSize) / 2);
+            font.drawString(text, textSize,  screenX + (width - text.length() * textSize) / 2, screenY + (height - textSize) / 2);
         }
     }
 }

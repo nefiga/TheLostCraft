@@ -59,7 +59,7 @@ public class TextureAtlas {
      * Adds the image to the texture atlas at the first open position.
      * If the atlas already contains the image the position of the image will be returned.
      *
-     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
+     * @return An array where position 0 and 1 are the starting screenX and screenY positions of the image in the atlas
      * and position 2 and 3 are the width and height of the image.
      */
     public int[] addTexture(String name, BufferedImage image) {
@@ -105,7 +105,7 @@ public class TextureAtlas {
      * Adds the image to the texture atlas at the first open position.
      * If the atlas already contains the image the position of the image will be returned.
      *
-     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas
+     * @return An array where position 0 and 1 are the starting screenX and screenY positions of the image in the atlas
      * and position 2 and 3 are the width and height of the image.
      */
     public int[] addTexture(String name) {
@@ -153,7 +153,7 @@ public class TextureAtlas {
      * Adds the pixels to the texture atlas at the first open position
      *
      * @param imagePixels An array of pixels to be added to the texture atlas
-     * @return An array where position 0 and 1 are the starting x and y positions of the image in the atlas.
+     * @return An array where position 0 and 1 are the starting screenX and screenY positions of the image in the atlas.
      */
     public int[] addTexture(int[] imagePixels, int w, int h) {
         int[] position = new int[2];
