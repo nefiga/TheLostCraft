@@ -3,7 +3,6 @@ package game;
 import editor.MapEditor;
 import entity.Player;
 import game.util.FileIO;
-import game.util.GameData;
 import game.util.LevelData;
 import game.util.MapData;
 import input.EditorInputReceiver;
@@ -30,7 +29,6 @@ public class Game extends GameLoop {
     private Player player;
     private PlayerInputReceiver playerInput;
     private EditorInputReceiver editorInput;
-    private static GameData gameData;
     private static MenuInputReceiver menuInput;
     private static Menu menu;
 
@@ -49,8 +47,6 @@ public class Game extends GameLoop {
         mapEditor = new MapEditor();
         editorInput = new EditorInputReceiver(mapEditor);
         menuInput = new MenuInputReceiver();
-        gameData = (GameData) FileIO.loadClass(GameData.NAME);
-        if (gameData == null) gameData = new GameData();
         mainScreen = new MainScreen(this);
         screenManager = new ScreenManager();
         screenManager.addScreen(Level.NAME, level);
@@ -94,7 +90,7 @@ public class Game extends GameLoop {
     }
 
     public static void loadMainMenu() {
-        mainScreen.load(gameData.getGameNames(), gameData.getMapNames());
+        mainScreen.load(FileIO.getSavedGames(), FileIO.getSavedMaps());
         state = MAIN_MENU;
         screenManager.setCurrentScreen(MainScreen.NAME);
     }
@@ -119,7 +115,6 @@ public class Game extends GameLoop {
     }
 
     public static void saveGame(LevelData levelData) {
-        gameData.saveGame(levelData.getName());
         FileIO.saveClass("games" + File.separator + levelData.getName(), levelData);
     }
 
@@ -144,7 +139,6 @@ public class Game extends GameLoop {
     }
 
     public static void saveMap(MapData mapData) {
-        gameData.saveMap(mapData.getName());
         FileIO.saveClass("maps" + File.separator + mapData.getName(), mapData);
     }
 
@@ -169,10 +163,6 @@ public class Game extends GameLoop {
         if (delta >= 2100) delta = 0;
     }
 
-    public void save() {
-        FileIO.saveClass(GameData.NAME, gameData);
-    }
-
     public void resized() {
         screenManager.screenResize(Display.getWidth(), Display.getHeight());
         if (menuOpen) menu.screenResized(Display.getWidth(), Display.getHeight());
@@ -184,15 +174,10 @@ public class Game extends GameLoop {
         } else if (state == GAME) {
             level.save();
         }
-        save();
     }
 
     public static void setState(int state) {
         Game.state = state;
-    }
-
-    public static GameData getGameData() {
-        return gameData;
     }
 
     public static int getXOffset() {

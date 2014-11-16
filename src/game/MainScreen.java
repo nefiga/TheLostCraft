@@ -1,13 +1,12 @@
 package game;
 
 import game.graphics.*;
-import game.util.GameData;
 import menu.*;
 import menu.component.*;
 import menu.component.MenuComponent.OnClickListener;
 import org.lwjgl.opengl.Display;
 
-public class MainScreen implements Screen, OnClickListener{
+public class MainScreen implements Screen, OnClickListener {
 
     public TextureAtlas atlas = new TextureAtlas(TextureAtlas.SMALL);
     public SpriteBatch batch;
@@ -22,9 +21,9 @@ public class MainScreen implements Screen, OnClickListener{
     private VerticalListView verticalListView;
     private HorizontalListView horizontalListView;
 
-    private StringComponent[] savedMaps = new StringComponent[GameData.MAX_SAVES];
+    private StringComponent[] savedMaps;
 
-    private StringComponent[] savedGames = new StringComponent[GameData.MAX_SAVES];
+    private StringComponent[] savedGames;
 
 
     private int[] background;
@@ -36,12 +35,22 @@ public class MainScreen implements Screen, OnClickListener{
     }
 
     public void load(String[] savedGames, String[] savedMaps) {
-        for (int i = 0; i < savedGames.length; i++) {
-            this.savedGames[i] = new StringComponent(savedGames[i], i + 10, 0, 0);
-        }
-        for (int i = 0; i < savedMaps.length; i++) {
-            this.savedMaps[i] = new StringComponent(savedMaps[i], i + 20, 0, 0);
-        }
+        if (savedGames != null) {
+            this.savedGames = new StringComponent[savedGames.length];
+            for (int i = 0; i < savedGames.length; i++) {
+                this.savedGames[i] = new StringComponent(savedGames[i], i + 10, 0, 0);
+            }
+        } else
+            this.savedGames = new StringComponent[]{new StringComponent("empty", 10, 0, 0)};
+
+        if (savedMaps != null) {
+            this.savedMaps = new StringComponent[savedMaps.length];
+            for (int i = 0; i < savedMaps.length; i++) {
+                this.savedMaps[i] = new StringComponent(savedMaps[i], i + 20, 0, 0);
+            }
+        } else
+            this.savedMaps = new StringComponent[]{new StringComponent("empty", 10, 0, 0)};
+
         loadMenuComponents();
     }
 
@@ -63,7 +72,7 @@ public class MainScreen implements Screen, OnClickListener{
         horizontalListView.setRenderBackground(false);
         horizontalListView.setOnClickListener(this);
 
-        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300, 25, 15, 16, 0,  verticalListView);
+        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300, 25, 15, 16, 0, verticalListView);
         menu.open();
     }
 
@@ -89,6 +98,7 @@ public class MainScreen implements Screen, OnClickListener{
     }
 
     boolean loadMap;
+
     @Override
     public void onClick(MenuComponent c) {
         switch (c.getId()) {
@@ -148,7 +158,7 @@ public class MainScreen implements Screen, OnClickListener{
             case 13:
             case 14:
                 String gameString = ((StringComponent) c).getString();
-                if (!gameString.equals("empty")){
+                if (!gameString.equals("empty")) {
                     game.loadGame(gameString);
                     Game.closeMenu();
                 }
@@ -158,8 +168,8 @@ public class MainScreen implements Screen, OnClickListener{
             case 22:
             case 23:
             case 24:
-                String mapString = ((StringComponent)c).getString();
-                if (!mapString.equals("empty")){
+                String mapString = ((StringComponent) c).getString();
+                if (!mapString.equals("empty")) {
                     if (loadMap) {
                         game.loadMapEditor(mapString);
                         Game.closeMenu();

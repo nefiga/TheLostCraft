@@ -36,6 +36,10 @@ public class VerticalListView extends MenuComponent {
     public VerticalListView(int id, int width, int height, MenuComponent... components) {
         super(id, width, height);
 
+        listView = MenuComponent.addImage("list_view");
+        scrollButton = MenuComponent.addImage("scroll_button");
+        focusedSB = MenuComponent.addImage("focused_scroll_button");
+
         for (int i = 0; i < components.length; i++) {
             this.components.add(components[i]);
         }
@@ -258,6 +262,9 @@ public class VerticalListView extends MenuComponent {
      */
     public void render(SpriteBatch batch) {
         if (renderBackground)
+            if (listView == null) {
+                System.out.println("NULL");
+            }
             batch.draw(screenX, screenY, width, height, listView[0], listView[1], listView[2], listView[3]);
 
         // Upper scrollButton

@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Class-Path: java -Djava.library.path=lib/windows
+Class-Path: slick-util.jar lwjgl_util.jar lwjgl.jar
 Main-Class: game.Game
 

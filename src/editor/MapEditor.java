@@ -7,10 +7,15 @@ import game.util.MapData;
 import level.Map;
 import menu.Menu;
 import menu.Result;
+import menu.SingleComponentMenu;
+import menu.component.Button;
+import menu.component.MenuComponent;
+import menu.component.MenuComponent.OnClickListener;
+import menu.component.VerticalListView;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
-public class MapEditor implements Screen{
+public class MapEditor implements Screen, OnClickListener{
 
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;
@@ -226,7 +231,13 @@ public class MapEditor implements Screen{
     }
 
     public void onEscapePressed() {
+        VerticalListView view = new VerticalListView(-1, 300, 200, new Button("resume", 0, 150, 30), new Button("save & exit", 1, 275, 30));
+        view.setTopPadding(20);
+        view.setSpacing(20);
+        view.setOnClickListener(this);
+        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2, 300, 200, 20, 0, view);
 
+        Game.openMenu(menu);
     }
 
     public void moveMap(int x, int y) {
@@ -311,5 +322,18 @@ public class MapEditor implements Screen{
             pageY[y] = (tilePageSize + tilePageSize / 8) * y + 225;
         }
 
+    }
+
+    @Override
+    public void onClick(MenuComponent c) {
+        switch (c.getId()) {
+            case 0:
+                Game.closeMenu();
+                break;
+            case 1:
+                Game.closeMenu();
+                Game.closeMapEditor();
+                break;
+        }
     }
 }

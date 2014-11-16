@@ -15,12 +15,15 @@ import item.Item;
 import math.Vector2;
 import menu.Menu;
 import menu.Result;
+import menu.SingleComponentMenu;
+import menu.component.*;
 import menu.component.MenuComponent;
 import menu.component.MenuComponent.OnClickListener;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
 import java.awt.*;
+import java.awt.Button;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -322,6 +325,13 @@ public class Level implements Screen, OnClickListener {
 
     public void onEscapePressed() {
         paused = true;
+        VerticalListView view = new VerticalListView(-1, 300, 200, new menu.component.Button("resume", 0, 150, 30), new menu.component.Button("save & exit", 1, 275, 30));
+        view.setTopPadding(20);
+        view.setSpacing(20);
+        view.setOnClickListener(this);
+        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2, 300, 200, 20, 0, view);
+
+        Game.openMenu(menu);
     }
 
     public void save() {
@@ -334,13 +344,13 @@ public class Level implements Screen, OnClickListener {
     public void onClick(MenuComponent c) {
         switch (c.getId()) {
             case 0:
-                Game.closeMenu();
                 paused = false;
                 Game.closeMenu();
                 break;
             case 1:
                 Game.closeMenu();
                 paused = false;
+                Game.closeGame();
                 break;
         }
     }

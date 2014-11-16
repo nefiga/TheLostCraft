@@ -10,8 +10,7 @@ public class FileIO {
             ObjectOutputStream objectOut = new ObjectOutputStream(f_out);
             objectOut.writeObject(classObject);
             objectOut.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Could not serialize class");
             e.printStackTrace();
         }
@@ -23,10 +22,41 @@ public class FileIO {
             Object returnObject = objectIn.readObject();
             objectIn.close();
             return returnObject;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Could not load serialized class");
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String[] getSavedGames() {
+        File folder = new File("saves" + File.separator + "games");
+        File[] files = folder.listFiles();
+        String[] strings;
+        if (files != null){
+            strings = new String[files.length];
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()) {
+                    strings[i] = files[i].getName();
+                }
+            }
+            return strings;
+        }
+        return null;
+    }
+
+    public static String[] getSavedMaps() {
+        File folder = new File("saves" + File.separator + "maps");
+        File[] files = folder.listFiles();
+        String[] strings;
+        if (files != null){
+            strings = new String[files.length];
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()) {
+                    strings[i] = files[i].getName();
+                }
+            }
+            return strings;
         }
         return null;
     }
