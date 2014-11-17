@@ -33,12 +33,9 @@ public class Level implements Screen, OnClickListener {
     private SpriteBatch entityBatch;
     private SpriteBatch itemBatch;
 
-    Menu menu;
     LevelData levelData;
 
     public static final String NAME = "Level";
-
-    private final int ESCAPE = 0, NAME_LEVEL = 1;
 
     private int[] tiles, tileData;
 
@@ -308,14 +305,6 @@ public class Level implements Screen, OnClickListener {
 
     @Override
     public void returnResult(Result result) {
-        switch (result.getState()) {
-            case ESCAPE:
-                Game.closeMenu();
-                paused = false;
-                if (result.getSelection() == 0) Game.closeGame();
-                break;
-        }
-
     }
 
     @Override

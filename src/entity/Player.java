@@ -4,7 +4,7 @@ import collision.shapes.Rectangle;
 import game.Game;
 import gear.tool.PickAxe;
 import inventory.Inventory;
-import inventory.PlayerInventoryLower;
+import inventory.PlayerInventory;
 import item.Item;
 import item.part.Bracket;
 import item.part.LongHandle;
@@ -14,7 +14,7 @@ import math.Vector2;
 
 public class Player extends LivingEntity {
 
-    PlayerInventoryLower inventory;
+    PlayerInventory inventory;
 
     private long globalCD;
 
@@ -27,7 +27,7 @@ public class Player extends LivingEntity {
         rect = new java.awt.Rectangle(64, 64);
         rect.setLocation(x, y);
         this.currentTool = new PickAxe("Pick Axe", new LongHandle("handle", Resource.stone), new PickHead("pick_head", Resource.stone), new Bracket("bracket", Resource.stone));
-        inventory = new PlayerInventoryLower();
+        inventory = new PlayerInventory();
     }
 
     public void update(long delta) {

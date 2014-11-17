@@ -37,7 +37,7 @@
         // Moves the Rectangle prior to check if there are any collisions.
         rect.translate(distance, 0);
 
-        for (int i = 0; i < entities.size(); i++) {
+        for (int i = 0; i < entities.amount(); i++) {
             // Skips checks on its self and the exclude entity.
             if (entities.get(i) == entity || entities.get(i) == excludeEntity) continue;
             Entity entity1 = entities.get(i);
@@ -96,7 +96,7 @@
         // Moves the Rectangle prior to check if there are any collisions.
         rect.translate(0, distance);
 
-        for (int i = 0; i < entities.size(); i++) {
+        for (int i = 0; i < entities.amount(); i++) {
             if (entities.get(i) == entity || entities.get(i) == excludeEntity) continue;
             Entity entity1 = entities.get(i);
             Rectangle rect1 = entity1.getRect();

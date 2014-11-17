@@ -5,55 +5,55 @@ import item.Item;
 public class ItemStack {
 
     private Item item;
-    private int size;
+    private int amount;
     private int maxSize;
     private boolean canStack = true;
 
-    public ItemStack(Item item, int size) {
+    public ItemStack(Item item, int amount) {
         this.item = item;
-        this.size = size;
+        this.amount = amount;
         this.maxSize = item.getMaxStackSize();
     }
 
     public ItemStack splitStack() {
-        int halfStack = size / 2;
-        size = halfStack + size % 2;
+        int halfStack = amount / 2;
+        amount = halfStack + amount % 2;
         if (halfStack <= 0) return null;
         return new ItemStack(item, halfStack);
     }
 
     public ItemStack placeOne() {
         if (!canStack) return null;
-        size--;
+        amount--;
         return new ItemStack(item, 1);
     }
 
     public ItemStack mergeStacks(ItemStack stack) {
         if (stack == null || !item.equals(stack.getItem())) return stack;
 
-        int totalItems = size + stack.getSize();
+        int totalItems = amount + stack.getAmount();
         if (totalItems > maxSize) {
-            size = maxSize;
+            amount = maxSize;
             return new ItemStack(item, totalItems - maxSize);
         }
-        size += stack.getSize();
+        amount += stack.getAmount();
         return null;
     }
 
     public boolean canAdd(Item item, int amount) {
-        if (size + amount <= maxSize && item.equals(item)) {
-            size += amount;
+        if (this.amount + amount <= maxSize && item.equals(item)) {
+            this.amount += amount;
             return true;
         }
         else return false;
     }
 
     public boolean isFull() {
-        return size == maxSize;
+        return amount == maxSize;
     }
 
-    public int getSize() {
-        return size;
+    public int getAmount() {
+        return amount;
     }
 
     public Item getItem() {
