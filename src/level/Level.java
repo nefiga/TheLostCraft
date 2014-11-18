@@ -318,7 +318,7 @@ public class Level implements Screen, OnClickListener {
         view.setTopPadding(20);
         view.setSpacing(20);
         view.setOnClickListener(this);
-        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2, 300, 200, 20, 0, view);
+        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2, view);
 
         Game.openMenu(menu);
     }
@@ -330,7 +330,7 @@ public class Level implements Screen, OnClickListener {
     }
 
     @Override
-    public void onClick(MenuComponent c) {
+    public void onLeftClick(MenuComponent c) {
         switch (c.getId()) {
             case 0:
                 paused = false;
@@ -342,5 +342,10 @@ public class Level implements Screen, OnClickListener {
                 Game.closeGame();
                 break;
         }
+    }
+
+    @Override
+    public void onRightClick(MenuComponent c) {
+
     }
 }

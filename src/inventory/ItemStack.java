@@ -40,12 +40,12 @@ public class ItemStack {
         return null;
     }
 
-    public boolean canAdd(Item item, int amount) {
-        if (this.amount + amount <= maxSize && item.equals(item)) {
-            this.amount += amount;
+    public boolean canAddItem(Item item) {
+        if (this.amount + 1 <= maxSize && item.equals(item)) {
+            this.amount += 1;
             return true;
         }
-        else return false;
+        return false;
     }
 
     public boolean isFull() {

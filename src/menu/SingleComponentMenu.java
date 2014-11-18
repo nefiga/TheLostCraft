@@ -4,12 +4,15 @@ import game.Game;
 import game.Screen;
 import game.fonts.Font;
 import menu.component.*;
-import menu.component.MenuComponent.OnClickListener;
 
-public class SingleComponentMenu extends Menu implements OnClickListener {
+public class SingleComponentMenu extends Menu{
 
-    public SingleComponentMenu(int x, int y, int width, int height, int drawSize, int tileSet, MenuComponent component) {
-        super(x, y, width, height, drawSize, tileSet, component);
+    public SingleComponentMenu(int x, int y, MenuComponent component) {
+        super(x, y, component);
+    }
+
+    public SingleComponentMenu(int x, int y) {
+        super(x, y);
     }
 
     public void update(long delta) {
@@ -17,7 +20,6 @@ public class SingleComponentMenu extends Menu implements OnClickListener {
     }
 
     public void render() {
-        //super.render();
 
         MenuComponent.batch.begin();
         component.render(MenuComponent.batch);
@@ -36,7 +38,7 @@ public class SingleComponentMenu extends Menu implements OnClickListener {
     }
 
     @Override
-    public void release(int button, int x, int y) {
+    public void onMouseButtonReleased(int button, int x, int y) {
         if (button == 0) {
             component.release(x, y);
         }
@@ -72,11 +74,6 @@ public class SingleComponentMenu extends Menu implements OnClickListener {
     }
 
     @Override
-    public void onClick(MenuComponent c) {
-
-    }
-
-    @Override
     public void moveCursorUp() {
     }
 
@@ -101,5 +98,4 @@ public class SingleComponentMenu extends Menu implements OnClickListener {
     @Override
     public void back() {
     }
-
 }

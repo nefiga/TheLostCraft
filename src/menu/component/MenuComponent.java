@@ -65,7 +65,6 @@ public class MenuComponent {
 
     public void press(int x, int y) {
         if (inBounds(x, y)){
-            System.out.println("Press");
             pressed = true;
             holding = true;
         }
@@ -73,7 +72,7 @@ public class MenuComponent {
 
     public void release(int x, int y) {
         if (inBounds(x, y)){
-            if (pressed && hasFocus && listener != null) listener.onClick(this);
+            if (pressed && hasFocus && listener != null) listener.onLeftClick(this);
             pressed = false;
             holding = false;;
         }
@@ -242,6 +241,8 @@ public class MenuComponent {
      * An event listener for mouse clicks
      */
     public interface OnClickListener {
-        public void onClick(MenuComponent c);
+        public void onLeftClick(MenuComponent c);
+
+        public void onRightClick(MenuComponent c);
     }
 }

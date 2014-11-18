@@ -72,7 +72,7 @@ public class MainScreen implements Screen, OnClickListener {
         horizontalListView.setRenderBackground(false);
         horizontalListView.setOnClickListener(this);
 
-        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300, 25, 15, 16, 0, verticalListView);
+        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300, verticalListView);
         menu.open();
     }
 
@@ -100,7 +100,7 @@ public class MainScreen implements Screen, OnClickListener {
     boolean loadMap;
 
     @Override
-    public void onClick(MenuComponent c) {
+    public void onLeftClick(MenuComponent c) {
         switch (c.getId()) {
             case LOAD_GAME:
                 verticalListView.setTopPadding(20);
@@ -181,5 +181,10 @@ public class MainScreen implements Screen, OnClickListener {
                 break;
 
         }
+    }
+
+    @Override
+    public void onRightClick(MenuComponent c) {
+
     }
 }

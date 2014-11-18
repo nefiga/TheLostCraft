@@ -4,7 +4,7 @@ import item.Item;
 
 public interface Inventory {
 
-    public Item addItem(Item item);
+    public boolean canAddItem(Item item);
 
     public Item addItemInSlot(Item item, int slot);
 
@@ -12,7 +12,7 @@ public interface Inventory {
 
     public ItemStack addItemStackInSlot(ItemStack stack, int slot);
 
-    public ItemStack takeItem();
+    public ItemStack takeItem(int slot);
 
-    public ItemStack splitStack();
+    public ItemStack splitStack(int slot);
 }

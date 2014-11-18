@@ -128,4 +128,33 @@ public class Font {
         }
         return null;
     }
+
+    public static boolean isPrintableChar(int character) {
+        // Space - /
+        if (character > 31 && character < 48) {
+            return true;
+        }
+        // 0 - 9
+        else if (character >  47 && character < 58) {
+            return true;
+        }
+        //  : - @
+        else if (character > 57 && character < 65) {
+            return true;
+        }
+        // [ - `
+        else if (character > 90 && character < 97) {
+            return true;
+        }
+        // a - z
+        else if (character > 96 && character < 123) {
+            return true;
+        }
+        // { - ~
+        else if (character > 122 && character < 127) {
+            return true;
+        }
+        return false;
+    }
+
 }

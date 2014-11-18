@@ -262,9 +262,6 @@ public class VerticalListView extends MenuComponent {
      */
     public void render(SpriteBatch batch) {
         if (renderBackground)
-            if (listView == null) {
-                System.out.println("NULL");
-            }
             batch.draw(screenX, screenY, width, height, listView[0], listView[1], listView[2], listView[3]);
 
         // Upper scrollButton

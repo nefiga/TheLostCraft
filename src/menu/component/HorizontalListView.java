@@ -192,6 +192,10 @@ public class HorizontalListView extends MenuComponent{
         adjustComponents();
     }
 
+    public void replaceComponent(MenuComponent component) {
+        components.add(components.indexOf(this), component);
+    }
+
     public void reloadComponents(MenuComponent... components) {
         this.components.clear();
         for (int i = 0; i < components.length; i++) {

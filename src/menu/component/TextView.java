@@ -49,7 +49,7 @@ public class TextView extends MenuComponent {
         if (hasFocus) {
             if (c == 8 && text.length() > 0) {
                 text.setLength(text.length() - 1);
-            } else if (text.length() * textSize < width) {
+            } else if (text.length() * textSize < width && Font.isPrintableChar(c)) {
                 text.append(c);
             }
         }
@@ -59,7 +59,7 @@ public class TextView extends MenuComponent {
         if (hasFocus) {
             if (c == 8 && text.length() > 0) {
                 text.setLength(text.length() - 1);
-            } else if (text.length() * textSize + textSize < width) {
+            } else if (text.length() * textSize + textSize < width && Font.isPrintableChar(c)) {
                 text.append(c);
             }
         }

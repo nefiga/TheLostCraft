@@ -59,24 +59,25 @@ public class Game extends GameLoop {
         if (menuOpen) {
             menuInput.update(delta);
             menu.update(delta);
-        } else {
-            switch (state) {
-                case MAIN_MENU:
-                    mainScreen.update(delta);
-                    break;
-                case GAME:
-                    playerInput.update(delta);
-                    player.update(delta);
-                    xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
-                    yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
-                    break;
-                case MAP_EDITOR:
-                    editorInput.update(delta);
-                    xOffset = mapEditor.getMapX() - (Display.getWidth() / 2 - 32);
-                    yOffset = mapEditor.getMapY() - (Display.getHeight() / 2 - 32);
-                    mapEditor.update(delta);
-                    break;
-            }
+        }
+
+        switch (state) {
+            case MAIN_MENU:
+                mainScreen.update(delta);
+                break;
+            case GAME:
+                playerInput.update(delta);
+                player.update(delta);
+                xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
+                yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
+                break;
+            case MAP_EDITOR:
+                editorInput.update(delta);
+                xOffset = mapEditor.getMapX() - (Display.getWidth() / 2 - 32);
+                yOffset = mapEditor.getMapY() - (Display.getHeight() / 2 - 32);
+                mapEditor.update(delta);
+                break;
+
         }
 
         updateTime(delta);

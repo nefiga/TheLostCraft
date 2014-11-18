@@ -1,39 +1,32 @@
 package gear;
 
-import game.graphics.ImageManager;
 import game.graphics.SpriteBatch;
-import game.graphics.TextureAtlas;
+import item.Item;
 
 import java.awt.image.BufferedImage;
 
-public class Gear {
-
-    public static TextureAtlas gearAtlas;
-
+public class Gear extends Item{
     protected int[] imagePosition;
 
     protected BufferedImage image;
 
-    final int gearSize = 32;
-
-    private String name;
-
     protected Stats stats;
 
     public Gear(String name) {
-        this.name = name;
+        super(name);
 
-        if (gearAtlas == null) {
-            gearAtlas = new TextureAtlas(TextureAtlas.LARGE);
-            // Create default texture
-            image = ImageManager.getImage("/items/void_item");
-            imagePosition = gearAtlas.addTexture("/items/void_item");
-        }
+        // Gear pieces can not stack
+        setMaxStackSize(1);
+    }
+
+    public void setTexture(String name) {
+        // Doing nothing, because Gear has its own textureAtlas. Also images
+        // must be loaded a different way
     }
 
     public void setTexture(String name, BufferedImage image) {
         this.image = image;
-        imagePosition = gearAtlas.addTexture(name, image);
+        imagePosition = itemAtlas.addTexture(name, image);
     }
 
     /**

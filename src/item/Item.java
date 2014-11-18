@@ -14,7 +14,7 @@ public class Item {
 
     protected Shape shape;
 
-    protected int[]  imagePosition;
+    protected int[] imagePosition;
 
     protected BufferedImage image;
 
@@ -46,7 +46,7 @@ public class Item {
 
         if (items == null) {
             items = new Item[1000];
-            itemAtlas = new TextureAtlas(TextureAtlas.SMALL);
+            itemAtlas = new TextureAtlas(TextureAtlas.MEDIUM);
             image = ImageManager.getImage("/items/void_item");
             imagePosition = itemAtlas.addTexture("/items/void_item");
         }
@@ -55,6 +55,7 @@ public class Item {
     }
 
     public void setTexture(String image) {
+        // Gear images can't be loaded with this setTexture see the Gear class setTexture
         this.image = ImageManager.getImage("/items/" + image);
         this.imageString = image;
         imagePosition = itemAtlas.addTexture("/items/" + image);
@@ -74,6 +75,7 @@ public class Item {
 
     /**
      * Adds an item to the items array.
+     *
      * @param item Item to be added.
      * @return The position of the item in the items array. The items id should be set to this.
      */
@@ -85,6 +87,10 @@ public class Item {
 
     public BufferedImage getImage() {
         return image;
+    }
+
+    public int[] getImagePosition() {
+        return imagePosition;
     }
 
     public String getImageString() {
