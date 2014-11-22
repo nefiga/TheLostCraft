@@ -16,13 +16,7 @@ public class VerticalListView extends MenuComponent {
 
     private int sbWidth = 30, sbHeight = 20;
 
-    private int spacing = 5;
-
     private int currentComponent;
-
-    private boolean center = true;
-
-    private boolean renderBackground = true;
 
     private boolean outOfUpperBounds, outOfLowerBounds;
 
@@ -85,7 +79,7 @@ public class VerticalListView extends MenuComponent {
         } else lowerHasFocus = false;
     }
 
-    public void press(int x, int y) {
+    public void press(int button, int x, int y) {
         // upper scrollButton
         if (x > this.screenX && x < horizontalBounds && y > this.screenY - sbHeight && y < this.screenY) {
             upperPressed = upperHolding = true;
@@ -96,12 +90,12 @@ public class VerticalListView extends MenuComponent {
         } else {
             for (int i = 0; i < components.size(); i++) {
                 if (isVisible(components.get(i)))
-                    components.get(i).press(x, y);
+                    components.get(i).press(button, x, y);
             }
         }
     }
 
-    public void release(int x, int y) {
+    public void release(int button, int x, int y) {
         // upper scrollButton
         if (x > this.screenX && x < horizontalBounds && y > this.screenY - sbHeight && y < this.screenY) {
             if (upperPressed && upperHasFocus) {
@@ -120,7 +114,7 @@ public class VerticalListView extends MenuComponent {
         } else {
             for (int i = 0; i < components.size(); i++) {
                 if (isVisible(components.get(i)))
-                    components.get(i).release(x, y);
+                    components.get(i).release(button, x, y);
             }
         }
     }
@@ -165,10 +159,6 @@ public class VerticalListView extends MenuComponent {
             }
             currentComponent--;
         }
-    }
-
-    public int getSpacing() {
-        return spacing;
     }
 
     public boolean isVisible(MenuComponent component) {
@@ -217,19 +207,6 @@ public class VerticalListView extends MenuComponent {
 
     public void setPosition(int x, int y) {
         super.setPosition(x, y);
-        adjustComponents();
-    }
-
-    public void setRenderBackground(boolean renderBackground) {
-        this.renderBackground = renderBackground;
-    }
-
-    public void setSpacing(int spacing) {
-        this.spacing = spacing;
-    }
-
-    public void setCenter(boolean center) {
-        this.center = center;
         adjustComponents();
     }
 

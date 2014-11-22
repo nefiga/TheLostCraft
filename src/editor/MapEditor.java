@@ -325,6 +325,16 @@ public class MapEditor implements Screen, OnClickListener{
     }
 
     @Override
+    public void onLeftPressed(MenuComponent c) {
+
+    }
+
+    @Override
+    public void onLeftReleased(MenuComponent c) {
+
+    }
+
+    @Override
     public void onLeftClick(MenuComponent c) {
         switch (c.getId()) {
             case 0:
@@ -335,6 +345,16 @@ public class MapEditor implements Screen, OnClickListener{
                 Game.closeMapEditor();
                 break;
         }
+    }
+
+    @Override
+    public void onRightPressed(MenuComponent c) {
+
+    }
+
+    @Override
+    public void onRightReleased(MenuComponent c) {
+
     }
 
     @Override

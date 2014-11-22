@@ -76,7 +76,7 @@ public class HorizontalListView extends MenuComponent{
         } else rightHasFocus = false;
     }
 
-    public void press(int x, int y) {
+    public void press(int button, int x, int y) {
         // Left scrollButton
         if (x > this.screenX - sbWidth && x < this.screenX && y > this.screenY && y < this.verticalBounds) {
             leftPressed = leftHolding = true;
@@ -87,12 +87,12 @@ public class HorizontalListView extends MenuComponent{
         } else {
             for (int i = 0; i < components.size(); i++) {
                 if (isVisible(components.get(i)))
-                    components.get(i).press(x, y);
+                    components.get(i).press(button, x, y);
             }
         }
     }
 
-    public void release(int x, int y) {
+    public void release(int button, int x, int y) {
         // Left scrollButton
         if (x > this.screenX - sbWidth && x < this.screenX && y > this.screenY && y < this.verticalBounds) {
             if (leftPressed && leftHasFocus) {
@@ -111,7 +111,7 @@ public class HorizontalListView extends MenuComponent{
         } else {
             for (int i = 0; i < components.size(); i++) {
                 if (isVisible(components.get(i)))
-                    components.get(i).release(x, y);
+                    components.get(i).release(button, x, y);
             }
         }
     }

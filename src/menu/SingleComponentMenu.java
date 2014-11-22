@@ -3,6 +3,8 @@ package menu;
 import game.Game;
 import game.Screen;
 import game.fonts.Font;
+import input.InputReceiver;
+import input.MenuInputReceiver;
 import menu.component.*;
 
 public class SingleComponentMenu extends Menu{
@@ -32,16 +34,12 @@ public class SingleComponentMenu extends Menu{
 
     @Override
     public void onMouseButtonPressed(int button, int x, int y) {
-        if (button == 0) {
-            component.press(x, y);
-        }
+            component.press(button, x, y);
     }
 
     @Override
     public void onMouseButtonReleased(int button, int x, int y) {
-        if (button == 0) {
-            component.release(x, y);
-        }
+            component.release(button, x, y);
     }
 
     @Override

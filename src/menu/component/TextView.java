@@ -2,6 +2,7 @@ package menu.component;
 
 import game.fonts.Font;
 import game.graphics.SpriteBatch;
+import input.InputReceiver;
 
 public class TextView extends MenuComponent {
 
@@ -38,8 +39,8 @@ public class TextView extends MenuComponent {
     }
 
     @Override
-    public void press(int x, int y) {
-        if (inBounds(x, y))
+    public void press(int button, int x, int y) {
+        if (inBounds(x, y) && button == InputReceiver.MOUSE_LEFT_BUTTON)
             focus();
         else
             unFocus();

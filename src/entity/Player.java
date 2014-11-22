@@ -11,6 +11,8 @@ import item.part.LongHandle;
 import item.part.PickHead;
 import item.resource.Resource;
 import math.Vector2;
+import menu.PlayerInventoryMenu;
+import org.lwjgl.opengl.Display;
 
 public class Player extends LivingEntity {
 
@@ -56,7 +58,9 @@ public class Player extends LivingEntity {
         level.onEscapePressed();
     }
 
-    public void openInventory() {
+    public void toggleInventory() {
+        PlayerInventoryMenu menu = new PlayerInventoryMenu(Display.getWidth() / 2 - 150 , Display.getHeight() / 2 - 75, inventory);
+        Game.openMenu(menu);
     }
 
     public void openInventory(Inventory upperInventory) {

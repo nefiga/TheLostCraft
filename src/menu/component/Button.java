@@ -74,16 +74,20 @@ public class Button extends MenuComponent {
     }
 
     public void render(SpriteBatch batch) {
-        if (pressed)
-            batch.draw(screenX, screenY, width, height, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
-        else if (hasFocus)
-            batch.draw(screenX, screenY, width, height, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
-        else batch.draw(screenX, screenY, width, height, image[0], image[1], image[2], image[3]);
+        if (renderBackground) {
+            if (leftButtonPressed)
+                batch.draw(screenX, screenY, width, height, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
+            else if (hasFocus)
+                batch.draw(screenX, screenY, width, height, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
+            else
+                batch.draw(screenX, screenY, width, height, image[0], image[1], image[2], image[3]);
+        }
+
     }
 
     public void renderString(Font font) {
         if (text != null) {
-            font.drawString(text, textSize,  screenX + (width - text.length() * textSize) / 2, screenY + (height - textSize) / 2);
+            font.drawString(text, textSize, screenX + (width - text.length() * textSize) / 2, screenY + (height - textSize) / 2);
         }
     }
 }

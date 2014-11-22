@@ -11,6 +11,8 @@ public abstract class InputReceiver {
 
     protected Game game;
 
+    public static final int MOUSE_LEFT_BUTTON = 0, MOUSE_RIGHT_BUTTON = 1;
+
     protected List<Action> actions = new ArrayList<Action>();
 
     protected boolean allowTyping;

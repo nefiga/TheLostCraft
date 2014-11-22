@@ -2,7 +2,7 @@ package inventory;
 
 import item.Item;
 
-public class SizedInventory implements Inventory{
+public class SizedInventory implements Inventory {
 
     protected ItemStack[] itemSlots = new ItemStack[24];
 
@@ -10,10 +10,16 @@ public class SizedInventory implements Inventory{
         return itemSlots;
     }
 
+    public ItemStack getItemStackAt(int position) {
+        if (position < itemSlots.length && itemSlots[position] != null)
+            return itemSlots[position];
+        return null;
+    }
+
     @Override
     public boolean canAddItem(Item item) {
         for (int i = 0; i < itemSlots.length; i++) {
-            if (itemSlots[i].canAddItem(item))
+            if (itemSlots[i] != null && itemSlots[i].canAddItem(item))
                 return true;
         }
         for (int i = 0; i < itemSlots.length; i++) {
@@ -27,7 +33,7 @@ public class SizedInventory implements Inventory{
 
     @Override
     public Item addItemInSlot(Item item, int slot) {
-        if (itemSlots[slot].canAddItem(item))
+        if (slot < itemSlots.length && itemSlots[slot].canAddItem(item))
             return null;
 
         return item;
@@ -51,16 +57,22 @@ public class SizedInventory implements Inventory{
 
     @Override
     public ItemStack addItemStackInSlot(ItemStack stack, int slot) {
-        return this.itemSlots[slot].mergeStacks(stack);
+        if (slot < itemSlots.length && itemSlots[slot] != null)
+            return this.itemSlots[slot].mergeStacks(stack);
+        return stack;
     }
 
     @Override
     public ItemStack takeItem(int slot) {
-        return itemSlots[slot];
+        if (slot < itemSlots.length && itemSlots[slot] != null)
+            return itemSlots[slot];
+        return null;
     }
 
     @Override
     public ItemStack splitStack(int slot) {
-        return itemSlots[slot].splitStack();
+        if (slot < itemSlots.length && itemSlots[slot] != null)
+            return itemSlots[slot].splitStack();
+        return null;
     }
 }

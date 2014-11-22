@@ -5,6 +5,7 @@ import game.graphics.ShaderManager;
 import game.graphics.SpriteBatch;
 import game.graphics.Texture;
 import game.graphics.TextureAtlas;
+import input.InputReceiver;
 
 public class MenuComponent {
 
@@ -14,7 +15,7 @@ public class MenuComponent {
     private OnClickListener listener;
 
     /**
-     * Insets what this component is holding in this order (top, right, bottom, left).
+     * Insets what this component is leftButtonHolding in this order (top, right, bottom, left).
      */
     protected int topPadding, rightPadding, bottomPadding, leftPadding;
 
@@ -22,9 +23,15 @@ public class MenuComponent {
 
     protected int screenX, screenY, menuX, menuY, width, height, verticalBounds, horizontalBounds;
 
+    protected boolean center = true;
+
+    protected boolean renderBackground = true;
+
     protected int textSize = 25;
 
-    protected boolean hasFocus, pressed, holding;
+    protected int spacing = 5;
+
+    protected boolean hasFocus, leftButtonPressed, leftButtonHolding,  rightButtonPressed, rightButtonHolding;
 
     /**
      * Creates a new MenuComponent when the location of the component is not known.
@@ -63,18 +70,45 @@ public class MenuComponent {
 
     }
 
-    public void press(int x, int y) {
-        if (inBounds(x, y)){
-            pressed = true;
-            holding = true;
+    public void press(int button, int x, int y) {
+        if (inBounds(x, y)) {
+            if (button == InputReceiver.MOUSE_LEFT_BUTTON) {
+                if (listener != null)
+                    listener.onRightPressed(this);
+
+                leftButtonPressed = true;
+                leftButtonHolding = true;
+            }
+            else {
+                if (listener != null)
+                    listener.onRightPressed(this);
+
+                rightButtonPressed = true;
+                rightButtonHolding = true;
+            }
         }
     }
 
-    public void release(int x, int y) {
-        if (inBounds(x, y)){
-            if (pressed && hasFocus && listener != null) listener.onLeftClick(this);
-            pressed = false;
-            holding = false;;
+    public void release(int button, int x, int y) {
+        if (inBounds(x, y)) {
+            if (button == InputReceiver.MOUSE_LEFT_BUTTON) {
+                if (leftButtonPressed && hasFocus && listener != null)
+                    listener.onLeftClick(this);
+                else if(listener != null)
+                    listener.onLeftReleased(this);
+
+                leftButtonPressed = false;
+                leftButtonHolding = false;
+            }
+            else {
+                if (rightButtonPressed && hasFocus && listener != null)
+                    listener.onRightClick(this);
+                else if (listener != null)
+                    listener.onRightReleased(this);
+
+                rightButtonPressed = false;
+                rightButtonHolding = false;
+            }
         }
     }
 
@@ -100,6 +134,10 @@ public class MenuComponent {
         hasFocus = false;
     }
 
+    public void renderBackground(boolean renderBackground) {
+        this.renderBackground = renderBackground;
+    }
+
     public void setPositionInMenu(int menuX, int menuY) {
         this.screenX = this.menuX + menuX;
         this.screenY = this.menuY + menuY;
@@ -113,6 +151,11 @@ public class MenuComponent {
         this.screenY = y;
         horizontalBounds = x + width;
         verticalBounds = y + height;
+    }
+
+    public void setCenter(boolean center) {
+        this.center = center;
+        adjustComponents();
     }
 
     protected void adjustComponents() {
@@ -140,6 +183,10 @@ public class MenuComponent {
 
     public void setLeftPadding(int padding) {
         leftPadding = padding;
+    }
+
+    public void setSpacing(int spacing) {
+        this.spacing = spacing;
     }
 
     public void setWidth(int width) {
@@ -189,6 +236,10 @@ public class MenuComponent {
         return screenY;
     }
 
+    public int getSpacing() {
+        return spacing;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -197,8 +248,8 @@ public class MenuComponent {
         return height;
     }
 
-    public boolean isHolding() {
-        return holding;
+    public boolean isLeftButtonHolding() {
+        return leftButtonHolding;
     }
 
     /**
@@ -211,9 +262,9 @@ public class MenuComponent {
         return false;
     }
 
-    public boolean isPressed() {
-        if (pressed) {
-            pressed = false;
+    public boolean isLeftButtonPressed() {
+        if (leftButtonPressed) {
+            leftButtonPressed = false;
             return true;
         }
         return false;
@@ -241,7 +292,16 @@ public class MenuComponent {
      * An event listener for mouse clicks
      */
     public interface OnClickListener {
+
+        public void onLeftPressed(MenuComponent c);
+
+        public void onLeftReleased(MenuComponent c);
+
         public void onLeftClick(MenuComponent c);
+
+        public void onRightPressed(MenuComponent c);
+
+        public void onRightReleased(MenuComponent c);
 
         public void onRightClick(MenuComponent c);
     }

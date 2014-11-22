@@ -53,7 +53,7 @@ public class PlayerInputReceiver extends InputReceiver {
         }
         if (leftButton.isHolding() || leftButton.isPressed()) player.interactWith(Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
         if (escape.isPressed()) player.onEscapedPressed();
-        if (v.isPressed()) player.openInventory();
+        if (v.isPressed()) player.toggleInventory();
         if (velocityX != 0 || velocityY != 0) {
             player.move(velocityX, velocityY);
         }

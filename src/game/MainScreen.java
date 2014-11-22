@@ -76,6 +76,8 @@ public class MainScreen implements Screen, OnClickListener {
         menu.open();
     }
 
+    //-------- Screen methods ---------
+
     @Override
     public void update(long delta) {
     }
@@ -94,6 +96,18 @@ public class MainScreen implements Screen, OnClickListener {
 
     @Override
     public void screenResized(int width, int height) {
+
+    }
+
+    //--------- OnClickListener methods-------------
+
+    @Override
+    public void onLeftPressed(MenuComponent c) {
+
+    }
+
+    @Override
+    public void onLeftReleased(MenuComponent c) {
 
     }
 
@@ -184,7 +198,19 @@ public class MainScreen implements Screen, OnClickListener {
     }
 
     @Override
+    public void onRightPressed(MenuComponent c) {
+
+    }
+
+    @Override
+    public void onRightReleased(MenuComponent c) {
+
+    }
+
+    @Override
     public void onRightClick(MenuComponent c) {
 
     }
+
+
 }
