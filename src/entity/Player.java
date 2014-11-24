@@ -18,6 +18,8 @@ public class Player extends LivingEntity {
 
     SizedInventory inventory;
 
+    PlayerInventoryMenu menu;
+
     private long globalCD;
 
     private int harvestReach = 196;
@@ -29,7 +31,8 @@ public class Player extends LivingEntity {
         rect = new java.awt.Rectangle(64, 64);
         rect.setLocation(x, y);
         this.currentTool = new PickAxe("Pick Axe", new LongHandle("handle", Resource.stone), new PickHead("pick_head", Resource.stone), new Bracket("bracket", Resource.stone));
-        inventory = new SizedInventory();
+        inventory = new SizedInventory(SizedInventory.SLOT_24);
+        menu = new PlayerInventoryMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2 - 75, inventory);
     }
 
     public void update(long delta) {
@@ -55,12 +58,17 @@ public class Player extends LivingEntity {
     }
 
     public void onEscapedPressed() {
-        level.onEscapePressed();
+        if (menu.isOpen())
+            menu.close();
+        else
+            level.onEscapePressed();
     }
 
     public void toggleInventory() {
-        PlayerInventoryMenu menu = new PlayerInventoryMenu(Display.getWidth() / 2 - 150 , Display.getHeight() / 2 - 75, inventory);
-        Game.openMenu(menu);
+        if (menu.isOpen())
+            menu.close();
+        else
+            menu.open();
     }
 
     public void openInventory(Inventory upperInventory) {

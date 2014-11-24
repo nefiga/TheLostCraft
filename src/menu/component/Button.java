@@ -69,10 +69,6 @@ public class Button extends MenuComponent {
     public void setLeftPadding(int padding) {
     }
 
-    public String getText() {
-        return text;
-    }
-
     public void render(SpriteBatch batch) {
         if (renderBackground) {
             if (leftButtonPressed)

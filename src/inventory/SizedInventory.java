@@ -4,7 +4,20 @@ import item.Item;
 
 public class SizedInventory implements Inventory {
 
-    protected ItemStack[] itemSlots = new ItemStack[24];
+    public static final int SLOT_2 = 2, SLOT_6 = 6, SLOT_12 = 12,  SLOT_24 = 24;
+
+    protected int size;
+
+    protected ItemStack[] itemSlots;
+
+    public SizedInventory(int size) {
+        this.size = size;
+        itemSlots = new ItemStack[size];
+    }
+
+    public int getSize() {
+        return size;
+    }
 
     public ItemStack[] getItemSlots() {
         return itemSlots;
@@ -32,15 +45,19 @@ public class SizedInventory implements Inventory {
     }
 
     @Override
-    public Item addItemInSlot(Item item, int slot) {
-        if (slot < itemSlots.length && itemSlots[slot].canAddItem(item))
-            return null;
+    public ItemStack addItemInSlot(ItemStack stack, int slot) {
+        if (stack == null) return null;
 
-        return item;
+        if (slot < itemSlots.length && itemSlots[slot].canAddItem(stack.getItem()))
+            return new ItemStack(stack.getItem(), stack.getAmount() - 1);
+
+        return stack;
     }
 
     @Override
     public ItemStack addItemStack(ItemStack stack) {
+        if (stack == null) return null;
+
         for (int i = 0; i < itemSlots.length; i++) {
             if (stack.getAmount() <= 0) return null;
             if (itemSlots[i].getItem() == stack.getItem())
@@ -57,6 +74,8 @@ public class SizedInventory implements Inventory {
 
     @Override
     public ItemStack addItemStackInSlot(ItemStack stack, int slot) {
+        if (stack == null) return null;
+
         if (slot < itemSlots.length && itemSlots[slot] != null)
             return this.itemSlots[slot].mergeStacks(stack);
         return stack;

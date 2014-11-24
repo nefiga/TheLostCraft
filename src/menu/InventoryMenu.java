@@ -7,19 +7,20 @@ import game.graphics.Texture;
 import inventory.ItemStack;
 import inventory.SizedInventory;
 import item.Item;
+import item.resource.Resource;
 import menu.component.InventoryComponent;
 import menu.component.MenuComponent;
 import menu.component.MenuComponent.OnClickListener;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 
 public class InventoryMenu extends SingleComponentMenu implements OnClickListener {
-
-    SpriteBatch inventoryBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
 
     SizedInventory inventory;
 
     InventoryComponent[] inventoryComponents;
 
-    ItemStack holding = null;
+    ItemStack holding = new ItemStack(Resource.stone, 5);
 
     public InventoryMenu(int x, int y, MenuComponent component, SizedInventory inventory) {
         super(x, y, component);
@@ -34,24 +35,26 @@ public class InventoryMenu extends SingleComponentMenu implements OnClickListene
     }
 
     private void createInventoryComponents() {
-        ItemStack[] itemStacks = inventory.getItemSlots();
-        inventoryComponents = new InventoryComponent[itemStacks.length];
+        inventoryComponents = new InventoryComponent[inventory.getSize()];
 
-        for (int i = 0; i < itemStacks.length; i++) {
+        for (int i = 0; i < inventory.getSize(); i++) {
             inventoryComponents[i] = new InventoryComponent(i, 32, 32);
             inventoryComponents[i].renderBackground(false);
+            inventoryComponents[i].setOnClickListener(this);
         }
     }
 
     public void render() {
         super.render();
 
-        inventoryBatch.begin();
+        MenuComponent.batch.begin();
         for (int i = 0; i < inventoryComponents.length; i++) {
             if (inventory.getItemStackAt(i) != null)
-                inventoryComponents[i].render(inventoryBatch, inventory.getItemStackAt(i).getItem());
+                inventoryComponents[i].render(MenuComponent.batch, inventory.getItemStackAt(i).getItem());
         }
-        inventoryBatch.end();
+        if (holding != null)
+            holding.getItem().render(MenuComponent.batch, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        MenuComponent.batch.end();
 
         Font.generalFont.begin();
         for (int i = 0; i < inventoryComponents.length; i++) {
@@ -63,7 +66,10 @@ public class InventoryMenu extends SingleComponentMenu implements OnClickListene
 
     @Override
     public void onLeftPressed(MenuComponent c) {
-
+        if (holding != null)
+            holding = inventory.addItemStackInSlot(holding, c.getId());
+        else
+            holding = inventory.getItemStackAt(c.getId());
     }
 
     @Override
@@ -78,7 +84,10 @@ public class InventoryMenu extends SingleComponentMenu implements OnClickListene
 
     @Override
     public void onRightPressed(MenuComponent c) {
-
+        if (holding != null)
+            holding = inventory.addItemInSlot(holding, c.getId());
+        else
+            holding = inventory.splitStack(c.getId());
     }
 
     @Override

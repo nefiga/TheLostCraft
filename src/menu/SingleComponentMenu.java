@@ -62,11 +62,6 @@ public class SingleComponentMenu extends Menu{
     }
 
     @Override
-    public void open() {
-        Game.openMenu(this);
-    }
-
-    @Override
     public void returnResult() {
         screen.returnResult(result);
     }

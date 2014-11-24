@@ -6,6 +6,7 @@ import game.graphics.SpriteBatch;
 import game.graphics.Texture;
 import game.graphics.TextureAtlas;
 import input.InputReceiver;
+import menu.Menu;
 
 public class MenuComponent {
 
@@ -15,13 +16,26 @@ public class MenuComponent {
     private OnClickListener listener;
 
     /**
-     * Insets what this component is leftButtonHolding in this order (top, right, bottom, left).
+     * Insets the contents of this component. Check with the specific component for implementation.
      */
     protected int topPadding, rightPadding, bottomPadding, leftPadding;
 
     private int id;
 
-    protected int screenX, screenY, menuX, menuY, width, height, verticalBounds, horizontalBounds;
+    /**
+     * The x and y position of where the component will be drawn on the screen
+     */
+    protected int screenX, screenY;
+    /**
+     * The x and y position of the component in the menu
+     */
+    protected int  menuX, menuY;
+
+    protected int width, height;
+    /**
+     * The farthest horizontal point and the farthest vertical point of this component
+     */
+    protected int verticalBounds, horizontalBounds;
 
     protected boolean center = true;
 
@@ -43,7 +57,7 @@ public class MenuComponent {
     }
 
     /**
-     * Creates a new MenuComponent at the location of screenX, screenY
+     * Creates a new MenuComponent at the location of menuX, menuY
      */
     public MenuComponent(int id, int menuX, int menuY, int width, int height) {
         this.id = id;
@@ -63,9 +77,6 @@ public class MenuComponent {
 
     }
 
-    /**
-     * Renders the Strings of this component if it has them
-     */
     public void renderString(Font font) {
 
     }
@@ -74,7 +85,7 @@ public class MenuComponent {
         if (inBounds(x, y)) {
             if (button == InputReceiver.MOUSE_LEFT_BUTTON) {
                 if (listener != null)
-                    listener.onRightPressed(this);
+                    listener.onLeftPressed(this);
 
                 leftButtonPressed = true;
                 leftButtonHolding = true;
@@ -138,9 +149,9 @@ public class MenuComponent {
         this.renderBackground = renderBackground;
     }
 
-    public void setPositionInMenu(int menuX, int menuY) {
-        this.screenX = this.menuX + menuX;
-        this.screenY = this.menuY + menuY;
+    public void setPositionInMenu(Menu menu) {
+        this.screenX = menu.getX() + menuX;
+        this.screenY = menu.getY() + menuY;
         horizontalBounds = screenX + width;
         verticalBounds = screenY + height;
         adjustComponents();
@@ -151,6 +162,7 @@ public class MenuComponent {
         this.screenY = y;
         horizontalBounds = x + width;
         verticalBounds = y + height;
+        adjustComponents();
     }
 
     public void setCenter(boolean center) {
@@ -228,10 +240,16 @@ public class MenuComponent {
         return id;
     }
 
+    /**
+     * Returns the x position of this component on the screen
+     */
     public int getScreenX() {
         return screenX;
     }
 
+    /**
+     * Returns the y position of this component on the screen
+     */
     public int getScreenY() {
         return screenY;
     }
@@ -262,14 +280,9 @@ public class MenuComponent {
         return false;
     }
 
-    public boolean isLeftButtonPressed() {
-        if (leftButtonPressed) {
-            leftButtonPressed = false;
-            return true;
-        }
-        return false;
-    }
-
+    /**
+     * Returns true if the mouse is over this component
+     */
     public boolean hasFocus() {
         return hasFocus;
     }

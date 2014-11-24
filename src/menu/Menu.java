@@ -1,8 +1,8 @@
 package menu;
 
+import game.Game;
 import game.Screen;
 import game.fonts.Font;
-import game.graphics.*;
 import menu.component.MenuComponent;
 
 public abstract class Menu {
@@ -15,6 +15,8 @@ public abstract class Menu {
 
     protected MenuComponent component;
 
+    protected boolean open;
+
     protected int x, y;
 
     /**
@@ -25,7 +27,7 @@ public abstract class Menu {
         this.x = x;
         this.y = y;
         this.component = component;
-        this.component.setPositionInMenu(x, y);
+        this.component.setPositionInMenu(this);
     }
 
     public Menu(int x, int y) {
@@ -39,6 +41,28 @@ public abstract class Menu {
 
     public void render() {
 
+    }
+
+    public void open() {
+        Game.openMenu(this);
+        open = true;
+    }
+
+    public void close() {
+        Game.closeMenu();
+        open = false;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public abstract void onMouseButtonPressed(int button, int x, int y);
@@ -64,8 +88,6 @@ public abstract class Menu {
     public abstract void screenResized(int width, int height);
 
     public abstract void openForResult(Result result, Screen screen);
-
-    public abstract void open();
 
     public abstract void returnResult();
 

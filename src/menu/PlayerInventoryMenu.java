@@ -1,9 +1,7 @@
 package menu;
 
-import inventory.ItemStack;
 import inventory.SizedInventory;
 import menu.component.*;
-import menu.component.MenuComponent.OnClickListener;
 
 public class PlayerInventoryMenu extends InventoryMenu {
 
@@ -22,10 +20,9 @@ public class PlayerInventoryMenu extends InventoryMenu {
         bottomView = new HorizontalListView(-1, 301, 32);
         bottomView.setLeftPadding(5);
 
-        ItemStack[] itemSlots = inventory.getItemSlots();
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 8; x++) {
-                if (x + y >= itemSlots.length) continue;
+                if (x + y >= inventory.getSize()) continue;
 
                 if (y == 0)
                     topView.addComponent(inventoryComponents[x + y * 8]);
@@ -37,7 +34,7 @@ public class PlayerInventoryMenu extends InventoryMenu {
         }
 
         this.component = new VerticalListView(-1, 301, 155, topView, middleView, bottomView);
-        component.setPositionInMenu(x, y);
+        component.setPositionInMenu(this);
         component.setTopPadding(12);
         component.setSpacing(12);
         component.setLeftPadding(5);

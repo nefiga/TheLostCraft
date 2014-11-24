@@ -6,7 +6,7 @@ public interface Inventory {
 
     public boolean canAddItem(Item item);
 
-    public Item addItemInSlot(Item item, int slot);
+    public ItemStack addItemInSlot(ItemStack stack, int slot);
 
     public ItemStack addItemStack(ItemStack stack);
 
