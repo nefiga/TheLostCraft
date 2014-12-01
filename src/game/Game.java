@@ -61,6 +61,7 @@ public class Game extends GameLoop {
             menu.update(delta);
         }
 
+
         switch (state) {
             case MAIN_MENU:
                 mainScreen.update(delta);

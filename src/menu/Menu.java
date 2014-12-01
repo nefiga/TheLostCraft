@@ -44,13 +44,13 @@ public abstract class Menu {
     }
 
     public void open() {
-        Game.openMenu(this);
         open = true;
+        Game.openMenu(this);
     }
 
     public void close() {
-        Game.closeMenu();
         open = false;
+        Game.closeMenu();
     }
 
     public boolean isOpen() {

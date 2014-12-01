@@ -20,7 +20,7 @@ public class InventoryMenu extends SingleComponentMenu implements OnClickListene
 
     InventoryComponent[] inventoryComponents;
 
-    ItemStack holding = new ItemStack(Resource.stone, 5);
+    ItemStack holding = null;
 
     public InventoryMenu(int x, int y, MenuComponent component, SizedInventory inventory) {
         super(x, y, component);
