@@ -11,14 +11,14 @@ import item.part.LongHandle;
 import item.part.PickHead;
 import item.resource.Resource;
 import math.Vector2;
-import menu.PlayerInventoryMenu;
+import menu.PlayerInventoryGUI;
 import org.lwjgl.opengl.Display;
 
 public class Player extends LivingEntity {
 
     SizedInventory inventory;
 
-    PlayerInventoryMenu menu;
+    PlayerInventoryGUI menu;
 
     private long globalCD;
 
@@ -32,7 +32,7 @@ public class Player extends LivingEntity {
         rect.setLocation(x, y);
         this.currentTool = new PickAxe("Pick Axe", new LongHandle("handle", Resource.stone), new PickHead("pick_head", Resource.stone), new Bracket("bracket", Resource.stone));
         inventory = new SizedInventory(SizedInventory.SLOT_24);
-        menu = new PlayerInventoryMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2 - 75, inventory);
+        menu = new PlayerInventoryGUI(Display.getWidth() / 2 - 150, Display.getHeight() / 2 - 75, inventory);
     }
 
     public void update(long delta) {

@@ -5,9 +5,9 @@ import game.Screen;
 import game.graphics.*;
 import game.util.MapData;
 import level.Map;
-import menu.Menu;
+import menu.GUI;
 import menu.Result;
-import menu.SingleComponentMenu;
+import menu.SingleComponentGUI;
 import menu.component.Button;
 import menu.component.MenuComponent;
 import menu.component.MenuComponent.OnClickListener;
@@ -20,7 +20,7 @@ public class MapEditor implements Screen, OnClickListener{
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;
     Map map;
-    Menu gameMenu;
+    GUI gameGUI;
 
     public static final String NAME = "Editor";
 
@@ -235,7 +235,7 @@ public class MapEditor implements Screen, OnClickListener{
         view.setTopPadding(20);
         view.setSpacing(20);
         view.setOnClickListener(this);
-        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2, view);
+        SingleComponentGUI menu = new SingleComponentGUI(Display.getWidth() / 2 - 150, Display.getHeight() / 2, view);
 
         Game.openMenu(menu);
     }

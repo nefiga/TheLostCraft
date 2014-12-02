@@ -215,7 +215,7 @@ public class HorizontalListView extends MenuComponent{
         adjustComponents();
     }
 
-    public void setRenderBackground(boolean renderBackground) {
+    public void renderBackground(boolean renderBackground) {
         this.renderBackground = renderBackground;
     }
 

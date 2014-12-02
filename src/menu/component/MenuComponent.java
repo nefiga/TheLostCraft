@@ -6,7 +6,7 @@ import game.graphics.SpriteBatch;
 import game.graphics.Texture;
 import game.graphics.TextureAtlas;
 import input.InputReceiver;
-import menu.Menu;
+import menu.GUI;
 
 public class MenuComponent {
 
@@ -149,9 +149,9 @@ public class MenuComponent {
         this.renderBackground = renderBackground;
     }
 
-    public void setPositionInMenu(Menu menu) {
-        this.screenX = menu.getX() + menuX;
-        this.screenY = menu.getY() + menuY;
+    public void setPositionInMenu(GUI GUI) {
+        this.screenX = GUI.getX() + menuX;
+        this.screenY = GUI.getY() + menuY;
         horizontalBounds = screenX + width;
         verticalBounds = screenY + height;
         adjustComponents();

@@ -1,55 +1,52 @@
 package menu;
 
-import game.Game;
 import game.Screen;
 import game.fonts.Font;
-import input.InputReceiver;
-import input.MenuInputReceiver;
 import menu.component.*;
 
-public class SingleComponentMenu extends Menu{
+public class SingleComponentGUI extends GUI {
 
-    public SingleComponentMenu(int x, int y, MenuComponent component) {
+    public SingleComponentGUI(int x, int y, MenuComponent component) {
         super(x, y, component);
     }
 
-    public SingleComponentMenu(int x, int y) {
+    public SingleComponentGUI(int x, int y) {
         super(x, y);
     }
 
     public void update(long delta) {
-        component.update(delta);
+        mainComponent.update(delta);
     }
 
     public void render() {
 
         MenuComponent.batch.begin();
-        component.render(MenuComponent.batch);
+        mainComponent.render(MenuComponent.batch);
         MenuComponent.batch.end();
 
         Font.generalFont.begin();
-        component.renderString(font);
+        mainComponent.renderString(font);
         Font.generalFont.end();
     }
 
     @Override
     public void onMouseButtonPressed(int button, int x, int y) {
-            component.press(button, x, y);
+        mainComponent.press(button, x, y);
     }
 
     @Override
     public void onMouseButtonReleased(int button, int x, int y) {
-            component.release(button, x, y);
+        mainComponent.release(button, x, y);
     }
 
     @Override
     public void charPressed(char c) {
-        component.onCharPressed(c);
+        mainComponent.onCharPressed(c);
     }
 
     @Override
     public void charHolding(char c) {
-        component.onCharHolding(c);
+        mainComponent.onCharHolding(c);
     }
 
     @Override
@@ -90,5 +87,6 @@ public class SingleComponentMenu extends Menu{
 
     @Override
     public void back() {
+
     }
 }

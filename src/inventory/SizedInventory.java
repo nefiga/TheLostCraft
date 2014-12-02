@@ -4,7 +4,7 @@ import item.Item;
 
 public class SizedInventory implements Inventory {
 
-    public static final int SLOT_2 = 2, SLOT_6 = 6, SLOT_12 = 12,  SLOT_24 = 24;
+    public static final int SLOT_2 = 2, SLOT_6 = 6, SLOT_12 = 12, SLOT_24 = 24;
 
     protected int size;
 
@@ -24,8 +24,12 @@ public class SizedInventory implements Inventory {
     }
 
     public ItemStack getItemStackAt(int position) {
-        if (position < itemSlots.length && itemSlots[position] != null)
-            return itemSlots[position];
+        if (position < itemSlots.length && itemSlots[position] != null) {
+            ItemStack returnStack = itemSlots[position];
+            itemSlots[position] = null;
+            return returnStack;
+        }
+
         return null;
     }
 
@@ -48,8 +52,22 @@ public class SizedInventory implements Inventory {
     public ItemStack addItemInSlot(ItemStack stack, int slot) {
         if (stack == null) return null;
 
-        if (slot < itemSlots.length && itemSlots[slot].canAddItem(stack.getItem()))
-            return new ItemStack(stack.getItem(), stack.getAmount() - 1);
+        if (slot < itemSlots.length) {
+            if (itemSlots[slot] == null) {
+                itemSlots[slot] = new ItemStack(stack.getItem(), 1);
+
+                if (stack.getAmount() > 1)
+                    return new ItemStack(stack.getItem(), stack.getAmount() - 1);
+                else
+                    return null;
+            }
+            else if (itemSlots[slot].canAddItem(stack.getItem())) {
+                if (stack.getAmount() > 1)
+                    return new ItemStack(stack.getItem(), stack.getAmount() - 1);
+                else
+                    return null;
+            }
+        }
 
         return stack;
     }
@@ -76,8 +94,14 @@ public class SizedInventory implements Inventory {
     public ItemStack addItemStackInSlot(ItemStack stack, int slot) {
         if (stack == null) return null;
 
-        if (slot < itemSlots.length && itemSlots[slot] != null)
-            return this.itemSlots[slot].mergeStacks(stack);
+        if (slot < itemSlots.length) {
+            if (itemSlots[slot] != null)
+                return this.itemSlots[slot].mergeStacks(stack);
+
+            itemSlots[slot] = stack;
+            return null;
+        }
+
         return stack;
     }
 
@@ -93,5 +117,21 @@ public class SizedInventory implements Inventory {
         if (slot < itemSlots.length && itemSlots[slot] != null)
             return itemSlots[slot].splitStack();
         return null;
+    }
+
+    @Override
+    public ItemStack itemStackAt(int slot) {
+        if (slot < itemSlots.length && itemSlots[slot] != null)
+            return itemSlots[slot];
+
+        return null;
+    }
+
+    @Override
+    public boolean containsItem(int slot) {
+        if (slot < itemSlots.length && itemSlots[slot] != null)
+            return true;
+
+        return false;
     }
 }

@@ -64,15 +64,16 @@ public class MainScreen implements Screen, OnClickListener {
         verticalListView.setTopPadding(15);
         verticalListView.setSpacing(15);
         verticalListView.reloadComponents(options);
+        verticalListView.renderBackground(false);
         verticalListView.setOnClickListener(this);
 
         horizontalListView = new HorizontalListView(-1, 300, 30);
         horizontalListView.setLeftPadding(16);
         horizontalListView.setSpacing(15);
-        horizontalListView.setRenderBackground(false);
+        horizontalListView.renderBackground(false);
         horizontalListView.setOnClickListener(this);
 
-        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300, verticalListView);
+        SingleComponentGUI menu = new SingleComponentGUI(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 300, verticalListView);
         menu.open();
     }
 

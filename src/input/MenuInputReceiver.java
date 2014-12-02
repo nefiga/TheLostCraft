@@ -1,18 +1,18 @@
 package input;
 
-import menu.Menu;
+import menu.GUI;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 public class MenuInputReceiver extends InputReceiver {
 
-    Menu menu;
+    GUI GUI;
 
     Action left, right, up, down, enter, back;
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setGUI(GUI GUI) {
+        this.GUI = GUI;
     }
 
     @Override
@@ -36,25 +36,25 @@ public class MenuInputReceiver extends InputReceiver {
 
     @Override
     public void checkInput() {
-        if (left.isPressed()) menu.moveCursorLeft();
-        if (right.isPressed()) menu.moveCursorRight();
-        if (up.isPressed()) menu.moveCursorUp();
-        if (down.isPressed()) menu.moveCursorDown();
-        if (enter.isPressed()) menu.select();
-        if (back.isPressed()) menu.back();
-        if (leftButton.isPressed()) menu.onMouseButtonPressed(MOUSE_LEFT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        else if (!leftButton.isHolding()) menu.onMouseButtonReleased(MOUSE_LEFT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        if (rightButton.isPressed()) menu.onMouseButtonPressed(MOUSE_RIGHT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
-        else if (!leftButton.isHolding()) menu.onMouseButtonReleased(MOUSE_RIGHT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (left.isPressed()) GUI.moveCursorLeft();
+        if (right.isPressed()) GUI.moveCursorRight();
+        if (up.isPressed()) GUI.moveCursorUp();
+        if (down.isPressed()) GUI.moveCursorDown();
+        if (enter.isPressed()) GUI.select();
+        if (back.isPressed()) GUI.back();
+        if (leftButton.isPressed()) GUI.onMouseButtonPressed(MOUSE_LEFT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        else if (!leftButton.isHolding()) GUI.onMouseButtonReleased(MOUSE_LEFT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        if (rightButton.isPressed()) GUI.onMouseButtonPressed(MOUSE_RIGHT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
+        else if (!leftButton.isHolding()) GUI.onMouseButtonReleased(MOUSE_RIGHT_BUTTON, Mouse.getX(), Math.abs(Mouse.getY() - Display.getHeight()));
     }
 
     @Override
     public void getPressedChar(char c) {
-        menu.charPressed(c);
+        GUI.charPressed(c);
     }
 
     @Override
     public void getHoldingChar(char c) {
-        menu.charHolding(c);
+        GUI.charHolding(c);
     }
 }

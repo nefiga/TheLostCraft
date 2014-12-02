@@ -5,7 +5,7 @@ import game.Screen;
 import game.fonts.Font;
 import menu.component.MenuComponent;
 
-public abstract class Menu {
+public abstract class GUI {
 
     protected Font font = Font.generalFont;
 
@@ -13,7 +13,7 @@ public abstract class Menu {
 
     protected Result result;
 
-    protected MenuComponent component;
+    protected MenuComponent mainComponent;
 
     protected boolean open;
 
@@ -23,14 +23,14 @@ public abstract class Menu {
      * Creates a new menu. The size of the menu can be controlled in two ways.
      * You can control the width and height of the tiles as well as how many tiles used.
      */
-    public Menu(int x, int y, MenuComponent component) {
+    public GUI(int x, int y, MenuComponent component) {
         this.x = x;
         this.y = y;
-        this.component = component;
-        this.component.setPositionInMenu(this);
+        this.mainComponent = component;
+        this.mainComponent.setPositionInMenu(this);
     }
 
-    public Menu(int x, int y) {
+    public GUI(int x, int y) {
         this.x = x;
         this.y = y;
     }

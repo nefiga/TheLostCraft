@@ -13,9 +13,8 @@ import game.util.LevelData;
 import gear.tool.Tool;
 import item.Item;
 import math.Vector2;
-import menu.Menu;
 import menu.Result;
-import menu.SingleComponentMenu;
+import menu.SingleComponentGUI;
 import menu.component.*;
 import menu.component.MenuComponent;
 import menu.component.MenuComponent.OnClickListener;
@@ -23,7 +22,6 @@ import org.lwjgl.opengl.Display;
 import tile.Tile;
 
 import java.awt.*;
-import java.awt.Button;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -318,7 +316,7 @@ public class Level implements Screen, OnClickListener {
         view.setTopPadding(20);
         view.setSpacing(20);
         view.setOnClickListener(this);
-        SingleComponentMenu menu = new SingleComponentMenu(Display.getWidth() / 2 - 150, Display.getHeight() / 2, view);
+        SingleComponentGUI menu = new SingleComponentGUI(Display.getWidth() / 2 - 150, Display.getHeight() / 2, view);
 
         Game.openMenu(menu);
     }

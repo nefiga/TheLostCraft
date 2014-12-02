@@ -10,7 +10,7 @@ import input.MenuInputReceiver;
 import input.PlayerInputReceiver;
 import level.*;
 import level.Level;
-import menu.Menu;
+import menu.GUI;
 import org.lwjgl.opengl.Display;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class Game extends GameLoop {
     private PlayerInputReceiver playerInput;
     private EditorInputReceiver editorInput;
     private static MenuInputReceiver menuInput;
-    private static Menu menu;
+    private static GUI GUI;
 
     private static int xOffset, yOffset;
 
@@ -56,24 +56,21 @@ public class Game extends GameLoop {
     }
 
     public void update(long delta) {
-        if (menuOpen) {
-            menuInput.update(delta);
-            menu.update(delta);
-        }
+        updateInput(delta);
 
+        if (menuOpen)
+            GUI.update(delta);
 
         switch (state) {
             case MAIN_MENU:
                 mainScreen.update(delta);
                 break;
             case GAME:
-                playerInput.update(delta);
                 player.update(delta);
                 xOffset = (int) (player.getX() - (Display.getWidth() / 2 - 32));
                 yOffset = (int) player.getY() - (Display.getHeight() / 2 - 32);
                 break;
             case MAP_EDITOR:
-                editorInput.update(delta);
                 xOffset = mapEditor.getMapX() - (Display.getWidth() / 2 - 32);
                 yOffset = mapEditor.getMapY() - (Display.getHeight() / 2 - 32);
                 mapEditor.update(delta);
@@ -84,11 +81,20 @@ public class Game extends GameLoop {
         updateTime(delta);
     }
 
+    public void updateInput(long delta) {
+        if (menuOpen)
+            menuInput.update(delta);
+        else if (state == GAME)
+            playerInput.update(delta);
+        else if (state == MAP_EDITOR)
+            editorInput.update(delta);
+    }
+
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT);
         screenManager.render();
 
-        if (menuOpen) menu.render();
+        if (menuOpen) GUI.render();
     }
 
     public static void loadMainMenu() {
@@ -149,10 +155,10 @@ public class Game extends GameLoop {
         loadMainMenu();
     }
 
-    public static void openMenu(Menu m) {
-        menu = m;
-        menuInput.setMenu(menu);
-        menu.screenResized(Display.getWidth(), Display.getHeight());
+    public static void openMenu(GUI m) {
+        GUI = m;
+        menuInput.setGUI(GUI);
+        GUI.screenResized(Display.getWidth(), Display.getHeight());
         menuOpen = true;
     }
 
@@ -167,7 +173,7 @@ public class Game extends GameLoop {
 
     public void resized() {
         screenManager.screenResize(Display.getWidth(), Display.getHeight());
-        if (menuOpen) menu.screenResized(Display.getWidth(), Display.getHeight());
+        if (menuOpen) GUI.screenResized(Display.getWidth(), Display.getHeight());
     }
 
     public void dispose() {

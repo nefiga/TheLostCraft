@@ -15,4 +15,8 @@ public interface Inventory {
     public ItemStack takeItem(int slot);
 
     public ItemStack splitStack(int slot);
+
+    public boolean containsItem(int slot);
+
+    public ItemStack itemStackAt(int slot);
 }
