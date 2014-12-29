@@ -3,10 +3,10 @@ package game;
 import game.graphics.*;
 import menu.*;
 import menu.component.*;
-import menu.component.MenuComponent.OnClickListener;
+import menu.component.MenuComponent.OnButtonClickedListener;
 import org.lwjgl.opengl.Display;
 
-public class MainScreen implements Screen, OnClickListener {
+public class MainScreen implements Screen, OnButtonClickedListener {
 
     public TextureAtlas atlas = new TextureAtlas(TextureAtlas.SMALL);
     public SpriteBatch batch;
@@ -100,7 +100,7 @@ public class MainScreen implements Screen, OnClickListener {
 
     }
 
-    //--------- OnClickListener methods-------------
+    //--------- OnButtonClickedListener methods-------------
 
     @Override
     public void onLeftPressed(MenuComponent c) {

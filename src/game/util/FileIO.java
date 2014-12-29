@@ -13,6 +13,7 @@ public class FileIO {
         } catch (IOException e) {
             System.out.println("Could not serialize class");
             e.printStackTrace();
+
         }
     }
 

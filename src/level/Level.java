@@ -17,7 +17,7 @@ import menu.Result;
 import menu.SingleComponentGUI;
 import menu.component.*;
 import menu.component.MenuComponent;
-import menu.component.MenuComponent.OnClickListener;
+import menu.component.MenuComponent.OnButtonClickedListener;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
@@ -25,7 +25,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level implements Screen, OnClickListener {
+public class Level implements Screen, OnButtonClickedListener {
 
     private SpriteBatch tileBatch;
     private SpriteBatch entityBatch;
@@ -69,7 +69,7 @@ public class Level implements Screen, OnClickListener {
         mapWidth = levelData.getMapWidth();
         mapHeight = levelData.getMapHeight();
         this.player = player;
-        this.player.setLevel(this);
+        this.player.addToLevel(this);
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
         itemBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
@@ -83,7 +83,7 @@ public class Level implements Screen, OnClickListener {
         mapWidth = levelData.getMapWidth();
         mapHeight = levelData.getMapHeight();
         this.player = player;
-        this.player.setLevel(this);
+        this.player.addToLevel(this);
         tileBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Tile.tileAtlas), 700);
         entityBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(LivingEntity.livingEntityAtlas), 100);
         itemBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(Item.itemAtlas), 100);
@@ -99,8 +99,8 @@ public class Level implements Screen, OnClickListener {
                 itemEntities.get(i).update(delta);
                 if (itemEntities.get(i).isRemoved()) removeItemEntity(i);
             }
+            player.update(delta);
         }
-        player.update(delta);
     }
 
     public void render() {

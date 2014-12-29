@@ -11,6 +11,8 @@ public abstract class InputReceiver {
 
     protected Game game;
 
+    protected InputActionListener listener;
+
     public static final int MOUSE_LEFT_BUTTON = 0, MOUSE_RIGHT_BUTTON = 1;
 
     protected List<Action> actions = new ArrayList<Action>();
@@ -93,6 +95,36 @@ public abstract class InputReceiver {
             return true;
         }
         return false;
+    }
+
+    public void setInputActionListener(InputActionListener listener) {
+        this.listener = listener;
+    }
+
+    public interface InputActionListener {
+        public void onLeftPressed(int x, int y);
+
+        public void onLeftHolding(int x, int y);
+
+        public void onLeftReleased(int x, int y);
+
+        public void onLeftClicked(int x, int y);
+
+        public void onRightPressed(int x, int y);
+
+        public void onRightHolding(int x, int y);
+
+        public void onRightReleased(int x, int y);
+
+        public void onRightClicked(int x, int y);
+
+        public void onKeyPressed(char c);
+
+        public void onKeyHolding(char c);
+
+        public void onKeyReleased(char c);
+
+        public void onKeyClicked(char c);
     }
 
     public abstract void checkInput();

@@ -204,7 +204,7 @@ public class HorizontalListView extends MenuComponent{
         adjustComponents();
     }
 
-    public void setOnClickListener(OnClickListener listener) {
+    public void setOnClickListener(OnButtonClickedListener listener) {
         for (int i = 0; i < components.size(); i++) {
             components.get(i).setOnClickListener(listener);
         }

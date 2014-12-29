@@ -30,7 +30,7 @@ public class TextView extends MenuComponent {
     }
 
     public void renderString(Font font) {
-        if (text != null)
+        if (text.length() > 0)
             font.drawString(text.toString(), screenX + (width - text.length() * textSize) / 2, screenY + (height - textSize) / 2);
     }
 

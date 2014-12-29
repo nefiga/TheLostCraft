@@ -53,7 +53,7 @@ public class LivingEntity extends Entity {
         imagePosition = livingEntityAtlas.addTexture("/sprites/" + image);
     }
 
-    public void setLevel(Level level) {
+    public void addToLevel(Level level) {
         this.level = level;
     }
 

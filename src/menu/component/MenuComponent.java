@@ -13,7 +13,7 @@ public class MenuComponent {
     protected static TextureAtlas atlas = new TextureAtlas(TextureAtlas.LARGE);
     public static SpriteBatch batch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(atlas), 1000);
 
-    private OnClickListener listener;
+    private OnButtonClickedListener listener;
 
     /**
      * Insets the contents of this component. Check with the specific component for implementation.
@@ -215,7 +215,7 @@ public class MenuComponent {
         textSize = size;
     }
 
-    public void setOnClickListener(OnClickListener listener) {
+    public void setOnClickListener(OnButtonClickedListener listener) {
         this.listener = listener;
     }
 
@@ -304,7 +304,7 @@ public class MenuComponent {
     /**
      * An event listener for mouse clicks
      */
-    public interface OnClickListener {
+    public interface OnButtonClickedListener {
 
         public void onLeftPressed(MenuComponent c);
 

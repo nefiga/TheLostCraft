@@ -10,12 +10,11 @@ import menu.Result;
 import menu.SingleComponentGUI;
 import menu.component.Button;
 import menu.component.MenuComponent;
-import menu.component.MenuComponent.OnClickListener;
 import menu.component.VerticalListView;
 import org.lwjgl.opengl.Display;
 import tile.Tile;
 
-public class MapEditor implements Screen, OnClickListener{
+public class MapEditor implements Screen, MenuComponent.OnButtonClickedListener {
 
     SpriteBatch editorBatch, tileBatch;
     TextureAtlas editorAtlas;

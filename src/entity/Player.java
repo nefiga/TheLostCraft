@@ -65,7 +65,6 @@ public class Player extends LivingEntity {
     }
 
     public void toggleInventory() {
-        System.out.println("Menu State " + menu.isOpen());
         if (menu.isOpen())
             menu.close();
         else
