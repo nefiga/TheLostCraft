@@ -131,16 +131,16 @@ public class SpriteBatch {
         shader.unBind();
     }
 
-    public void draw(float x, float y, int textureX, int textureY, int width, int height) {
-        draw(x, y, width, height, textureX, textureY, width, height, NO_ROTATE);
+    public void draw(float x, float y, Sprite sprite) {
+        draw(x, y, sprite, sprite.getWidth(), sprite.getHeight(),  NO_ROTATE);
     }
 
-    public void draw(float x, float y, int textureX, int textureY, int width, int height, int rotate) {
-        draw(x, y, width, height, textureX, textureY, width, height, rotate);
+    public void draw(float x, float y, Sprite sprite, int rotate) {
+        draw(x, y, sprite, sprite.getWidth(), sprite.getHeight(), rotate);
     }
 
-    public void draw(float x, float y, int drawWidth, int drawHeight, int textureX, int textureY, int textureWidth, int textureHeight) {
-        draw(x, y, drawWidth, drawHeight, textureX, textureY, textureWidth, textureHeight, NO_ROTATE);
+    public void draw(float x, float y, Sprite sprite, int drawWidth, int drawHeight) {
+        draw(x, y, sprite, drawWidth, drawHeight, NO_ROTATE);
     }
 
     /**
@@ -150,13 +150,9 @@ public class SpriteBatch {
      * @param drawHeight    The height to draw the texture
      * @param x             The starting screenX point of the screen
      * @param y             The starting screenY point on the screen
-     * @param textureX      The starting screenX point of the texture in the texture atlas
-     * @param textureY      The starting screenY point of the texture in the texture atlas
-     * @param textureWidth  The width of the texture in the texture atlas
-     * @param textureHeight The height of the texture in the texture atlas
      * @param rotate       If the image should be rotate and in what direction it should be rotate
      */
-    public void draw(float x, float y, int drawWidth, int drawHeight, int textureX, int textureY, int textureWidth, int textureHeight, int rotate) {
+    public void draw(float x, float y, Sprite sprite, int drawWidth, int drawHeight, int rotate) {
         float disWidth = Display.getWidth();
         float disHeight = Display.getHeight();
         float atlasWidth = texture.getWidth();
@@ -167,10 +163,10 @@ public class SpriteBatch {
         float x2 = x / disWidth * 2 + drawWidth / disWidth * 2 - 1;
         float y2 = (1 - y / disHeight * 2) - (drawHeight / disHeight * 2);
 
-        float tx1 = (textureX * TextureAtlas.TILE_SIZE) / atlasWidth;
-        float ty1 = (textureY * TextureAtlas.TILE_SIZE) / atlasHeight;
-        float tx2 = ((textureX * TextureAtlas.TILE_SIZE) / atlasWidth) + textureWidth / atlasWidth;
-        float ty2 = (textureY * TextureAtlas.TILE_SIZE) / atlasHeight + textureHeight / atlasHeight;
+        float tx1 = (sprite.getStartXPosition() * TextureAtlas.TILE_SIZE) / atlasWidth;
+        float ty1 = (sprite.getStartYPosition() * TextureAtlas.TILE_SIZE) / atlasHeight;
+        float tx2 = ((sprite.getStartXPosition()* TextureAtlas.TILE_SIZE) / atlasWidth) + sprite.getWidth() / atlasWidth;
+        float ty2 = (sprite.getStartYPosition() * TextureAtlas.TILE_SIZE) / atlasHeight + sprite.getHeight() / atlasHeight;
 
         if (rotate == NO_ROTATE) {
             vertex.put(x1).put(y1); // Top left

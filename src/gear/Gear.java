@@ -1,12 +1,13 @@
 package gear;
 
+import game.graphics.Sprite;
 import game.graphics.SpriteBatch;
 import item.Item;
 
 import java.awt.image.BufferedImage;
 
 public class Gear extends Item{
-    protected int[] imagePosition;
+    protected Sprite imagePosition;
 
     protected BufferedImage image;
 
@@ -38,7 +39,7 @@ public class Gear extends Item{
     }
 
     public void render(SpriteBatch batch, int x, int y) {
-        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+        batch.draw(x, y, imagePosition);
     }
 
     public String getName() {

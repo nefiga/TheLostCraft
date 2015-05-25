@@ -2,6 +2,7 @@ package item;
 
 import collision.shapes.Shape;
 import game.graphics.ImageManager;
+import game.graphics.Sprite;
 import game.graphics.SpriteBatch;
 import game.graphics.TextureAtlas;
 import item.resource.StoneResource;
@@ -14,7 +15,7 @@ public class Item {
 
     protected Shape shape;
 
-    protected int[] imagePosition;
+    protected Sprite imagePosition;
 
     protected BufferedImage image;
 
@@ -89,7 +90,7 @@ public class Item {
         return image;
     }
 
-    public int[] getImagePosition() {
+    public Sprite getImagePosition() {
         return imagePosition;
     }
 
@@ -121,18 +122,18 @@ public class Item {
     }
 
     public void render(SpriteBatch batch, int x, int y) {
-        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+        batch.draw(x, y, imagePosition);
     }
 
     public void render(SpriteBatch batch, int x, int y, int rotation) {
-        batch.draw(x, y, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
+        batch.draw(x, y, imagePosition, rotation);
     }
 
     public void render(SpriteBatch batch, int x, int y, int width, int height) {
-        batch.draw(x, y, width, height, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3]);
+        batch.draw(x, y, imagePosition, width, height);
     }
 
     public void render(SpriteBatch batch, int x, int y, int width, int height, int rotation) {
-        batch.draw(x, y, width, height, imagePosition[0], imagePosition[1], imagePosition[2], imagePosition[3], rotation);
+        batch.draw(x, y, imagePosition, width, height, rotation);
     }
 }

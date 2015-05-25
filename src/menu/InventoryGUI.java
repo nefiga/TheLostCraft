@@ -5,11 +5,10 @@ import inventory.ItemStack;
 import inventory.SizedInventory;
 import menu.component.InventoryComponent;
 import menu.component.MenuComponent;
-import menu.component.MenuComponent.OnClickListener;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-public class InventoryGUI extends SingleComponentGUI implements OnClickListener {
+public class InventoryGUI extends SingleComponentGUI {
 
     SizedInventory inventory;
 
@@ -34,7 +33,7 @@ public class InventoryGUI extends SingleComponentGUI implements OnClickListener 
 
         for (int i = 0; i < inventory.getSize(); i++) {
             inventoryComponents[i] = new InventoryComponent(i, 64, 64);
-            inventoryComponents[i].setOnClickListener(this);
+            //inventoryComponents[i].setOnClickListener(this);
         }
     }
 
@@ -61,7 +60,7 @@ public class InventoryGUI extends SingleComponentGUI implements OnClickListener 
         }
         Font.generalFont.end();
     }
-
+/*
     @Override
     public void onLeftPressed(MenuComponent c) {
         if (holding != null)
@@ -96,5 +95,5 @@ public class InventoryGUI extends SingleComponentGUI implements OnClickListener 
     @Override
     public void onRightClick(MenuComponent c) {
 
-    }
+    }*/
 }

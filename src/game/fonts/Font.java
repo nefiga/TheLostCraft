@@ -22,12 +22,12 @@ public class Font {
 
     public static final int CHAR_SIZE = 16;
 
-    protected int[][] characters;
+    protected Sprite[] characters;
 
     public Font(BufferedImage image) {
         this.width = image.getWidth();
         this.height = image.getHeight();
-        characters = new int[CHARACTER_COUNT][2];
+        characters = new Sprite[CHARACTER_COUNT];
         fontAtlas = new TextureAtlas(TextureAtlas.SMALL);
         loadChars(image);
         fontBatch = new SpriteBatch(ShaderManager.NORMAL_TEXTURE, new Texture(fontAtlas), 1000);
@@ -61,9 +61,9 @@ public class Font {
     public void drawString(String string, int x, int y) {
         int index = 0;
         for (int i = 0; i < string.length(); i++) {
-            int[] position = getChar(string.charAt(i));
-            if (position == null) continue;
-            fontBatch.draw(x + index * textSize, y, textSize, textSize, position[0], position[1], CHAR_SIZE, CHAR_SIZE);
+            Sprite charSprite = getChar(string.charAt(i));
+            if (charSprite == null) continue;
+            fontBatch.draw(x + index * textSize, y,  charSprite, CHAR_SIZE, CHAR_SIZE);
             index++;
         }
     }
@@ -71,9 +71,9 @@ public class Font {
     public void drawString(String string, int textSize, int x, int y) {
         int index = 0;
         for (int i = 0; i < string.length(); i++) {
-            int[] position = getChar(string.charAt(i));
-            if (position == null) continue;
-            fontBatch.draw(x + index * textSize, y, textSize, textSize, position[0], position[1], CHAR_SIZE, CHAR_SIZE);
+            Sprite charSprite = getChar(string.charAt(i));
+            if (charSprite == null) continue;
+            fontBatch.draw(x + index * textSize, y, charSprite, CHAR_SIZE, CHAR_SIZE);
             index++;
         }
     }
@@ -101,7 +101,7 @@ public class Font {
     /**
      * Returns a image stored in an array, of the matching character
      */
-    protected int[] getChar(int character) {
+    protected Sprite getChar(int character) {
         // Space - /
         if (character > 31 && character < 48) {
             return characters[character + 4];

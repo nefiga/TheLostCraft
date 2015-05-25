@@ -7,9 +7,9 @@ import org.lwjgl.opengl.Display;
 
 public class Button extends MenuComponent {
 
-    private int[] image;
-    private int[] imagePressed;
-    private int[] imageFocused;
+    private Sprite image;
+    private Sprite imagePressed;
+    private Sprite imageFocused;
 
     private String text;
 
@@ -72,11 +72,11 @@ public class Button extends MenuComponent {
     public void render(SpriteBatch batch) {
         if (renderBackground) {
             if (leftButtonPressed)
-                batch.draw(screenX, screenY, width, height, imagePressed[0], imagePressed[1], imagePressed[2], imagePressed[3]);
+                batch.draw(screenX, screenY, imagePressed, width, height);
             else if (hasFocus)
-                batch.draw(screenX, screenY, width, height, imageFocused[0], imageFocused[1], imageFocused[2], imageFocused[3]);
+                batch.draw(screenX, screenY, imageFocused, width, height);
             else
-                batch.draw(screenX, screenY, width, height, image[0], image[1], image[2], image[3]);
+                batch.draw(screenX, screenY, image, width, height);
         }
 
     }

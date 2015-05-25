@@ -1,6 +1,7 @@
 package menu.component;
 
 import game.fonts.Font;
+import game.graphics.Sprite;
 import game.graphics.SpriteBatch;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -12,7 +13,7 @@ public class VerticalListView extends MenuComponent {
 
     private List<MenuComponent> components = new ArrayList<MenuComponent>();
 
-    private int[] listView, scrollButton, focusedSB;
+    private Sprite listView, scrollButton, focusedSB;
 
     private int sbWidth = 30, sbHeight = 20;
 
@@ -239,22 +240,22 @@ public class VerticalListView extends MenuComponent {
      */
     public void render(SpriteBatch batch) {
         if (renderBackground)
-            batch.draw(screenX, screenY, width, height, listView[0], listView[1], listView[2], listView[3]);
+            batch.draw(screenX, screenY, listView, width, height);
 
         // Upper scrollButton
         if (outOfLowerBounds) {
             if (upperHasFocus)
-                batch.draw(screenX + (width / 2) - (sbWidth / 2), screenY - sbHeight, sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3]);
+                batch.draw(screenX + (width / 2) - (sbWidth / 2), screenY - sbHeight, scrollButton, sbWidth, sbHeight);
             else
-                batch.draw(screenX + (width / 2) - (sbWidth / 2), screenY - sbHeight, sbWidth, sbHeight, scrollButton[0], scrollButton[1], scrollButton[2], scrollButton[3]);
+                batch.draw(screenX + (width / 2) - (sbWidth / 2), screenY - sbHeight, scrollButton, sbWidth, sbHeight);
         }
 
         // Lower scrollButton
         if (outOfUpperBounds) {
             if (lowerHasFocus)
-                batch.draw(screenX + (width / 2) - (sbWidth / 2), verticalBounds, sbWidth, sbHeight, focusedSB[0], focusedSB[1], focusedSB[2], focusedSB[3], SpriteBatch.ROTATE_180);
+                batch.draw(screenX + (width / 2) - (sbWidth / 2), verticalBounds, focusedSB, sbWidth, sbHeight, SpriteBatch.ROTATE_180);
             else
-                batch.draw(screenX + (width / 2) - (sbWidth / 2), verticalBounds, sbWidth, sbHeight, scrollButton[0], scrollButton[1], scrollButton[2], scrollButton[3], SpriteBatch.ROTATE_180);
+                batch.draw(screenX + (width / 2) - (sbWidth / 2), verticalBounds, scrollButton, sbWidth, sbHeight, SpriteBatch.ROTATE_180);
         }
 
         for (int i = 0; i < components.size(); i++) {

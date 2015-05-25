@@ -1,10 +1,7 @@
 package menu.component;
 
 import game.fonts.Font;
-import game.graphics.ShaderManager;
-import game.graphics.SpriteBatch;
-import game.graphics.Texture;
-import game.graphics.TextureAtlas;
+import game.graphics.*;
 import input.InputReceiver;
 import menu.GUI;
 
@@ -224,11 +221,10 @@ public class MenuComponent {
      * If the TextureAtlas already contains the image the position of the image will be returned.
      * Also updates the SpriteBatch Texture if needs be.
      */
-    public static int[] addImage(String name) {
+    public static Sprite addImage(String name) {
         int beforeAtlasSize = atlas.getSize();
 
-        int[] imagePosition;
-        imagePosition = atlas.addTexture("/menu/" + name);
+        Sprite imagePosition = atlas.addTexture("/menu/" + name);
 
         int afterAtlasSize = atlas.getSize();
         if (beforeAtlasSize < afterAtlasSize) batch.updateTexture();

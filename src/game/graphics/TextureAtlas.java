@@ -8,7 +8,7 @@ public class TextureAtlas {
 
     public static final int FONT_NORMAL = 0, SUPER_SMALL = 320, SMALL = 640, MEDIUM = 960, LARGE = 1024;
 
-    private Map<String, int[]> textures = new HashMap<String, int[]>();
+    private Map<String, Sprite> textures = new HashMap<String, Sprite>();
 
     private int[] atlas;
 
@@ -62,12 +62,11 @@ public class TextureAtlas {
      * @return An array where position 0 and 1 are the starting screenX and screenY positions of the image in the atlas
      * and position 2 and 3 are the width and height of the image.
      */
-    public int[] addTexture(String name, BufferedImage image) {
+    public Sprite addTexture(String name, BufferedImage image) {
         if (textures.containsKey(name)) {
             return textures.get(name);
         }
 
-        int[] position = new int[4];
         int w = image.getWidth();
         int h = image.getHeight();
         int textureColumns = w / TILE_SIZE;
@@ -78,10 +77,7 @@ public class TextureAtlas {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
                 if (checkSpace(c, r, textureColumns, textureRows)) {
-                    position[0] = c;
-                    position[1] = r;
-                    position[2] = image.getWidth();
-                    position[3] = image.getHeight();
+                    Sprite sprite = new Sprite(c, r, image.getWidth(), image.getHeight());
 
                     int pixelRow = r * TILE_SIZE;
                     int pixelCol = c * TILE_SIZE;
@@ -91,8 +87,8 @@ public class TextureAtlas {
                         }
                     }
                     fillTile(c, r, textureColumns, textureRows);
-                    textures.put(name, position);
-                    return position;
+                    textures.put(name, sprite);
+                    return sprite;
                 }
             }
         }
@@ -108,14 +104,13 @@ public class TextureAtlas {
      * @return An array where position 0 and 1 are the starting screenX and screenY positions of the image in the atlas
      * and position 2 and 3 are the width and height of the image.
      */
-    public int[] addTexture(String name) {
+    public Sprite addTexture(String name) {
         if (textures.containsKey(name)) {
             return textures.get(name);
         }
 
         BufferedImage image = ImageManager.getImage(name);
 
-        int[] position = new int[4];
         int w = image.getWidth();
         int h = image.getHeight();
         int textureColumns = w / TILE_SIZE;
@@ -126,10 +121,7 @@ public class TextureAtlas {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
                 if (checkSpace(c, r, textureColumns, textureRows)) {
-                    position[0] = c;
-                    position[1] = r;
-                    position[2] = image.getWidth();
-                    position[3] = image.getHeight();
+                    Sprite sprite = new Sprite(c, r, image.getWidth(), image.getHeight());
 
                     int pixelRow = r * TILE_SIZE;
                     int pixelCol = c * TILE_SIZE;
@@ -139,8 +131,8 @@ public class TextureAtlas {
                         }
                     }
                     fillTile(c, r, textureColumns, textureRows);
-                    textures.put(name, position);
-                    return position;
+                    textures.put(name, sprite);
+                    return sprite;
                 }
             }
         }
@@ -155,16 +147,14 @@ public class TextureAtlas {
      * @param imagePixels An array of pixels to be added to the texture atlas
      * @return An array where position 0 and 1 are the starting screenX and screenY positions of the image in the atlas.
      */
-    public int[] addTexture(int[] imagePixels, int w, int h) {
-        int[] position = new int[2];
+    public Sprite addTexture(int[] imagePixels, int w, int h) {
         int textureColumns = w / TILE_SIZE;
         int textureRows = h / TILE_SIZE;
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
                 if (checkSpace(c, r, textureColumns, textureRows)) {
-                    position[0] = c;
-                    position[1] = r;
+                    Sprite sprite = new Sprite(r, c, 0, 0);
 
                     int pixelRow = r * TILE_SIZE;
                     int pixelCol = c * TILE_SIZE;
@@ -174,7 +164,7 @@ public class TextureAtlas {
                         }
                     }
                     fillTile(c, r, textureColumns, textureRows);
-                    return position;
+                    return sprite;
                 }
             }
         }
